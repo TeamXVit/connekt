@@ -1,5 +1,10 @@
-import Authentication from "./pages/Authentication"
+import { BrowserRouter } from "react-router";
+import Navigator from "./components/navigation/Navigator";
 
 export default function  App() {
-  return <Authentication />;
+  return (
+    <BrowserRouter>
+      <Navigator />
+    </BrowserRouter>
+  )
 }
