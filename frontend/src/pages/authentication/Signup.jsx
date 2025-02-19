@@ -30,7 +30,6 @@ export default function Signup() {
         ]
     };
     
-
     const handlePage = () => setPage(page + 1);
 
     const handleChange = (e) => {
@@ -40,6 +39,7 @@ export default function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        page > 3 ? setPage(1) : null
         console.log(page);
         console.log(formData)
     };
@@ -61,18 +61,18 @@ export default function Signup() {
                         <span className={`border-y-[1px] border-[#6586f1] w-24 h-1 ${page >= 3 ? 'bg-[#6586f1]' : null}`}></span>
                         <p className={`py-1 text-center rounded-lg border-[1px] border-[#6586f1] w-7 h-fit text-[#6586f1] ${page >= 3 && 'bg-[#6586f1] text-white'}`}>3</p>
                     </div>
-                    <form className="flex flex-col px-4 lg:w-[95%] h-[80%]" onSubmit={handleSubmit}>
+                    <form className="flex flex-col px-4 w-[95%] h-[80%]" onSubmit={handleSubmit}>
                         {page === 1 && inputFields.field1.map((field, index) => 
                             <div key={index} className="flex justify-center gap-2 w-[100%] py-3 px-2">
                                 {field.icon}
-                                <input type={field.type} placeholder={field.question} className="outline-none border-b-[0.5px] border-b-gray-400 pb-2 sm:w-[80%] lg:w-[100%]" name={field.name} onChange={handleChange} required={field.required}/>
+                                <input type={field.type} placeholder={field.question} className="outline-none border-b-[0.5px] border-b-gray-400 pb-1 sm:w-[80%] lg:w-[100%]" name={field.name} onChange={handleChange} required={field.required}/>
                             </div>
                         )}
                         {page === 2 && inputFields.field2.map((field, index) => 
                             <div key={index} className="flex justify-center gap-2 w-[100%] py-3 px-2">
                                 {field.icon}
-                                {field.name !== "gender" ? <input type={field.type} placeholder={field.question} className="outline-none border-b-[0.5px] border-b-gray-400 pb-2 sm:w-[80%] lg:w-[100%]" name={field.name} onChange={handleChange} required={field.required}/> :
-                                <select name={field.name} required={field.required} className="outline-none border-b-[0.5px] border-b-gray-400 pb-2 sm:w-[80%] lg:w-[100%]" onChange={handleChange}>
+                                {field.name !== "gender" ? <input type={field.type} placeholder={field.question} className="outline-none border-b-[0.5px] border-b-gray-400 pb-1 sm:w-[80%] lg:w-[100%]" name={field.name} onChange={handleChange} required={field.required}/> :
+                                <select name={field.name} required={field.required} className="outline-none border-b-[0.5px] border-b-gray-400 pb-1 sm:w-[80%] lg:w-[100%]" onChange={handleChange}>
                                     <option>{field.question}</option>
                                     <option>Male</option>
                                     <option>Female</option>
@@ -86,7 +86,7 @@ export default function Signup() {
                                 <input className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:cursor-pointer file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-[#87a3ff] focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-bg-[#6586f1] dark:text-neutral-200 dark:file:bg-[#6586f1] dark:file:text-neutral-100 dark:focus:border-primary cursor-pointer" type="file" id="profile-pic" accept="image/png, image/jpg"/>
                             </div>
                             <div className="flex gap-2 w-[100%] py-3 px-2">
-                                <input type="checkbox" name=""/>
+                                <input type="checkbox" name="" required/>
                                 <p className="">I accept the <button className="text-blue-500 cursor-pointer">terms and conditions</button></p>
                             </div>
                         </>
