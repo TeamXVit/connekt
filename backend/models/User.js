@@ -8,6 +8,7 @@ const usersSchema = new mongoose.Schema({
     email:{type:String, require: true},
     phoneno:{type:String, require: true},
     dob:{type:Date, require: true},
+    isVerified: { type: Boolean, default: false },
     profilepicture:{type:String},
     instagram:{type:String}
 });

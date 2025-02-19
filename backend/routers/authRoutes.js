@@ -1,6 +1,19 @@
 import express from "express";
 import { Users } from "../models/User.js";
 import bcrypt from "bcrypt";
+import "dotenv/config";
+import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
+    }
+});
 
 const authRouter = express.Router();
 
@@ -35,16 +48,39 @@ authRouter.post("/signup", async (request, response)=>{
             email,
             phoneno,
             dob,
+            isVerified: false,
             instagram: instagram || "",
             profilepicture: profilepicture || ""
         });
+        const token = jwt.sign({email},process.env.JWTKEY,{expiresIn:"1d"});
+        const verificationLink = `${request.protocol}://${request.get("host")}/auth/verify/${token}`;
+        await transporter.sendMail({
+            from: process.env.EMAIL,
+            to: email,
+            subject: "Email Verification",
+            html:`<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`
+        });
         return response.status(200).send({
-            message : "User Account Created Successfully."
+            message : "User Account Created Successfully and Verification e-mail sent."
         });
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
         });
+    }
+});
+
+authRouter.get("/verify/:token", async (request, response)=>{
+    try{
+        const {token} = request.params;
+        const decoded = jwt.verify(token, process.env.JWTKEY);
+        const user = await Users.findOne({ email: decoded.email });
+        if (!user) return response.status(400).send({ error: "Invalid token" });
+        user.isVerified = true;
+        await user.save();
+        return response.status(200).send({message:"Email Verified"});
+    }catch(err){
+        return response.status(500).send({error: "Invalid or expired token"});
     }
 });
 
