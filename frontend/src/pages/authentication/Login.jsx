@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Button, Checkbox, Container, FormControlLabel, Grid2, IconButton, InputAdornment, Link, TextField, Typography } from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
+import BadgeIcon from "@mui/icons-material/Badge";
 import PasswordIcon from "@mui/icons-material/Password";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -26,9 +26,9 @@ export default function Login() {
 
     return (
         <Container maxWidth="xl" sx={{  bgcolor: "#f3f4f6" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
-            <Grid2 sx={{ bgcolor: "green" ,height: { sm: "95%", lg: "70%" }, width: { sm: "95%", lg: "50%" } }} container direction={{ sm: "column", lg: "row" }}>
-                <Box sx={{ bgcolor: "#6586f1", height: { sm: "30%", lg: "100%" }, width: { sm: "100%", lg: "35%" } }}></Box>
-                <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: "white", height: { sm: "70%", lg: "100%" }, width: { sm: "100%", lg: "65%" }, p: 2, display: "flex", flexDirection: "column", gap: { sm: 3, lg: 4 } }} >
+            <Grid2 sx={{ height: { sm: "85%", md: "95%" , lg: "80%" }, width: { sm: "95%", md: "75%", lg: "50%" } }} container direction={{ sm: "column", lg: "row" }}>
+                <Box sx={{ bgcolor: "#6586f1", height: { sm: "30%", md: "25%", lg: "100%" }, width: { sm: "100%", lg: "35%" } }}></Box>
+                <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: "white", height: { sm: "70%", md: "75%", lg: "100%" }, width: { sm: "100%", lg: "65%" }, p: 2, display: "flex", flexDirection: "column", gap: { sm: 3, lg: 4 } }} >
                     <Typography variant="h4">Welcome to Connekt!</Typography>   
                     <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 3 }}>
                         <TextField 
@@ -45,7 +45,7 @@ export default function Login() {
                                 input: {
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <EmailIcon sx={{ color: "#6586f1" }}/>
+                                            <BadgeIcon sx={{ color: "#6586f1" }}/>
                                         </InputAdornment>
                                     )
                                 }
