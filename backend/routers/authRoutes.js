@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import authenticateToken from "../middleware/authMiddleware.js";
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -75,7 +76,9 @@ authRouter.get("/verify/:token", async (request, response)=>{
         const {token} = request.params;
         const decoded = jwt.verify(token, process.env.JWTKEY);
         const user = await Users.findOne({ email: decoded.email });
-        if (!user) return response.status(400).send({ error: "Invalid token" });
+        if (!user) return response.status(400).send({ 
+            error: "Invalid token" 
+        });
         user.isVerified = true;
         await user.save();
         return response.status(200).send({message:"Email Verified"});
@@ -84,7 +87,28 @@ authRouter.get("/verify/:token", async (request, response)=>{
     }
 });
 
-authRouter.get("/allusers", async (request, response)=>{
+authRouter.post("/signin", async (request, response)=>{
+    try{
+        const { regno, password } = request.body;
+        if(!regno || !password) return response.status(400).send({ error: "All required fields must be filled." });
+        const user = await Users.findOne({regno:regno.toUpperCase()});
+        if(!user) return response.status(400).send({
+            error: "Invalid Credentials."
+        });
+        const match = await bcrypt.compare(password, user.password);
+        if(!match) return response.status(400).send({
+            error: "Invalid Credentials."
+        });
+        const token = jwt.sign({regno}, process.env.JWTKEY, {expiresIn: "7d"});
+        return response.status(200).send({token});
+    }catch(err){
+        return response.status(500).send({
+            error: `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+authRouter.get("/allusers", authenticateToken, async (request, response)=>{
     try{
         const data = await Users.find();
         response.status(200).send(data);
