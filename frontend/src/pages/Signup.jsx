@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { Box, Button, Checkbox, Container, Divider, FormControl, FormControlLabel, Grid2, IconButton, InputLabel, InputAdornment, Link, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Container, Divider, FormControl, FormControlLabel, Grid2, IconButton, InputLabel, InputAdornment, Link, MenuItem, Select, Snackbar, TextField, Typography } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -17,7 +17,6 @@ import emailVerificationImage from "../assets/email-verification.jpg";
 import axios from "axios";
 import Backend from "../constants/Backend";
 import { useNavigate } from "react-router";
-import { ToastContainer, toast } from "react-toastify";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -51,6 +50,7 @@ export default function Signup() {
         if (page === 1) {
             if (!formData.name || !formData.email || !formData.password) {
                 isValid = false;
+                
             };
         } else if (page === 2) {
             if (!formData.dob || !formData.gender || !formData.regno || !formData.phoneno) {
@@ -77,11 +77,7 @@ export default function Signup() {
         if (termsConsent === true && page === 3) { 
             axios.post(`${Backend}/auth/signup`, formData)
             .then((res) => {
-                toast.success(res.data.message, {
-                    position: "top-left",
-                    autoClose: 1500,
-                    hideProgressBar: true
-                });
+                console.log(res.data);
                 navigate("/login")
             })
             .catch((e) => console.log(e)); 
@@ -90,8 +86,7 @@ export default function Signup() {
 
     return (
         <Container maxWidth="xl" sx={{  bgcolor: "#f3f4f6" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
-            <ToastContainer />
-            <Grid2 sx={{ bgcolor: "white", height: { sm: "85%", md: "95%" ,lg: "90%" }, width: { sm: "95%", md: "75%", lg: "50%" } }} container direction="column" gap={2}>
+           <Grid2 sx={{ bgcolor: "white", height: { sm: "85%", md: "95%" ,lg: "90%" }, width: { sm: "100%", md: "75%", lg: "50%" } }} container direction="column" gap={2}>
                 <Typography variant="h6" textAlign="center" sx={{ pt: 1 }}>
                     {page === 1 && "Create Account"}
                     {page === 2 && "Personal Details"}
@@ -101,11 +96,11 @@ export default function Signup() {
                     <Box sx={{ bgcolor: "#6586f1", height: { sm: 40, lg: 44 }, width: { sm: 40, lg: 44 }, borderRadius: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <Typography variant="body1" color="white">1</Typography>
                     </Box>
-                    <Divider orientation="vertical" sx={{ height: 3 ,width: { sm: 36, md: 64, lg: 96 }, bgcolor: page >=2 ? "#6586f1" : "black" }}/>
+                    <Divider orientation="vertical" sx={{ height: 3 ,width: { sm: 57, md: 64, lg: 96 }, bgcolor: page >=2 ? "#6586f1" : "black" }}/>
                     <Box sx={{ bgcolor: page >= 2 ? "#6586f1" : "white", height: { sm: 40, lg: 44 }, width: { sm: 40, lg: 44 }, border: page < 2 ? 2 : "none", borderRadius: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <Typography variant="body1" color={page >= 2 ? "white" : "black"}>2</Typography>
                     </Box>
-                    <Divider orientation="vertical" sx={{ height: 3 ,width: { sm: 36, md: 64, lg: 96 }, bgcolor: page >=3 ? "#6586f1" : "black" }}/>
+                    <Divider orientation="vertical" sx={{ height: 3 ,width: { sm: 57, md: 64, lg: 96 }, bgcolor: page >=3 ? "#6586f1" : "black" }}/>
                     <Box sx={{ bgcolor: page >= 3 ? "#6586f1" : "white", height: { sm: 40, lg: 44 }, width: { sm: 40, lg: 44 }, border: page < 3 ? 2 : "none", borderRadius: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <Typography variant="body1" color={page >= 3 ? "white" : "black"}>3</Typography>
                     </Box>
@@ -122,7 +117,7 @@ export default function Signup() {
                             required
                             onChange={handleChange}
                             value={formData.name}
-                            sx={{ width: "75%" }}
+                            sx={{ width: { sm: "85%", md: "80%", lg: "75%"} }}
                             slotProps={{
                                 input: {
                                     startAdornment: (
@@ -142,7 +137,7 @@ export default function Signup() {
                             required
                             onChange={handleChange}
                             value={formData.email}
-                            sx={{ width: "75%" }}
+                            sx={{ width: { sm: "85%", md: "80%", lg: "75%" } }}
                             slotProps={{
                                 input: {
                                     startAdornment: (
@@ -162,7 +157,7 @@ export default function Signup() {
                             required
                             onChange={handleChange}
                             value={formData.password}
-                            sx={{ width: "75%" }}
+                            sx={{ width: { sm: "85%", md: "80%", lg: "75%" } }}
                             slotProps={{ 
                                 input: {
                                     startAdornment: (
@@ -183,11 +178,11 @@ export default function Signup() {
                     </>}
                     {page === 2 && 
                     <>
-                        <Box sx={{ width: "75%", display: "flex", flexDirection: { sm: "column", lg: "row" }, flexWrap: { sm: "wrap" } ,justifyContent: "space-between", gap: { sm: 2, lg: 1 } }}>
+                        <Box sx={{ width: { sm: "85%", md: "80%", lg: "75%" }, display: "flex", flexDirection: { sm: "column", lg: "row" }, flexWrap: { sm: "wrap" } ,justifyContent: "space-between", gap: { sm: 2, lg: 1 } }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker disableFuture value={formData.dob} label="DOB" name="dob" format="YYYY-MM-DD" onChange={handleDateChange} sx={{ width: { sm: "100%", lg: "57%" } }} />
                             </LocalizationProvider>
-                            <FormControl sx={{ width: { sm: "100%",lg: "40%" } }}>
+                            <FormControl sx={{ width: { sm: "100%", lg: "40%" } }}>
                                 <InputLabel id="gender-select">Gender</InputLabel>
                                 <Select
                                     labelId="gender-select"
@@ -202,7 +197,7 @@ export default function Signup() {
                                 </Select>
                             </FormControl>
                         </Box>
-                        <Box sx={{ width: "75%", display: "flex", flexDirection: { sm: "column", lg: "row" }, flexWrap: { sm: "wrap" }, justifyContent: "space-between", gap: { sm: 2, lg: 1 } }}>
+                        <Box sx={{ width: { sm: "85%", md: "80%", lg: "75%" }, display: "flex", flexDirection: { sm: "column", lg: "row" }, flexWrap: { sm: "wrap" }, justifyContent: "space-between", gap: { sm: 2, lg: 1 } }}>
                             <TextField 
                                 name="regno"
                                 placeholder="Reg No"
@@ -252,7 +247,7 @@ export default function Signup() {
                             variant="outlined"
                             onChange={handleChange}
                             value={formData.instagram}
-                            sx={{ width: "75%" }}
+                            sx={{ width: { sm: "85%", md: "80%", lg: "75%" } }}
                             slotProps={{
                                 input: {
                                     startAdornment: (
@@ -270,7 +265,7 @@ export default function Signup() {
                         <Typography sx={{ width: "75%", textAlign: "" ,textWrap: "wrap" }}>We have sent a verification mail to the given email ID. Click on the provided link to activate your account. The link will expire within 24 hours</Typography>
                         <FormControlLabel control={<Checkbox/>} label="I accept the terms and conditions" sx={{ width: "75%" }} onChange={() => setTermsConsent(true)}/>
                     </>}
-                    <Box sx={{ width: "75%", display: "flex", justifyContent: "space-between" }}>
+                    <Box sx={{ width: { sm: "85%", md: "80%", lg: "75%" }, display: "flex", justifyContent: "space-between" }}>
                         {page === 1 ? 
                         <Link href="/login" underline="none" color="#6586f1">Login</Link> : 
                         <Button variant="contained" sx={{ bgcolor: "#6586f1" }} onClick={handlePrevPage}>Back</Button>}

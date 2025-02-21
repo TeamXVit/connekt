@@ -6,8 +6,8 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Backend from "../constants/Backend";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +16,7 @@ export default function Login() {
         password: ""
     });
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -29,29 +30,20 @@ export default function Login() {
         axios.post(`${Backend}/auth/signin`, formData)
         .then((res) => {
             login(res.data);
+            navigate("/");
             console.log(res.data)
-            toast.success(res.data.message, {
-                position: "top-left",
-                autoClose: 1500,
-                hideProgressBar: true
-            })
+
         })
         .catch((e) => {
             console.log(e)
-            toast.error(e, {
-                position: "top-left",
-                autoClose: 1500,
-                hideProgressBar: true
-            })
         });
     };
 
     return (
         <Container maxWidth="xl" sx={{  bgcolor: "#f3f4f6" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
-            <ToastContainer />
-            <Grid2 sx={{ height: { sm: "85%", md: "95%" , lg: "80%" }, width: { sm: "95%", md: "75%", lg: "50%" } }} container direction={{ sm: "column", lg: "row" }}>
-                <Box sx={{ bgcolor: "#6586f1", height: { sm: "30%", md: "25%", lg: "100%" }, width: { sm: "100%", lg: "35%" } }}></Box>
-                <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: "white", height: { sm: "70%", md: "75%", lg: "100%" }, width: { sm: "100%", lg: "65%" }, p: 2, display: "flex", flexDirection: "column", gap: { sm: 3, lg: 4 } }} >
+            <Grid2 sx={{ height: { sm: "80%", md: "95%" , lg: "80%" }, width: { sm: "95%", md: "75%", lg: "50%" } }} container direction={{ sm: "column", lg: "row" }}>
+                <Box sx={{ bgcolor: "#6586f1", height: { sm: "20%", md: "25%", lg: "100%" }, width: { sm: "100%", lg: "35%" } }}></Box>
+                <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: "white", height: { sm: "75%", md: "75%", lg: "100%" }, width: { sm: "100%", lg: "65%" }, p: 2, display: "flex", flexDirection: "column", gap: { sm: 3, lg: 4 } }} >
                     <Typography variant="h4">Welcome to Connekt!</Typography>   
                     <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 3 }}>
                         <TextField 

@@ -3,13 +3,12 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import { useEffect } from "react";
-import useAuth from "../hooks/useAuth";
-
 
 export default function RouteProvider() {
     const location = useLocation();
-    const { isAuthenticated } = useAuth();
     
+    const token = localStorage.getItem("Connekt-token")
+
     useEffect(() => {
         switch(location.pathname) {
             case "/":
@@ -28,8 +27,8 @@ export default function RouteProvider() {
 
     return (
         <Routes>
-            <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/login"/>}/>
-            <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/"/>}/>
+            <Route path="/" element={token ? <Home /> : <Navigate to="/login"/>}/>
+            <Route path="/login" element={!token ? <Login /> : <Navigate to="/"/>}/>
             <Route path="/signup" element={<Signup />}/>
         </Routes>
     )
