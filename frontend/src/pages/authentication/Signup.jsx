@@ -64,13 +64,11 @@ export default function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData)
-        // if (termsConsent === true && page === 3) { 
-        //     axios.post(`${Backend}/auth/signup`, formData, {
-        //         headers: { "Content-type": "multipart/form-data" },
-        //     })
-        //     .then((res) => console.log(res))
-        //     .catch((e) => console.log(e)) 
-        // }
+        if (termsConsent === true && page === 3) { 
+            axios.post(`${Backend}/auth/signup`, formData)
+            .then((res) => console.log(res))
+            .catch((e) => console.log(e)) 
+        }
     };
 
     return (

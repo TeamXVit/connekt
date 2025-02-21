@@ -99,6 +99,9 @@ authRouter.post("/signin", async (request, response)=>{
         if(!match) return response.status(400).send({
             error: "Invalid Credentials."
         });
+        if(!user.isVerified) return response.status(400).send({
+            error: "Email not verified"
+        });
         const token = jwt.sign({regno}, process.env.JWTKEY, {expiresIn: "7d"});
         return response.status(200).send({token});
     }catch(err){
@@ -107,6 +110,37 @@ authRouter.post("/signin", async (request, response)=>{
         });
     }
 });
+
+authRouter.post("/forget-password", async (request,response)=>{
+    try{
+        const {email} = request.body;
+        if(!email) return response.status(400).send({ 
+            error: "All required fields must be filled." 
+        });
+        const user = await Users.findOne({email});
+        if(!user) return response.status(400).send({
+            error: "User Account doesn't exists"
+        });
+        const resetToken = jwt.sign({regno: user.regno}, process.env.JWTKEY, {expiresIn: "15m"});
+        const resetLink = `${request.protocol}://${request.get("host")}/auth/reset-password/${resetToken}`;
+        await transporter.sendMail({
+            from: process.env.EMAIL,
+            to: email,
+            subject: "Password Reset",
+            html:`<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
+        });
+        return response.status(200).send({
+            message: "Password reset email sent successfully."
+        });
+    }catch(err){
+        return response.status(500).send({
+            error: `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+authRouter.get("/reset-password/:token", async (request,response)=>{});
+authRouter.post("/reset-password", async (request,response)=>{});   
 
 authRouter.get("/allusers", authenticateToken, async (request, response)=>{
     try{
