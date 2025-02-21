@@ -71,21 +71,13 @@ export default function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData)
-        if (termsConsent === true && page === 3) { 
-            const payload = {
-                name: formData.name,
-                email: formData.email,
-                password: formData.password,
-                regno: formData.regno,
-                dob: formData.dob.format("YYYY-MM-DD"),
-                gender: formData.gender,
-                phoneno: formData.phoneno,
-                instagram: formData.instagram
-            };
-            axios.post(`${Backend}/auth/signup`, payload)
-            .then(res => console.log(res))
-            .catch(e => console.log(e))
-        }
+        // if (termsConsent === true && page === 3) { 
+        //     axios.post(`${Backend}/auth/signup`, formData, {
+        //         headers: { "Content-type": "multipart/form-data" },
+        //     })
+        //     .then((res) => console.log(res))
+        //     .catch((e) => console.log(e)) 
+        // }
     };
 
     return (
