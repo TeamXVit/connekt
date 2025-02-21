@@ -50,6 +50,7 @@ authRouter.post("/signup", async (request, response)=>{
             phoneno,
             dob,
             isVerified: false,
+            resetToken: null,
             instagram: instagram || "",
             profilepicture: profilepicture || ""
         });
@@ -87,7 +88,7 @@ authRouter.get("/verify/:token", async (request, response)=>{
     }
 });
 
-authRouter.post("/signin", async (request, response)=>{
+authRouter.post("/login", async (request, response)=>{
     try{
         const { regno, password } = request.body;
         if(!regno || !password) return response.status(400).send({ error: "All required fields must be filled." });
@@ -115,13 +116,24 @@ authRouter.post("/forget-password", async (request,response)=>{
     try{
         const {email} = request.body;
         if(!email) return response.status(400).send({ 
-            error: "All required fields must be filled." 
+            error: "Email is required." 
         });
         const user = await Users.findOne({email});
         if(!user) return response.status(400).send({
             error: "User Account doesn't exists"
         });
+        if(user.resetToken){
+            try {
+                jwt.verify(user.resetToken, process.env.JWTKEY);
+                return response.status(400).send({ error: "Multiple password reset attempts." });
+            } catch (err) {
+                user.resetToken = null;
+                await user.save();
+            }
+        }
         const resetToken = jwt.sign({regno: user.regno}, process.env.JWTKEY, {expiresIn: "15m"});
+        user.resetToken = resetToken;
+        await user.save()
         const resetLink = `${request.protocol}://${request.get("host")}/auth/reset-password/${resetToken}`;
         await transporter.sendMail({
             from: process.env.EMAIL,
@@ -139,8 +151,57 @@ authRouter.post("/forget-password", async (request,response)=>{
     }
 });
 
-authRouter.get("/reset-password/:token", async (request,response)=>{});
-authRouter.post("/reset-password", async (request,response)=>{});   
+authRouter.get("/reset-password/:token", async (request,response)=>{
+    try{
+        const { token } = request.params;
+        return response.send(`
+            <form action="/auth/reset-password" method="POST">
+                <input type="hidden" name="token" value="${token}"/>
+                <input type="password" name="password" value="" placeholder="Enter your new password"/>
+                <input type="submit" value="Reset Password"/>
+            </form>
+        `);
+    }catch(err){
+        return response.status(500).send({
+            error: `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+authRouter.post("/reset-password", async (request,response)=>{
+    try{
+        const { token,password } = request.body;
+        if(!password?.trim()) return response.status(400).send({
+            error: "New Password is Required."
+        });
+        let decoded;
+        try{
+            decoded = jwt.verify(token, process.env.JWTKEY); 
+        }catch(err){
+            return response.status(400).send({
+                error: "Invalid or expired token."
+            });
+        }
+        const user = await Users.findOne({regno:decoded.regno});
+        if(!user) return response.status(400).send({
+            error: "User not found."
+        });
+        if(user.resetToken!==token) return response.status(400).send({
+            error: "Invalid or expired token."
+        });
+        const hashedPassword = await bcrypt.hash(password,10);
+        user.password = hashedPassword;
+        user.resetToken = null;
+        await user.save();
+        return response.status(200).send({
+            message: "Your password has been successfully changed."
+        });
+    }catch(err){
+        return response.status(500).send({
+            error: `Internal Server Error : ${err.message}`
+        });
+    }
+});   
 
 authRouter.get("/allusers", authenticateToken, async (request, response)=>{
     try{
