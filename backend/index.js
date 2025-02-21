@@ -13,6 +13,7 @@ mongoose.connect(process.env.MONGODB_URL).then(()=>{
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/auth",authRouter);
 
 app.get("/",(request, response)=>{
