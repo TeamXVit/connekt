@@ -21,7 +21,7 @@ const authRouter = express.Router();
 authRouter.post("/signup", async (request, response)=>{
     try{
         const {name, regno, password, gender, email, phoneno, dob, instagram, profilepicture} = request.body;
-        if (!name || !regno || !password || !gender || !email || !phoneno || !dob) {    
+        if (!name || !regno || !password || !gender || !email || !phoneno || !dob) {
             return response.status(400).send({ error: "All required fields must be filled." });
         }
         if(!email.includes("@vitapstudent.ac.in")){

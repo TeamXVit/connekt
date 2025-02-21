@@ -4,7 +4,6 @@ import { Box, Button, Checkbox, Container, Divider, FormControl, FormControlLabe
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MarkEmailUnreadIcon from '@mui/icons-material/MarkEmailUnread';
 import PasswordIcon from "@mui/icons-material/Password";
@@ -17,6 +16,8 @@ import dayjs from "dayjs";
 import emailVerificationImage from "../assets/email-verification.jpg";
 import axios from "axios";
 import Backend from "../constants/Backend";
+import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -33,13 +34,16 @@ export default function Signup() {
         instagram: ""
     });
 
+    let navigate = useNavigate();
+
     const handlePrevPage = () => {
         if (page === 3) {
-            if (termsConsent)
+            if (termsConsent) {
                 setTermsConsent(false)
-        }
-        setPage(page - 1)
-    }
+            };
+        };
+        setPage(page - 1);
+    };
 
     const handleNextPage = () => {
         let isValid = true;
@@ -47,16 +51,16 @@ export default function Signup() {
         if (page === 1) {
             if (!formData.name || !formData.email || !formData.password) {
                 isValid = false;
-            }
+            };
         } else if (page === 2) {
             if (!formData.dob || !formData.gender || !formData.regno || !formData.phoneno) {
                 isValid = false;
-            }
-        }
-    
+            };
+        };
+
         if (isValid) {
             setPage(page + 1);
-        }
+        };
     };
     
     const handlePasswordVisibility = () => setShowPassword(!showPassword);
@@ -70,18 +74,23 @@ export default function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData)
-        // if (termsConsent === true && page === 3) { 
-        //     axios.post(`${Backend}/auth/signup`, formData, {
-        //         headers: { "Content-type": "multipart/form-data" },
-        //     })
-        //     .then((res) => console.log(res))
-        //     .catch((e) => console.log(e)) 
-        // }
+        if (termsConsent === true && page === 3) { 
+            axios.post(`${Backend}/auth/signup`, formData)
+            .then((res) => {
+                toast.success(res.data.message, {
+                    position: "top-left",
+                    autoClose: 1500,
+                    hideProgressBar: true
+                });
+                navigate("/login")
+            })
+            .catch((e) => console.log(e)); 
+        };
     };
 
     return (
         <Container maxWidth="xl" sx={{  bgcolor: "#f3f4f6" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
+            <ToastContainer />
             <Grid2 sx={{ bgcolor: "white", height: { sm: "85%", md: "95%" ,lg: "90%" }, width: { sm: "95%", md: "75%", lg: "50%" } }} container direction="column" gap={2}>
                 <Typography variant="h6" textAlign="center" sx={{ pt: 1 }}>
                     {page === 1 && "Create Account"}
