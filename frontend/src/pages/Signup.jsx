@@ -14,9 +14,9 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import BadgeIcon from "@mui/icons-material/Badge";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import dayjs from "dayjs";
-import emailVerificationImage from "../../assets/email-verification.jpg";
+import emailVerificationImage from "../assets/email-verification.jpg";
 import axios from "axios";
-import Backend from "../../constants/Backend";
+import Backend from "../constants/Backend";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -32,6 +32,14 @@ export default function Signup() {
         phoneno: "",
         instagram: ""
     });
+
+    const handlePrevPage = () => {
+        if (page === 3) {
+            if (termsConsent)
+                setTermsConsent(false)
+        }
+        setPage(page - 1)
+    }
 
     const handleNextPage = () => {
         let isValid = true;
@@ -51,7 +59,6 @@ export default function Signup() {
         }
     };
     
-
     const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
     const handleChange = (e) => {
@@ -64,13 +71,21 @@ export default function Signup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData)
-        // if (termsConsent === true && page === 3) { 
-        //     axios.post(`${Backend}/auth/signup`, formData, {
-        //         headers: { "Content-type": "multipart/form-data" },
-        //     })
-        //     .then((res) => console.log(res))
-        //     .catch((e) => console.log(e)) 
-        // }
+        if (termsConsent === true && page === 3) { 
+            const payload = {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+                regno: formData.regno,
+                dob: formData.dob.format("YYYY-MM-DD"),
+                gender: formData.gender,
+                phoneno: formData.phoneno,
+                instagram: formData.instagram
+            };
+            axios.post(`${Backend}/auth/signup`, payload)
+            .then(res => console.log(res))
+            .catch(e => console.log(e))
+        }
     };
 
     return (
@@ -169,7 +184,7 @@ export default function Signup() {
                     <>
                         <Box sx={{ width: "75%", display: "flex", flexDirection: { sm: "column", lg: "row" }, flexWrap: { sm: "wrap" } ,justifyContent: "space-between", gap: { sm: 2, lg: 1 } }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker disableFuture value={formData.dob} label="DOB" name="dob" format="YYYY-MM-DD" onChange={handleDateChange} sx={{ width: { sm: "100%", lg: "57%" } }}/>
+                                <DatePicker disableFuture value={formData.dob} label="DOB" name="dob" format="YYYY-MM-DD" onChange={handleDateChange} sx={{ width: { sm: "100%", lg: "57%" } }} />
                             </LocalizationProvider>
                             <FormControl sx={{ width: { sm: "100%",lg: "40%" } }}>
                                 <InputLabel id="gender-select">Gender</InputLabel>
@@ -252,12 +267,12 @@ export default function Signup() {
                     <>
                         <Box component="img" src={emailVerificationImage} sx={{ width: 150, height: 150 }}></Box>
                         <Typography sx={{ width: "75%", textAlign: "" ,textWrap: "wrap" }}>We have sent a verification mail to the given email ID. Click on the provided link to activate your account. The link will expire within 24 hours</Typography>
-                        <FormControlLabel control={<Checkbox/>} label="I accept the terms and conditions" sx={{ width: "75%" }} onChange={() => setTermsConsent(!termsConsent)}/>
+                        <FormControlLabel control={<Checkbox/>} label="I accept the terms and conditions" sx={{ width: "75%" }} onChange={() => setTermsConsent(true)}/>
                     </>}
                     <Box sx={{ width: "75%", display: "flex", justifyContent: "space-between" }}>
                         {page === 1 ? 
-                        <Link href="/" underline="none" color="#6586f1">Login</Link> : 
-                        <Button variant="contained" sx={{ bgcolor: "#6586f1" }} onClick={() => setPage(page - 1)}>Back</Button>}
+                        <Link href="/login" underline="none" color="#6586f1">Login</Link> : 
+                        <Button variant="contained" sx={{ bgcolor: "#6586f1" }} onClick={handlePrevPage}>Back</Button>}
                         {page > 2 ? 
                         <Button variant="contained" sx={{ bgcolor: "#6586f1" }} disabled={termsConsent === false} type="submit">Submit</Button> : 
                         <Button variant="contained" sx={{ bgcolor: "#6586f1" }} onClick={handleNextPage}>Next</Button>}
