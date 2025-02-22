@@ -60,7 +60,26 @@ authRouter.post("/signup", async (request, response)=>{
             from: process.env.EMAIL,
             to: email,
             subject: "Email Verification",
-            html:`<p>Click <a href="${verificationLink}">here</a> to verify your email.</p>`
+            html:`
+            <h2>Verify Your Email for Connekt</h2>
+            <p>Hi ${name},</p>
+            <p>Welcome to Connekt! To complete your sign-up and, please verify your email.</p>
+            <a href="${verificationLink}" style="
+                display: inline-block;
+                background-color: #007bff;
+                color: #ffffff;
+                padding: 12px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;">Verify Email</a>
+            <p>If the button doesn’t work, you can also verify your email by copying and pasting the following link into your browser:</p>
+            <p><a href="${verificationLink}">${verificationLink}</a></p>
+            <p>If you didn’t sign up for Connekt, please ignore this email.</p>
+            <p>Happy exploring! <br> <strong>TeamX</strong></p>
+            <p>(This is an automated email—please do not reply.)</p>
+            `
         });
         return response.status(200).send({
             message : "User Account Created Successfully and Verification e-mail sent."
@@ -139,7 +158,26 @@ authRouter.post("/forget-password", async (request,response)=>{
             from: process.env.EMAIL,
             to: email,
             subject: "Password Reset",
-            html:`<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
+            html:`
+            <h2>Reset Your Password for Connekt</h2>
+            <p>Hi ${user.name},</p>
+            <p>We received a request to reset your password for your connekt account. If this was you, click the button below to set a new password:</p>
+            <a href="${resetLink}" style="
+                display: inline-block;
+                background-color: #007bff;
+                color: #ffffff;
+                padding: 12px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;">Reset Password</a>
+            <p>If the button doesn’t work, you can also reset your password by copying and pasting the following link into your browser:</p>
+            <p><a href="${resetLink}">${resetLink}</a></p>
+            <p>If you didn’t request a password reset, you can ignore this email—your account is safe.</p>
+            <p>Best Regards, <br> <strong>TeamX</strong></p>
+            <p>(This is an automated email—please do not reply.)</p>
+        `
         });
         return response.status(200).send({
             message: "Password reset email sent successfully."
