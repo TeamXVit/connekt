@@ -20,6 +20,9 @@ export default function RouteProvider() {
             case "/signup":
                 document.title = "Signup"
                 break
+            case "/forget-password":
+                document.title = "Reset Password"
+                break
             default:
                 document.title = "Connekt"
         }

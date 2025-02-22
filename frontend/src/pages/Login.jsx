@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Checkbox, Container, FormControlLabel, Grid2, IconButton, InputAdornment, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Grid2, IconButton, InputAdornment, Link, Stack, TextField, Typography } from "@mui/material";
 import BadgeIcon from "@mui/icons-material/Badge";
 import PasswordIcon from "@mui/icons-material/Password";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -8,6 +8,7 @@ import Backend from "../constants/Backend";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify"
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
@@ -27,24 +28,19 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${Backend}/auth/signin`, formData)
+        axios.post(`${Backend}/auth/login`, formData)
         .then((res) => {
             login(res.data);
             navigate("/");
-            console.log(res.data)
-
         })
-        .catch((e) => {
-            console.log(e)
-        });
+        .catch((e) => toast.error(e.response.data.error));
     };
 
     return (
-        <Container maxWidth="xl" sx={{  bgcolor: "#f3f4f6" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
-            <Grid2 sx={{ height: { sm: "80%", md: "95%" , lg: "80%" }, width: { sm: "95%", md: "75%", lg: "50%" } }} container direction={{ sm: "column", lg: "row" }}>
-                <Box sx={{ bgcolor: "#6586f1", height: { sm: "20%", md: "25%", lg: "100%" }, width: { sm: "100%", lg: "35%" } }}></Box>
-                <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: "white", height: { sm: "75%", md: "75%", lg: "100%" }, width: { sm: "100%", lg: "65%" }, p: 2, display: "flex", flexDirection: "column", gap: { sm: 3, lg: 4 } }} >
-                    <Typography variant="h4">Welcome to Connekt!</Typography>   
+        <Container maxWidth={false} sx={{  bgcolor: "background.default" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
+            <Grid2 sx={{ height: { sm: "65%", md: "70%" }, width: { sm: "95%", md: "75%", lg: "35%" }, border: 1, borderColor: "grey.500", borderRadius: 1  }} container direction="column">
+                <Box component="form" onSubmit={handleSubmit} sx={{ bgcolor: "background.default", color: "text.primary", height: "100%", width: "100%", p: 2, display: "flex", flexDirection: "column",  gap: { sm: 3, lg: 4 }, justifyContent: "space-evenly", borderRadius: 1 }} >
+                    <Typography variant="h4">Login to Connekt!</Typography>   
                     <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 3 }}>
                         <TextField 
                             name="regno"
@@ -66,44 +62,42 @@ export default function Login() {
                                 }
                             }} 
                         />
-                        <Box sx={{ width: "100%" }}>
-                            <TextField 
-                                name="password"
-                                placeholder="Enter your password"
-                                label="Password" 
-                                type={showPassword ? "text" : "password"} 
-                                variant="outlined" 
-                                required
-                                onChange={handleChange}
-                                value={formData.password}
-                                sx={{ width: "100%" }}
-                                slotProps={{ 
-                                    input: {
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <PasswordIcon sx={{ color: "#6586f1" }}/>
-                                            </InputAdornment>
-                                        ),
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton onClick={handlePasswordVisibility}>
-                                                {showPassword ? <VisibilityIcon sx={{ color: "#6586f1" }}/> : <VisibilityOffIcon />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }
-                                }}
-                            />
-                            <FormControlLabel control={<Checkbox/>} label="Remember Me" />
-                        </Box>
+                        <TextField 
+                            name="password"
+                            placeholder="Enter your password"
+                            label="Password" 
+                            type={showPassword ? "text" : "password"} 
+                            variant="outlined" 
+                            required
+                            onChange={handleChange}
+                            value={formData.password}
+                            sx={{ width: "100%" }}
+                            slotProps={{ 
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <PasswordIcon sx={{ color: "#6586f1" }}/>
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handlePasswordVisibility}>
+                                            {showPassword ? <VisibilityIcon sx={{ color: "#6586f1" }}/> : <VisibilityOffIcon />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }
+                            }}
+                        />
+                        <Button variant="contained" sx={{ bgcolor: "#6586f1" }} type="submit">Login</Button>
                     </Box>
-                    <Button variant="contained" sx={{ bgcolor: "#6586f1" }} type="submit">Login</Button>
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Stack direction="row" sx={{ justifyContent: "space-between" }}>
                         <Link href="#" underline="none">Forgot Password</Link>
                         <Link href="/signup" underline="none">Sign Up</Link>
-                    </Box>
+                    </Stack>
                 </Box>
             </Grid2>
+            <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     )
 }
