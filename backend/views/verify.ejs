@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-md w-full">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Reset Password</h2>
+        <form id="resetPasswordForm" action="/auth/reset-password" method="POST" class="space-y-4">
+            <input type="hidden" name="token" value="<%=token%>"/>
+            <div>
+                <label for="newPassword" class="block font-medium text-gray-700">New Password</label>
+                <input name="password" id="newPassword" type="password" required
+                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+            <div>
+                <label for="confirmPassword" class="block font-medium text-gray-700">Confirm Password</label>
+                <input id="confirmPassword" type="password" required
+                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            </div>
+            <p id="message" class="text-red-500 font-medium text-sm hidden"></p>
+            <button type="submit" 
+                class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 transition">
+                Reset Password
+            </button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('resetPasswordForm').addEventListener('submit', function(event) {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageElement = document.getElementById('message');
+
+            if (newPassword !== confirmPassword) {
+                event.preventDefault();
+                messageElement.textContent = "Passwords do not match.";
+                messageElement.classList.remove("hidden");
+            }
+        });
+    </script>
+</body>
+</html>

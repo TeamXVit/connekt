@@ -122,7 +122,7 @@ authRouter.post("/login", async (request, response)=>{
         if(!user.isVerified) return response.status(400).send({
             error: "Email not verified"
         });
-        const token = jwt.sign({regno}, process.env.JWTKEY, {expiresIn: "7d"});
+        const token = jwt.sign({regno:regno.toUpperCase()}, process.env.JWTKEY, {expiresIn: "7d"});
         return response.status(200).send({token});
     }catch(err){
         return response.status(500).send({
@@ -192,13 +192,14 @@ authRouter.post("/forget-password", async (request,response)=>{
 authRouter.get("/reset-password/:token", async (request,response)=>{
     try{
         const { token } = request.params;
-        return response.send(`
-            <form action="/auth/reset-password" method="POST">
-                <input type="hidden" name="token" value="${token}"/>
-                <input type="password" name="password" value="" placeholder="Enter your new password"/>
-                <input type="submit" value="Reset Password"/>
-            </form>
-        `);
+        // return response.send(`
+        //     <form action="/auth/reset-password" method="POST">
+        //         <input type="hidden" name="token" value="${token}"/>
+        //         <input type="password" name="password" value="" placeholder="Enter your new password"/>
+        //         <input type="submit" value="Reset Password"/>
+        //     </form>
+        // `);
+        return response.render("verify", {token});
     }catch(err){
         return response.status(500).send({
             error: `Internal Server Error : ${err.message}`
