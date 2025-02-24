@@ -12,8 +12,8 @@ export default function  App() {
     palette: {
       mode: "dark",
       primary: {
-        main: '#1976d2',
-        contrastText: 'white',
+        main: "#1976d2",
+        contrastText: "white",
       },
     },
     breakpoints: {
@@ -31,11 +31,11 @@ export default function  App() {
 
   return (
     <AuthProvider>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme} defaultMode="system">
         <BrowserRouter>
           <RouteProvider />
         </BrowserRouter>
       </ThemeProvider>
     </AuthProvider>
-  )
-}
+  );
+};

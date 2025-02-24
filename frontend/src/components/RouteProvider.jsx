@@ -1,8 +1,11 @@
+import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router";
-import Home from "../pages/Home";
+import Sidebar from "../components/Sidebar";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
-import { useEffect } from "react";
+import Home from "../pages/Home";
+import TravelPartner from "../pages/TravelPartner";
+import { Box } from "@mui/material";
 
 export default function RouteProvider() {
     const location = useLocation();
@@ -23,16 +26,23 @@ export default function RouteProvider() {
             case "/forget-password":
                 document.title = "Reset Password"
                 break
+            case "travel-partner":
+                document.title = "Travel Partner"
+                break
             default:
                 document.title = "Connekt"
         }
     }, [location])
 
     return (
-        <Routes>
-            <Route path="/" element={token ? <Home /> : <Navigate to="/login"/>}/>
-            <Route path="/login" element={!token ? <Login /> : <Navigate to="/"/>}/>
-            <Route path="/signup" element={<Signup />}/>
-        </Routes>
+        <Box sx={{ display: "flex" }}>
+            <Sidebar />
+            <Routes>
+                <Route path="/" element={token ? <Home /> : <Navigate to="/login"/>}/>
+                <Route path="/login" element={!token ? <Login /> : <Navigate to="/"/>}/>
+                <Route path="/signup" element={<Signup />}/>
+                <Route path="/travel-partner" element={<TravelPartner />}/>
+            </Routes>
+        </Box>
     )
 }
