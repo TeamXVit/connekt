@@ -30,8 +30,9 @@ export default function Login() {
         e.preventDefault();
         axios.post(`${Backend}/auth/login`, formData)
         .then((res) => {
-            login(res.data);
-            navigate("/");
+            console.log(res.data.token);
+            login(res.data.token);
+            navigate("/travel-partner");
         })
         .catch((e) => toast.error(e.response.data.error));
     };
@@ -92,7 +93,7 @@ export default function Login() {
                         <Button variant="contained" sx={{ bgcolor: "#6586f1" }} type="submit">Login</Button>
                     </Box>
                     <Stack direction="row" sx={{ justifyContent: "space-between" }}>
-                        <Link href="#" underline="none">Forgot Password</Link>
+                        <Link href="/forgot-password" underline="none">Forgot Password</Link>
                         <Link href="/signup" underline="none">Sign Up</Link>
                     </Stack>
                 </Box>
