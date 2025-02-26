@@ -4,9 +4,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import PasswordIcon from "@mui/icons-material/Password";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import Backend from "../constants/Backend";
+import Backend from "../../constants/Backend";
 import axios from "axios";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify"
 

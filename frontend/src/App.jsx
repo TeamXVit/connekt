@@ -1,13 +1,10 @@
-/* eslint-disable no-unused-vars */
 import { AuthProvider } from "./contexts/AuthContext";
 import { BrowserRouter } from "react-router";
 import RouteProvider from "./components/RouteProvider";
-import { createTheme, ThemeProvider, useColorScheme } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 
 export default function  App() {
-  const { mode, setMode } = useColorScheme();
-
   const theme = createTheme({
     palette: {
       mode: "dark",

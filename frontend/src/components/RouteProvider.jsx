@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router";
 import TopBar from "../components/TopBar";
 import Sidebar from "../components/Sidebar";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import Home from "../pages/Home";
-import ForgotPassword from "../pages/ForgotPassword";
-import TravelPartner from "../pages/TravelPartner";
-import LostFound from "../pages/LostFound";
-import FindTeammate from "../pages/FindTeammate";
-import Queries from "../pages/Queries";
-import UserProfile from "../pages/UserProfile";
+import Login from "../pages/auth/Login";
+import Signup from "../pages/auth/Signup";
+import Home from "../pages/user/Home";
+import ForgotPassword from "../pages/user/ForgotPassword";
+import TravelPartner from "../pages/features/TravelPartner";
+import LostFound from "../pages/features/LostFound";
+import FindTeammate from "../pages/features/FindTeammate";
+import Queries from "../pages/features/Queries";
+import UserProfile from "../pages/user/UserProfile";
 import { Box } from "@mui/material";
 
 export default function RouteProvider() {
@@ -43,6 +43,9 @@ export default function RouteProvider() {
                 break
             case "/queries":
                 document.title = "Queries"
+                break
+            case "/user":
+                document.title = "User Profile"
                 break
             default:
                 document.title = "Connekt"

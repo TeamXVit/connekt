@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
-import { Avatar, AppBar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Avatar, AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography, useTheme } from "@mui/material";
 
 
 export default function TopBar() {
@@ -13,6 +12,8 @@ export default function TopBar() {
     const { logout } = useAuth();
 
     const [anchorElUser, setAnchorElUser] = useState(null);
+
+    const theme = useTheme();
 
     if (hiddenRoutes.includes(location.pathname)) return null;
 
@@ -31,7 +32,7 @@ export default function TopBar() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar elevation={0} position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, background: "background.default", borderBottom: 0.5, borderColor: "grey.500" }}>
+            <AppBar elevation={0} position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor: theme.palette.mode === "dark" ? "#121212" : "white", borderBottom: 0.3, borderColor: "grey.500" }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: { sm: 3, lg: 0 }, color: "text.primary" }}>Connekt</Typography>
                     <Tooltip title="Open settings">

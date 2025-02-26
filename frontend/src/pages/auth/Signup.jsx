@@ -12,9 +12,9 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import BadgeIcon from "@mui/icons-material/Badge";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import dayjs from "dayjs";
-import emailVerificationImage from "../assets/email-verification.jpg";
+import emailVerificationImage from "../../assets/email-verification.jpg";
 import axios from "axios";
-import Backend from "../constants/Backend";
+import Backend from "../../constants/Backend";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 
