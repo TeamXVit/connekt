@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRouter from "./routers/authRoutes.js";
 import profileRouter from "./routers/profileRoutes.js";
+import travelRouter from "./routers/travelRouter.js";
 import path from "path";
 import "dotenv/config";
 
@@ -20,10 +21,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/auth",authRouter);
 app.use("/profile", profileRouter);
+app.use("/travel",travelRouter);
 
 app.get("/",(request, response)=>{
     response.status(200).send({
-        message:"connekt backend server"
+        message:"connekt backend server is active"
     });
 });
 

@@ -122,7 +122,7 @@ authRouter.post("/login", async (request, response)=>{
         if(!user.isVerified) return response.status(400).send({
             error: "Email not verified"
         });
-        const token = jwt.sign({regno:regno.toUpperCase()}, process.env.JWTKEY, {expiresIn: "7d"});
+        const token = jwt.sign({regno:regno.toUpperCase(), gender:user.gender}, process.env.JWTKEY, {expiresIn: "7d"});
         return response.status(200).send({token});
     }catch(err){
         return response.status(500).send({
@@ -241,16 +241,5 @@ authRouter.post("/reset-password", async (request,response)=>{
         });
     }
 });   
-
-authRouter.get("/allusers", authenticateToken, async (request, response)=>{
-    try{
-        const data = await Users.find();
-        response.status(200).send(data);
-    }catch(err){
-        response.status(500).send({
-            error: `Internal Server Error : ${err.message}`
-        });
-    }
-})
 
 export default authRouter;
