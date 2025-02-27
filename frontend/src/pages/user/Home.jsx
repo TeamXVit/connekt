@@ -1,9 +1,5 @@
-/* eslint-disable no-unused-vars */
-import { Box, Container, IconButton, Typography } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import EditIcon from "@mui/icons-material/Edit";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { Container, Typography } from "@mui/material";
+
 
 export default function Home() {
     

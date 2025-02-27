@@ -12,6 +12,7 @@ import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
 import UserProfile from "../pages/user/UserProfile";
 import MakePost from "../pages/user/MakePost";
+import Activities from "../pages/user/Activities"
 import { Box } from "@mui/material";
 
 
@@ -70,9 +71,9 @@ export default function RouteProvider() {
                 <Route path="/lost-found" element={<LostFound />}/>
                 <Route path="/find-teammate" element={<FindTeammate />}/>
                 <Route path="/queries" element={<Queries />}/>
-                
                 <Route path="/user" element={<UserProfile />}/>
                 <Route path="/make-post" element={<MakePost />}/>
+                <Route path="/activities" element={<Activities />}/>
             </Routes>
         </Box>
     )

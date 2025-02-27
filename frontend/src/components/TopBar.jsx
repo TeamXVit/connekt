@@ -55,7 +55,7 @@ export default function TopBar() {
                         <MenuItem onClick={() => {navigate("/make-post"); handleCloseUserMenu}} sx={{ width: "100%" }}>
                             <Typography>Create Post</Typography>
                         </MenuItem>
-                        <MenuItem onClick={handleCloseUserMenu} sx={{ width: "100%" }}>
+                        <MenuItem onClick={() => {navigate("/activities"); handleCloseUserMenu}} sx={{ width: "100%" }}>
                             <Typography>Activities</Typography>
                         </MenuItem>
                         <MenuItem onClick={() => {logout_(); handleCloseUserMenu()}} sx={{ width: "100%" }}>
