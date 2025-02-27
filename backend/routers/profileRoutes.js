@@ -2,6 +2,7 @@ import express from "express";
 import authenticateToken from "../middleware/authMiddleware.js";
 import { Users } from "../models/User.js";
 import { v2 as cloudinary} from "cloudinary";
+import { Travel } from "../models/Travel.js"; 
 import "dotenv/config";
 import multer from "multer";
 
@@ -115,6 +116,22 @@ profileRouter.patch("/edit",authenticateToken, async (request, response)=>{
         return response.status(200).send({
             message : "Profile edited successfully"
         }); 
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await Travel.find({author:user._id});
+        return response.status(200).send(posts);
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`

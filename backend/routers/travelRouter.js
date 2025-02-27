@@ -46,8 +46,21 @@ travelRouter.get("/view",authenticateToken, async (request, response)=>{
                 {preferences: "All"},
                 {preferences: gender}
             ]
-        });
-        return response.status(200).send(posts);
+        }).populate({
+            path:"author",
+            select:"regno name profilepicture phoneno"
+        }).lean();
+        const filteredPosts = posts.map(post =>{
+            let data = { ...post };
+            if (data && data.author) {
+                data.author = { ...data.author };
+                if (!data.showphoneno) {
+                    delete data.author.phoneno;
+                }
+            }
+            return data;
+        });        
+        return response.status(200).send(filteredPosts);
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
