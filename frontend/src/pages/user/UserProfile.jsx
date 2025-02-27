@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../../axios/axios";
-import { Avatar, Badge, Box, Button, Container, Divider, IconButton, Modal, TextField, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Button, Container, Divider, IconButton, Input, Modal, TextField, Typography } from "@mui/material";
 import Chopper from "../../assets/chopper.jpeg";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
-
 
 export default function UserProfile() {
     const [userDetails, setUserDetails] = useState(null);
@@ -15,8 +14,13 @@ export default function UserProfile() {
         value: "",
         label: "",
     });
+    const [openImageModal, setOpenImageModal] = useState(false);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [profilePicture, setProfilePicture] = useState(null);
 
     const dataFetchedRef = useRef(false);
+
+    const data = new FormData();
 
     useEffect(() => {
         if (dataFetchedRef.current) return;
@@ -24,9 +28,9 @@ export default function UserProfile() {
 
         const fetchData = async () => {
             await axios.get('/profile/view')
-            .then(res => {setUserDetails(res.data); console.log(res.data)})
+            .then(res => setUserDetails(res.data))
             .catch(e => console.log(e));
-        }
+        };
 
         fetchData();
     }, []);
@@ -61,6 +65,40 @@ export default function UserProfile() {
         });
     };
 
+    const handleOpenImageModal = () => {
+        setOpenImageModal(true);
+    };
+
+    const handleCloseImageModal = () => {
+        setImagePreview(null);
+        setOpenImageModal(false);
+    };
+
+    const handleImagePreview = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setProfilePicture(e.target.files[0])
+            data.append("image", profilePicture);
+            setImagePreview(URL.createObjectURL(e.target.files[0]));
+        };
+    };
+
+    const handleImageUpload = () => {   
+        if (profilePicture) {      
+            console.log(data);
+            axios.post("/profile/upload-profilepicture", data, {
+                headers: { "Content-Type": "multipart/form-data" }
+            })
+            .then(res => {
+                console.log(res.data);
+                toast.success("Profile picture uploaded successfully!");
+            })
+            .catch(e => {
+                console.log(e);
+                toast.error("Failed to upload profile picture.");
+            });
+        };
+    };
+
     const handleCloseModal = () => {
         setModal({ ...modal, open: false });
     };
@@ -70,25 +108,16 @@ export default function UserProfile() {
     };
 
     return (
-        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "70px", pb: "15px" }}>
+        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "70px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
             <Typography variant="h4" sx={{ my: 2 }}>Your Profile</Typography>
             {userDetails && 
             <>
-                <Box sx={{ width: { sm: "100%", lg: "70%" }, height: 100, px: 1, position: "relative", display: "flex", alignItems: "center", gap: 3, }}>
+                <Box sx={{ width: { sm: "90%", lg: "70%" }, height: 100, px: 1, position: "relative", display: "flex", alignItems: "center", gap: 3, }}>
                     <Badge
                         overlap="circular"
                         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                         badgeContent={
-                            <IconButton
-                            sx={{
-                                backgroundColor: "black",
-                                color: "white",
-                                borderRadius: "50%",
-                                padding: "5px",
-                                width: 32,
-                                height: 32,
-                            }}
-                            >
+                            <IconButton sx={{ backgroundColor: "black", color: "white", borderRadius: "50%", padding: "5px", width: 32, height: 32 }} onClick={handleOpenImageModal}>
                                 <AddAPhotoIcon sx={{ width: 20, height: 20 }} />
                             </IconButton>
                         }
@@ -103,6 +132,17 @@ export default function UserProfile() {
                         <Typography variant="body2">{userDetails.regno}</Typography>
                     </Box>
                 </Box>
+                <Modal open={openImageModal} onClose={handleCloseImageModal}>
+                    <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "fit", bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: "text.primary" }}>Upload Profile Picture</Typography>
+                        <Avatar sx={{ width: 100, height: 100, mx: "auto" }} src={imagePreview}/>
+                        <Input type="file" accept="image/png, image/jpeg" onChange={handleImagePreview}/>
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <Button variant="text" onClick={handleCloseImageModal}>Cancel</Button>
+                            <Button variant="contained" onClick={handleImageUpload} disabled={!imagePreview}>Upload</Button>
+                        </Box>
+                    </Box>
+                </Modal>
                 <Modal open={modal.open} onClose={handleCloseModal}>
                     <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "fit", bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: "text.primary" }}>Edit your {modal.label}</Typography>

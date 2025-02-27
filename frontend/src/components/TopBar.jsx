@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
-import { Avatar, AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography, useTheme } from "@mui/material";
+import { Avatar, AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography, useTheme, } from "@mui/material";
 
 
 export default function TopBar() {
@@ -52,7 +52,7 @@ export default function TopBar() {
                         <MenuItem onClick={() => {navigate("/user"); handleCloseUserMenu()}} sx={{ width: "100%" }}>
                             <Typography>View Profile</Typography>
                         </MenuItem>
-                        <MenuItem onClick={handleCloseUserMenu} sx={{ width: "100%" }}>
+                        <MenuItem onClick={() => {navigate("/make-post"); handleCloseUserMenu}} sx={{ width: "100%" }}>
                             <Typography>Create Post</Typography>
                         </MenuItem>
                         <MenuItem onClick={handleCloseUserMenu} sx={{ width: "100%" }}>

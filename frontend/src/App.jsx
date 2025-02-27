@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 export default function  App() {
   const theme = createTheme({
     palette: {
-      mode: "dark",
+      mode: "light",
       primary: {
         main: "#1976d2",
         contrastText: "white",

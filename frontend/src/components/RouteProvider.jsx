@@ -11,7 +11,9 @@ import LostFound from "../pages/features/LostFound";
 import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
 import UserProfile from "../pages/user/UserProfile";
+import MakePost from "../pages/user/MakePost";
 import { Box } from "@mui/material";
+
 
 export default function RouteProvider() {
     const location = useLocation();
@@ -47,6 +49,9 @@ export default function RouteProvider() {
             case "/user":
                 document.title = "User Profile"
                 break
+            case "/make-post":
+                document.title = "Make A Post"
+                break
             default:
                 document.title = "Connekt"
         }
@@ -65,7 +70,9 @@ export default function RouteProvider() {
                 <Route path="/lost-found" element={<LostFound />}/>
                 <Route path="/find-teammate" element={<FindTeammate />}/>
                 <Route path="/queries" element={<Queries />}/>
+                
                 <Route path="/user" element={<UserProfile />}/>
+                <Route path="/make-post" element={<MakePost />}/>
             </Routes>
         </Box>
     )
