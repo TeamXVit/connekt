@@ -4,25 +4,22 @@ import { Users } from "../models/User.js";
 import { v2 as cloudinary} from "cloudinary";
 import { Travel } from "../models/Travel.js"; 
 import "dotenv/config";
-import multer from "multer";
 
 cloudinary.config({secure:true});
-const storage = multer.memoryStorage();
-const upload = multer({storage});
 const profileRouter = express.Router();
 
-profileRouter.post(
-    "/upload-profilepicture",
-    authenticateToken, 
-    upload.single("image"), 
-    async (request, response)=>{
+profileRouter.post("/upload-profilepicture", authenticateToken, async (request, response)=>{
     try{
         const { regno } = request.user;
-        if(!request.file) return response.status(400).send({
+        const { image } = request.body;
+        if(!image) return response.status(400).send({
             error: "Image is Required"
         });
-        if(!["image/jpeg", "image/png"].includes(request.file.mimetype)) return response.status(400).send({
-            error: "Only JPG and PNG files are allowed."
+        if(!image.startsWith("data:image")) return response.status(400).send({
+            error: "Image should be in base64."
+        });
+        if(!image.startsWith("data:image/png;") && !image.startsWith("data:image/jpeg;")) return response.status(400).send({
+            error: "Only JPG and PNG Images are allowed."
         });
         const user = await Users.findOne({regno});
         if(!user) return response.status(404).send({
@@ -35,13 +32,23 @@ profileRouter.post(
             use_filename : true,
             resource_type: "image"
         };
-        const b64 = Buffer.from(request.file.buffer).toString("base64");
-        const dataURI = `data:${request.file.mimetype};base64,${b64}`;
-        const result = await cloudinary.uploader.upload(dataURI, config);
+        const result = await cloudinary.uploader.upload(image, config);
         user.profilepicture = result.secure_url;
+        user.optprofilepicture = cloudinary.url(result.public_id,{
+            secure: true,
+            transformation:[
+                {
+                    crop:"crop",
+                    gravity:"auto",
+                    height:400,
+                    width:400
+                },
+                {fetch_format:"auto"}
+            ]
+        });
         await user.save();
         return response.status(200).send({
-            message: "Profile picture uploaded successfully."
+            message: "Profile picture uploaded successfully.",
         });
     }catch(err){
         return response.status(500).send({
@@ -126,7 +133,10 @@ profileRouter.patch("/edit",authenticateToken, async (request, response)=>{
 profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
     try{
         const { regno } = request.user;
-        const user = await Users.findOne({regno});
+        const user = await Users.findOne({regno}).populate({
+            path:"author",
+            select:"regno name optprofilepicture phoneno"
+        }).lean();
         if(!user) return response.status(404).send({
             error:"User not found."
         });

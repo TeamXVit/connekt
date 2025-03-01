@@ -48,7 +48,7 @@ travelRouter.get("/view",authenticateToken, async (request, response)=>{
             ]
         }).populate({
             path:"author",
-            select:"regno name profilepicture phoneno"
+            select:"regno name optprofilepicture phoneno"
         }).lean();
         const filteredPosts = posts.map(post =>{
             let data = { ...post };

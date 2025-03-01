@@ -11,6 +11,7 @@ const usersSchema = new mongoose.Schema({
     isVerified: { type: Boolean, default: false },
     resetToken: {type: String, default: null},
     profilepicture:{type:String},
+    optprofilepicture:{type:String},
     instagram:{type:String}
 });
 

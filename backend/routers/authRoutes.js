@@ -51,8 +51,9 @@ authRouter.post("/signup", async (request, response)=>{
             dob,
             isVerified: false,
             resetToken: null,
-            instagram: instagram || "",
-            profilepicture: profilepicture || ""
+            instagram: instagram || null,
+            profilepicture: null,
+            optprofilepicture: null
         });
         const token = jwt.sign({email},process.env.JWTKEY,{expiresIn:"1d"});
         const verificationLink = `${request.protocol}://${request.get("host")}/auth/verify/${token}`;
