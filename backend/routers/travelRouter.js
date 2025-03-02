@@ -45,7 +45,6 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
         response.setHeader("Connection", "keep-alive");
         response.flushHeaders();
         const { gender } = request.user;
-        const db = getDB();
         const changeStream = Travel.watch();
         async function sendPosts(){
             try {

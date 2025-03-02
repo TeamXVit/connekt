@@ -138,14 +138,14 @@ profileRouter.patch("/edit",authenticateToken, async (request, response)=>{
 profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
     try{
         const { regno } = request.user;
-        const user = await Users.findOne({regno}).populate({
-            path:"author",
-            select:"regno name optprofilepicture phoneno"
-        }).lean();
+        const user = await Users.findOne({regno});
         if(!user) return response.status(404).send({
             error:"User not found."
         });
-        const posts = await Travel.find({author:user._id});
+        const posts = await Travel.find({author:user._id}).populate({
+            path:"author",
+            select:"regno name optprofilepicture phoneno"
+        }).lean();
         return response.status(200).send(posts);
     }catch(err){
         return response.status(500).send({
