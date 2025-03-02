@@ -12,69 +12,63 @@ import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
 import UserProfile from "../pages/user/UserProfile";
 import MakePost from "../pages/user/MakePost";
-import Activities from "../pages/user/Activities"
+import Activities from "../pages/user/Activities";
 import { Box } from "@mui/material";
-
 
 export default function RouteProvider() {
     const location = useLocation();
-    
-    const token = localStorage.getItem("Connekt-token")
+    const token = localStorage.getItem("Connekt-token");
+
+    const authRoutes = ["/login", "/signup", "/forgot-password"];
+    const isAuthPage = authRoutes.includes(location.pathname);
 
     useEffect(() => {
-        switch(location.pathname) {
-            case "/":
-                document.title = "Home"
-                break
-            case "/login":
-                document.title = "Login"
-                break
-            case "/signup":
-                document.title = "Signup"
-                break
-            case "/forget-password":
-                document.title = "Reset Password"
-                break
-            case "/travel-partner":
-                document.title = "Travel Partner"
-                break
-            case "/lost-found":
-                document.title = "Lost & Found"
-                break
-            case "/find-teammate":
-                document.title = "Find A Teammate"
-                break
-            case "/queries":
-                document.title = "Queries"
-                break
-            case "/user":
-                document.title = "User Profile"
-                break
-            case "/make-post":
-                document.title = "Make A Post"
-                break
-            default:
-                document.title = "Connekt"
-        }
-    }, [location])
+        const titles = {
+            "/": "Home",
+            "/login": "Login",
+            "/signup": "Signup",
+            "/forgot-password": "Reset Password",
+            "/travel-partner": "Travel Partner",
+            "/lost-found": "Lost & Found",
+            "/find-teammate": "Find A Teammate",
+            "/queries": "Queries",
+            "/user": "User Profile",
+            "/make-post": "Make A Post",
+            "/activities": "My Activities",
+        };
+        document.title = titles[location.pathname] || "Connekt";
+    }, [location]);
+
+    if (!token && location.pathname === "/") {
+        return <Navigate to="/login" replace />;
+    } else if (token && location.pathname === "/") {
+        return <Navigate to="/travel-partner" replace/>
+    };
 
     return (
-        <Box sx={{ display: "flex" }}>
-            <TopBar />
-            <Sidebar />
-            <Routes>
-                <Route path="/login" element={!token ? <Login /> : <Navigate to="/travel-partner"/>}/>
-                <Route path="/signup" element={!token ? <Signup /> : <Navigate to="/travel-partner"/>}/>
-                <Route path="/travel-partner" element={token ? <TravelPartner /> : <Navigate to="/login"/>}/>
-                <Route path="/" element={<Home />}/>
-                <Route path="/forgot-password" element={<ForgotPassword />}/>
-                <Route path="/lost-found" element={<LostFound />}/>
-                <Route path="/find-teammate" element={<FindTeammate />}/>
-                <Route path="/queries" element={<Queries />}/>
-                <Route path="/user" element={<UserProfile />}/>
-                <Route path="/make-post" element={<MakePost />}/>
-                <Route path="/activities" element={<Activities />}/>
-            </Routes>
-        </Box>
-    )
+        <>
+            {isAuthPage ? (
+                <Routes>
+                    <Route path="/login" element={!token ? <Login /> : <Navigate to="/travel-partner" />} />
+                    <Route path="/signup" element={!token ? <Signup /> : <Navigate to="/travel-partner" />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                </Routes>
+            ) : (
+                <Box sx={{ display: "flex" }}>
+                    <TopBar />
+                    <Sidebar />
+                    <Routes>
+                        <Route path="/travel-partner" element={token ? <TravelPartner /> : <Navigate to="/login" />} />
+                        <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} />
+                        <Route path="/lost-found" element={<LostFound />} />
+                        <Route path="/find-teammate" element={<FindTeammate />} />
+                        <Route path="/queries" element={<Queries />} />
+                        <Route path="/user" element={<UserProfile />} />
+                        <Route path="/make-post" element={<MakePost />} />
+                        <Route path="/activities" element={<Activities />} />
+                    </Routes>
+                </Box>
+            )}
+        </>
+    );
 }

@@ -78,7 +78,7 @@ export default function Signup() {
         if (termsConsent === true && page === 3) { 
             axios.post(`${Backend}/auth/signup`, formData)
             .then((res) => {
-                console.log(res.data);
+                toast.success(res.data.message);
                 navigate("/login")
             })
             .catch((e) => toast.error(e.response.data.error)); 
@@ -86,8 +86,8 @@ export default function Signup() {
     };
 
     return (
-        <Container maxWidth="xl" sx={{  bgcolor: "background.default" ,height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", }}>
-           <Grid2 sx={{ bgcolor: "background.default", color: "text.primary", width: { sm: "100%", md: "75%", lg: "35%" }, height: "fit-content", maxHeight: "85%", p: 2, border: 1, borderColor: "grey.500", borderRadius: 1 }} container direction="column" gap={2}>
+        <Container maxWidth="xl" sx={{  bgcolor: "background.default", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", p: 2 }}>
+           <Grid2 sx={{ bgcolor: "background.default", color: "text.primary", width: { sm: "100%", md: "75%", lg: "35%" }, minHeight: "fit-content", maxHeight: "85%", p: 2, border: 1, borderColor: "grey.500", borderRadius: 1 }} container direction="column" gap={2}>
                 <Typography variant="h6" textAlign="center" >
                     {page === 1 && "Create Account"}
                     {page === 2 && "Personal Details"}
@@ -248,7 +248,7 @@ export default function Signup() {
                             variant="outlined"
                             onChange={handleChange}
                             value={formData.instagram}
-                            sx={{ width: { sm: "100%", md: "80%" } }}
+                            sx={{ width: { sm: "100%", md: "90%" } }}
                             slotProps={{
                                 input: {
                                     startAdornment: (
