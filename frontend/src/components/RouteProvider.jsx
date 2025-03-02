@@ -4,8 +4,8 @@ import TopBar from "../components/TopBar";
 import Sidebar from "../components/Sidebar";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
-import Home from "../pages/user/Home";
-import ForgotPassword from "../pages/user/ForgotPassword";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+// import Home from "../pages/user/Home";
 import TravelPartner from "../pages/features/TravelPartner";
 import LostFound from "../pages/features/LostFound";
 import FindTeammate from "../pages/features/FindTeammate";
@@ -17,10 +17,11 @@ import { Box } from "@mui/material";
 
 export default function RouteProvider() {
     const location = useLocation();
+    
     const token = localStorage.getItem("Connekt-token");
-
-    const authRoutes = ["/login", "/signup", "/forgot-password"];
-    const isAuthPage = authRoutes.includes(location.pathname);
+    
+    const hiddenRoutes = ["/login", "/signup", "/forgot-password"];
+    const isAuthPage = hiddenRoutes.includes(location.pathname)
 
     useEffect(() => {
         const titles = {
@@ -41,11 +42,14 @@ export default function RouteProvider() {
 
     if (!token && location.pathname === "/") {
         return <Navigate to="/login" replace />;
-    } else if (token && location.pathname === "/") {
-        return <Navigate to="/travel-partner" replace/>
-    };
+    }
 
-    return (
+    if (token && location.pathname === "/") {
+        return <Navigate to="/travel-partner" replace/>
+    }
+    
+
+    return (  
         <>
             {isAuthPage ? (
                 <Routes>
@@ -59,7 +63,7 @@ export default function RouteProvider() {
                     <Sidebar />
                     <Routes>
                         <Route path="/travel-partner" element={token ? <TravelPartner /> : <Navigate to="/login" />} />
-                        <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} />
+                        {/* <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} /> */}
                         <Route path="/lost-found" element={<LostFound />} />
                         <Route path="/find-teammate" element={<FindTeammate />} />
                         <Route path="/queries" element={<Queries />} />
@@ -71,4 +75,5 @@ export default function RouteProvider() {
             )}
         </>
     );
-}
+};
+    

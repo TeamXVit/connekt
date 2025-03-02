@@ -1,5 +1,5 @@
-import { DetailsContext } from "../contexts/DetailsContext";
 import { useContext } from "react";
+import { DetailsContext } from "../contexts/DetailsContext";
 
 const useDetails = () => useContext(DetailsContext);
 

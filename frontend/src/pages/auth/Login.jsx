@@ -30,7 +30,6 @@ export default function Login() {
         e.preventDefault();
         axios.post(`${Backend}/auth/login`, formData)
         .then((res) => {
-            console.log(res.data.token);
             login(res.data.token);
             navigate("/travel-partner");
         })

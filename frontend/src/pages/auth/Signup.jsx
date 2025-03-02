@@ -81,13 +81,13 @@ export default function Signup() {
                 toast.success(res.data.message);
                 navigate("/login")
             })
-            .catch((e) => toast.error(e.response.data.error)); 
+            .catch((e) => {toast.error("Signup failed. Check if you have entered all the required details and try again."); console.log(e)}); 
         };
     };
 
     return (
-        <Container maxWidth="xl" sx={{  bgcolor: "background.default", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center", p: 2 }}>
-           <Grid2 sx={{ bgcolor: "background.default", color: "text.primary", width: { sm: "100%", md: "75%", lg: "35%" }, minHeight: "fit-content", maxHeight: "85%", p: 2, border: 1, borderColor: "grey.500", borderRadius: 1 }} container direction="column" gap={2}>
+        <Container maxWidth="xl" sx={{  bgcolor: "background.default", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", py: 3 }}>
+           <Grid2 sx={{ bgcolor: "background.default", color: "text.primary", width: { sm: "100%", md: "75%", lg: "35%" }, height: "fit-content", minHeight: "75%", p: 2, border: 1, borderColor: "grey.500", borderRadius: 1 }} container direction="column" gap={2}>
                 <Typography variant="h6" textAlign="center" >
                     {page === 1 && "Create Account"}
                     {page === 2 && "Personal Details"}
