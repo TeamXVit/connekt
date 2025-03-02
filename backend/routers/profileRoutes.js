@@ -1,6 +1,7 @@
 import express from "express";
 import authenticateToken from "../middleware/authMiddleware.js";
 import { Users } from "../models/User.js";
+import { Travel } from "../models/Travel.js";
 import { v2 as cloudinary} from "cloudinary";
 import "dotenv/config";
 import multer from "multer";
