@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import authenticateToken from "../middleware/authMiddleware.js";
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',

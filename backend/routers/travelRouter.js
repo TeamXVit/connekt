@@ -38,33 +38,43 @@ travelRouter.post("/post",authenticateToken, async (request,response)=>{
     }
 });
 
-travelRouter.get("/view",authenticateToken, async (request, response)=>{
-    try{
+travelRouter.get("/view", authenticateToken, async (request, response) => {
+    try {
+        response.setHeader("Content-Type", "text/event-stream");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Connection", "keep-alive");
+        response.flushHeaders();
         const { gender } = request.user;
-        const posts = await Travel.find({
-            $or:[
-                {preferences: "All"},
-                {preferences: gender}
-            ]
-        }).populate({
-            path:"author",
-            select:"regno name optprofilepicture phoneno"
-        }).lean();
-        const filteredPosts = posts.map(post =>{
-            let data = { ...post };
-            if (data && data.author) {
-                data.author = { ...data.author };
-                if (!data.showphoneno) {
-                    delete data.author.phoneno;
-                }
+        const db = getDB();
+        const changeStream = Travel.watch();
+        async function sendPosts(){
+            try {
+                const posts = await Travel.find({
+                    $or: [{ preferences: "All" }, { preferences: gender }]
+                })
+                .populate("author", "regno name optprofilepicture phoneno")
+                .lean();
+                posts.forEach(post => {
+                    if (post.author && !post.showphoneno) {
+                        delete post.author.phoneno;
+                    }
+                });
+                response.write(`data: ${JSON.stringify(posts)}\n\n`);
+            } catch (err) {
+                console.error("Error fetching posts:", err);
             }
-            return data;
-        });        
-        return response.status(200).send(filteredPosts);
-    }catch(err){
-        return response.status(500).send({
-            error : `Internal Server Error : ${err.message}`
+        };
+        await sendPosts();
+        changeStream.on("change", sendPosts);
+        request.on("close", () => {
+            changeStream.close();
+            response.end();
         });
+    }catch(err){
+        console.error("SSE Error:", err);
+        if(!response.headersSent){
+            response.status(500).json({ error: `Internal Server Error: ${err.message}` });
+        }
     }
 });
 

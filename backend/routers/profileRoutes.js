@@ -4,22 +4,25 @@ import { Users } from "../models/User.js";
 import { v2 as cloudinary} from "cloudinary";
 import { Travel } from "../models/Travel.js"; 
 import "dotenv/config";
+import multer from "multer";
 
 cloudinary.config({secure:true});
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 const profileRouter = express.Router();
 
-profileRouter.post("/upload-profilepicture", authenticateToken, async (request, response)=>{
+profileRouter.post(
+    "/upload-profilepicture",
+    authenticateToken, 
+    upload.single("image"), 
+    async (request, response)=>{
     try{
         const { regno } = request.user;
-        const { image } = request.body;
-        if(!image) return response.status(400).send({
+        if(!request.file) return response.status(400).send({
             error: "Image is Required"
         });
-        if(!image.startsWith("data:image")) return response.status(400).send({
-            error: "Image should be in base64."
-        });
-        if(!image.startsWith("data:image/png;") && !image.startsWith("data:image/jpeg;")) return response.status(400).send({
-            error: "Only JPG and PNG Images are allowed."
+        if(!["image/jpeg", "image/png"].includes(request.file.mimetype)) return response.status(400).send({
+            error: "Only JPG and PNG files are allowed."
         });
         const user = await Users.findOne({regno});
         if(!user) return response.status(404).send({
@@ -32,7 +35,9 @@ profileRouter.post("/upload-profilepicture", authenticateToken, async (request, 
             use_filename : true,
             resource_type: "image"
         };
-        const result = await cloudinary.uploader.upload(image, config);
+        const b64 = Buffer.from(request.file.buffer).toString("base64");
+        const dataURI = `data:${request.file.mimetype};base64,${b64}`;
+        const result = await cloudinary.uploader.upload(dataURI, config);
         user.profilepicture = result.secure_url;
         user.optprofilepicture = cloudinary.url(result.public_id,{
             secure: true,
@@ -48,7 +53,7 @@ profileRouter.post("/upload-profilepicture", authenticateToken, async (request, 
         });
         await user.save();
         return response.status(200).send({
-            message: "Profile picture uploaded successfully.",
+            message: "Profile picture uploaded successfully."
         });
     }catch(err){
         return response.status(500).send({
