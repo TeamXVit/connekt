@@ -45,7 +45,6 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
         response.setHeader("Connection", "keep-alive");
         response.flushHeaders();
         const { gender } = request.user;
-        const db = getDB();
         const changeStream = Travel.watch();
         async function sendPosts(){
             try {
@@ -59,7 +58,7 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
                         delete post.author.phoneno;
                     }
                 });
-                response.write(`data: ${JSON.stringify(posts)}\n\n`);
+                response.write(`${JSON.stringify(posts)}\n\n`);
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }

@@ -1,16 +1,13 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader"
-import axios from "../../axios/axios";
 import { Box, Container } from "@mui/material";
 import TravelPostUI from "../../components/TravelPostUI";
 
 
 export default function TravelPartner() {
     const [travelPosts, setTravelPosts] = useState([]);
-    const [isConnected, setIsConnected] = useState(false);
-
+    
     const dataFetchedRef = useRef(false);
 
     useEffect(() => {
@@ -20,8 +17,6 @@ export default function TravelPartner() {
     }, []);
 
     const getTravelStream = () => {
-        const token = "your_jwt_token_here"; 
-    
         fetch(`${Backend}/travel/view`, {
             headers: {
                 Authorization: BearerHeader,
@@ -40,7 +35,9 @@ export default function TravelPartner() {
                     }
 
                     const chunk = decoder.decode(value);
-                    console.log("Received data:", chunk);
+                    const processed = JSON.parse(chunk)
+                    console.log(processed);
+                    setTravelPosts(processed);
                     readStream(); 
                 });
             };

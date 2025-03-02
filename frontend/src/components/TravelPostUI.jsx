@@ -9,7 +9,7 @@ export default function TravelPostUI({ data }) {
         <Box sx={{ width: "100%", bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                    <Avatar src={data.author.profilepicture || ""}/>
+                    <Avatar src={data.author.optprofilepicture || ""}/>
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                         <Typography variant="body1">{data.author.name}</Typography>
                         <Typography variant="body2">{data.author.regno}</Typography>
