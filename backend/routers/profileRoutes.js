@@ -81,6 +81,7 @@ profileRouter.get("/view",authenticateToken, async (request, response)=>{
             regno: user.regno,
             gender: user.gender,
             profilepicture: user.profilepicture,
+            optprofilepicture: user.optprofilepicture,
             email: user.email,
             instagram: user.instagram,
             dob: user.dob,

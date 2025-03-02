@@ -58,7 +58,7 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
                         delete post.author.phoneno;
                     }
                 });
-                response.write(`data: ${JSON.stringify(posts)}\n\n`);
+                response.write(`${JSON.stringify(posts)}\n\n`);
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
