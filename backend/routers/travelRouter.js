@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import authenticateToken from "../middleware/authMiddleware.js";
 import { Travel } from "../models/Travel.js";
 import { Users } from "../models/User.js";
@@ -92,7 +93,7 @@ travelRouter.delete("/delete/:id",authenticateToken, async (request,response)=>{
         if(!post) return response.status(404).send({
             error: "Post not found."
         });
-        if(post.author.equals(user._id)) return response.status(400).send({
+        if(!post.author.equals(user._id)) return response.status(400).send({
             error: "Access denied."
         });
         await Travel.findByIdAndDelete(id);
@@ -105,5 +106,5 @@ travelRouter.delete("/delete/:id",authenticateToken, async (request,response)=>{
         });
     }
 });
-
+    
 export default travelRouter;
