@@ -1,7 +1,6 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import axios from "../../axios/axios";
 import { Avatar, Badge, Box, Button, Container, Divider, IconButton, Input, Modal, TextField, Typography } from "@mui/material";
-import Chopper from "../../assets/chopper.jpeg";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
@@ -26,7 +25,7 @@ export default function UserProfile() {
 
         const fetchData = async () => {
             await axios.get('/profile/view')
-            .then(res => setUserDetails(res.data))
+            .then(res => {setUserDetails(res.data); console.log(res.data)})
             .catch(e => console.log(e));
         };
 
@@ -80,16 +79,15 @@ export default function UserProfile() {
     };
 
     const handleImageUpload = () => {   
+        const formData = new FormData();
+        formData.append("image", profilePicture);
         
-        axios.post("/profile/upload-profilepicture", { "image": profilePicture }, )
-        .then(res => {
-            console.log(res.data);
-            toast.success("Profile picture uploaded successfully!");
+        axios.post("/profile/upload-profilepicture", formData)
+        .then((res) => {
+            toast.success(res.data.message);
+            handleCloseImageModal();
         })
-        .catch(e => {
-            console.log(e);
-            toast.error("Failed to upload profile picture.");
-        });
+        .catch((e) => toast.error(e.response.data.error));
     };
 
     const handleCloseModal = () => {
@@ -101,8 +99,7 @@ export default function UserProfile() {
     };
 
     return (
-        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "70px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
-            <Typography variant="h4" sx={{ my: 2 }}>Profile</Typography>
+        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "75px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
             <Suspense fallback={<Loading />}>
                 {userDetails && 
                 <>
@@ -118,7 +115,7 @@ export default function UserProfile() {
                             >
                             <Avatar
                                 sx={{ width: 80, height: 80 }}
-                                src={Chopper}
+                                src={userDetails.profilepicture}
                             />
                         </Badge>
                         <Box>
@@ -127,7 +124,7 @@ export default function UserProfile() {
                         </Box>
                     </Box>
                     <Modal open={openImageModal} onClose={handleCloseImageModal}>
-                        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "fit", bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "fit", bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
                             <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: "text.primary" }}>Upload Profile Picture</Typography>
                             <Avatar sx={{ width: 100, height: 100, mx: "auto" }} src={imagePreview}/>
                             <Input type="file" accept="image/png, image/jpeg" onChange={handleImagePreview}/>
@@ -138,7 +135,7 @@ export default function UserProfile() {
                         </Box>
                     </Modal>
                     <Modal open={modal.open} onClose={handleCloseModal}>
-                        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "fit", bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "fit", bgcolor: "background.paper", boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
                             <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: "text.primary" }}>Edit your {modal.label}</Typography>
                             <TextField label={modal.label} variant="outlined" value={modal.value} onChange={handleModalChange}/>
                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>

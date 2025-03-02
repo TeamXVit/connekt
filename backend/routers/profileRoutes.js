@@ -2,7 +2,6 @@ import express from "express";
 import authenticateToken from "../middleware/authMiddleware.js";
 import { Users } from "../models/User.js";
 import { v2 as cloudinary} from "cloudinary";
-import { Travel } from "../models/Travel.js"; 
 import "dotenv/config";
 import multer from "multer";
 
@@ -11,14 +10,11 @@ const storage = multer.memoryStorage();
 const upload = multer({storage});
 const profileRouter = express.Router();
 
-profileRouter.post(
-    "/upload-profilepicture",
-    authenticateToken, 
-    upload.single("image"), 
-    async (request, response)=>{
+profileRouter.post("/upload-profilepicture", authenticateToken, async (request, response)=>{
     try{
         const { regno } = request.user;
-        if(!request.file) return response.status(400).send({
+        const { image } = request.body;
+        if(!image) return response.status(400).send({
             error: "Image is Required"
         });
         if(!["image/jpeg", "image/png"].includes(request.file.mimetype)) return response.status(400).send({
@@ -39,21 +35,9 @@ profileRouter.post(
         const dataURI = `data:${request.file.mimetype};base64,${b64}`;
         const result = await cloudinary.uploader.upload(dataURI, config);
         user.profilepicture = result.secure_url;
-        user.optprofilepicture = cloudinary.url(result.public_id,{
-            secure: true,
-            transformation:[
-                {
-                    crop:"crop",
-                    gravity:"auto",
-                    height:400,
-                    width:400
-                },
-                {fetch_format:"auto"}
-            ]
-        });
         await user.save();
         return response.status(200).send({
-            message: "Profile picture uploaded successfully."
+            message: "Profile picture uploaded successfully.",
         });
     }catch(err){
         return response.status(500).send({

@@ -22,7 +22,6 @@ export default function MakePost() {
         axios.post(`${feature}/post`, formData)
         .then(res => toast.success(res.data.message))
         .catch(e => console.log(e));
-
         handleClear();
     };
 
@@ -67,9 +66,9 @@ export default function MakePost() {
                         label="Preference"
                         onChange={handleChange}
                     >
-                        <MenuItem value="all">All</MenuItem>
-                        <MenuItem value="male">Male</MenuItem>
-                        <MenuItem value="female">Female</MenuItem>
+                        <MenuItem value="All">All</MenuItem>
+                        <MenuItem value="Male">Male</MenuItem>
+                        <MenuItem value="Female">Female</MenuItem>
                     </Select>
                 </FormControl>}
             </Box>
