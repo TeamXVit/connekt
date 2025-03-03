@@ -237,7 +237,7 @@ authRouter.post("/reset-password", async (request,response)=>{
         await user.save();
         return response.render("success",{
             heading:"Password Reset",
-            message: "Your password has been successfully changed."
+            message: "Your password has been changed successfully."
         });
     }catch(err){
         return response.status(500).send({
