@@ -3,7 +3,6 @@ import authenticateToken from "../middleware/authMiddleware.js";
 import { Users } from "../models/User.js";
 import { Travel } from "../models/Travel.js";
 import { v2 as cloudinary} from "cloudinary";
-import { Travel } from "../models/Travel.js"; 
 import "dotenv/config";
 import multer from "multer";
 
@@ -140,7 +139,7 @@ profileRouter.patch("/edit",authenticateToken, async (request, response)=>{
 profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
     try{
         const { regno } = request.user;
-        const user = await Travel.findOne({regno});
+        const user = await Users.findOne({regno});
         if(!user) return response.status(404).send({
             error:"User not found."
         });

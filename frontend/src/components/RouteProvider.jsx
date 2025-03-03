@@ -1,19 +1,19 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router";
 import TopBar from "../components/TopBar";
 import Sidebar from "../components/Sidebar";
 import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import ForgotPassword from "../pages/auth/ForgotPassword";
-// import Home from "../pages/user/Home";
-import TravelPartner from "../pages/features/TravelPartner";
 import LostFound from "../pages/features/LostFound";
 import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
-import UserProfile from "../pages/user/UserProfile";
 import MakePost from "../pages/user/MakePost";
 import Activities from "../pages/user/Activities";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+
+const UserProfile = lazy(() => import("../pages/user/UserProfile"));
+const TravelPartner = lazy(() => import("../pages/features/TravelPartner"));
 
 export default function RouteProvider() {
     const location = useLocation();
@@ -62,12 +62,24 @@ export default function RouteProvider() {
                     <TopBar />
                     <Sidebar />
                     <Routes>
-                        <Route path="/travel-partner" element={token ? <TravelPartner /> : <Navigate to="/login" />} />
-                        {/* <Route path="/" element={token ? <Home /> : <Navigate to="/login" />} /> */}
+                        <Route 
+                            path="/travel-partner" 
+                            element={token ? 
+                            <Suspense fallback={<Typography variant="h3">🌀 Loading...</Typography>}>
+                                <TravelPartner />
+                            </Suspense> : 
+                            <Navigate to="/login" />} 
+                        />
                         <Route path="/lost-found" element={<LostFound />} />
                         <Route path="/find-teammate" element={<FindTeammate />} />
                         <Route path="/queries" element={<Queries />} />
-                        <Route path="/user" element={<UserProfile />} />
+                        <Route 
+                            path="/user" 
+                            element={
+                            <Suspense fallback={<Typography variant="h3">🌀 Loading...</Typography>}>
+                                <UserProfile />
+                            </Suspense>} 
+                        />
                         <Route path="/make-post" element={<MakePost />} />
                         <Route path="/activities" element={<Activities />} />
                     </Routes>

@@ -20,6 +20,7 @@ export default function Sidebar() {
     const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
     const [open, setOpen] = useState(false);
+    
 
     const toggleDrawer = () => {
         setOpen((prev) => !prev);
@@ -52,14 +53,13 @@ export default function Sidebar() {
             <Drawer 
                 open={isLargeScreen ? true : open} 
                 variant={isLargeScreen ? "permanent" : "temporary"} 
-                sx={{ bgcolor: "background.default", justifyContent: "space-between", width: drawerWidth, flexShrink: 0, "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box", p: 2,  } }}
+                sx={{ bgcolor: "transparent", justifyContent: "space-between", width: drawerWidth, flexShrink: 0, "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box", p: 2,  } }}
             >
                 <Typography variant="h5" sx={{ mb: 2, color: "transparent" }}>_</Typography>
                 <List sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                     {navLinks.map((navLink, index) => (
                         <ListItem 
                             key={index} 
-                            button
                             sx={{ bgcolor: location.pathname === navLink.link ? theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[300] : "transparent", cursor: "pointer", borderRadius: 2, }} 
                             onClick={() => navigate(navLink.link)}
                         >

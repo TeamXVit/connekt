@@ -28,7 +28,7 @@ export default function  App() {
 
   return (
     <AuthProvider>
-      <ThemeProvider theme={theme} defaultMode="system">
+      <ThemeProvider theme={theme} defaultMode="light">
         <BrowserRouter>
           <RouteProvider />
         </BrowserRouter>

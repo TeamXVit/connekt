@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
+import axios from "../axios/axios";
 import { Avatar, AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography, useTheme, } from "@mui/material";
 
 
@@ -15,7 +16,25 @@ export default function TopBar() {
 
     const theme = useTheme();
 
-    if (hiddenRoutes.includes(location.pathname)) return null;
+    const [pic, setPic] = useState("");
+
+    const dataFetchedRef = useRef(false);
+   
+    useEffect(() => {
+        if (dataFetchedRef.current) return;
+        dataFetchedRef.current = true;
+
+        const fetchDetails = () => {
+            axios.get("/profile/view")
+            .then(res => setPic(res.data.optprofilepicture))
+            .catch(e => console.log(e));
+        };
+        
+        fetchDetails();
+
+    }, [])
+
+    if (hiddenRoutes.includes(location.pathname)) return null; 
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -37,7 +56,7 @@ export default function TopBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: { sm: 3, lg: 0 }, color: "text.primary" }}>Connekt</Typography>
                     <Tooltip title="Open settings">
                         <IconButton  sx={{ p: 0 }} onClick={handleOpenUserMenu}>
-                            <Avatar alt="Profile Picture" src="" />
+                            <Avatar alt="Profile Picture" src={pic} />
                         </IconButton>
                     </Tooltip>
                     <Menu
