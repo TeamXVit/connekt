@@ -11,11 +11,14 @@ const storage = multer.memoryStorage();
 const upload = multer({storage});
 const profileRouter = express.Router();
 
-profileRouter.post("/upload-profilepicture", authenticateToken, async (request, response)=>{
+profileRouter.post(
+    "/upload-profilepicture",
+    authenticateToken, 
+    upload.single("image"), 
+    async (request, response)=>{
     try{
         const { regno } = request.user;
-        const { image } = request.body;
-        if(!image) return response.status(400).send({
+        if(!request.file) return response.status(400).send({
             error: "Image is Required"
         });
         if(!["image/jpeg", "image/png"].includes(request.file.mimetype)) return response.status(400).send({
