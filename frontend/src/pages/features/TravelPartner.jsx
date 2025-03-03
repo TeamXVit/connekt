@@ -35,8 +35,8 @@ export default function TravelPartner() {
                     
                     const chunk = decoder.decode(value);
                     const processed = JSON.parse(chunk)
-                    
-                    setTravelPosts(processed);
+                    console.log(processed)
+                    setTravelPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                     readStream(); 
                 });
             };

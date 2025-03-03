@@ -26,6 +26,16 @@ export default function TravelPostUI({ data }) {
     const open = Boolean(anchorEl);
     const id = open ? 'details-popper' : undefined;
 
+    const formattedDate = new Date(data.createdAt).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+    });
+
     return (
         <Box sx={{ width: "100%", bgcolor: theme.palette.mode === "light" ? "grey.200" : "grey.900", borderRadius: 7, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
@@ -62,7 +72,7 @@ export default function TravelPostUI({ data }) {
             </Box>
             <Typography variant="body1" sx={{ width: "100%" }}>{data.content}</Typography>
             {data.author.phoneno && <Typography variant="body2">Phone no: {data.author.phoneno}</Typography>}
-            <Typography variant="body2">{data.createdAt}</Typography>
+            <Typography variant="body2">{formattedDate}</Typography>
         </Box>
     );
 };

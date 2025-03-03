@@ -5,8 +5,9 @@ import { Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typogra
 import TrainIcon from '@mui/icons-material/Train';
 import SearchIcon from '@mui/icons-material/Search';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
-import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import MenuIcon from '@mui/icons-material/Menu';
+import InfoIcon from '@mui/icons-material/Info';
 
 
 const drawerWidth = 240;
@@ -32,12 +33,12 @@ export default function Sidebar() {
         { page: "Travel Partner", icon: <TrainIcon />, link: "/travel-partner" },
         { page: "Lost & Found", icon: <SearchIcon />, link: "/lost-found" },
         { page: "Find A Teammate", icon: <PeopleOutlineIcon />, link: "/find-teammate" },
-        { page: "Queries", icon: <PsychologyAltIcon />, link: "/queries" },
+        { page: "Queries", icon: <LiveHelpIcon />, link: "/queries" },
+        { page: "Help", icon: <InfoIcon />, link: "#" }
     ]
 
     return (
         <>  
-            {/* <TopBar /> */}
             {!isLargeScreen && (
                 <IconButton
                     size="large"

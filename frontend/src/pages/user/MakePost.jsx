@@ -9,7 +9,7 @@ export default function MakePost() {
     const [feature, setFeature] = useState("");
     const [formData, setFormData] = useState({
         content: "",
-        preferences: "",
+        preferences: "All",
         showphoneno: true,
         ttl: "",
         time: new Date()
@@ -84,6 +84,7 @@ export default function MakePost() {
                         name="ttl"
                         label="Duration"
                         onChange={handleChange}
+                        required
                     >
                         <MenuItem value={1 * 86400}>1 Day</MenuItem>
                         <MenuItem value={2 * 86400}>2 Days</MenuItem>
@@ -128,7 +129,7 @@ export default function MakePost() {
                 />
             </Box>
             <Box sx={{ width: "90%" }}>
-                <Button variant="contained" onClick={handlePost} disabled={!formData.content || !formData.ttl}>Post</Button>
+                <Button variant="contained" onClick={handlePost} disabled={!formData.content || !formData.ttl || !feature}>Post</Button>
             </Box>
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>

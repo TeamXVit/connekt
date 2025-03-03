@@ -20,6 +20,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
+    const [showCNFPassword, setShowCNFPassword] = useState(false);
     const [page, setPage] = useState(1);
     const [termsConsent, setTermsConsent] = useState(false);
     const [formData, setFormData] = useState({
@@ -32,6 +33,7 @@ export default function Signup() {
         phoneno: "",
         instagram: ""
     });
+    const [cnfPassword, setCNFPassword] = useState("");
 
     let navigate = useNavigate();
 
@@ -52,6 +54,14 @@ export default function Signup() {
                 isValid = false;
                 toast.error("Fill all the required fields!");
             };
+            if (formData.password.length < 8 || cnfPassword.length < 8) {
+                isValid = false;
+                toast.error("Password's length must be 8 or more characters long!")
+            }
+            if (formData.password !== cnfPassword) {
+                isValid = false;
+                toast.error("Passwords don't match. Please re-enter the password correctly!");
+            };
         } else if (page === 2) {
             if (!formData.dob || !formData.gender || !formData.regno || !formData.phoneno) {
                 isValid = false;
@@ -64,14 +74,26 @@ export default function Signup() {
         };
     };
     
-    const handlePasswordVisibility = () => setShowPassword(!showPassword);
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const handleCNFPasswordVisibility = () => {
+        setShowCNFPassword(!showCNFPassword);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }))
     };
 
-    const handleDateChange = (date) => setFormData((prevData) => ({ ...prevData, dob: date }))
+    const handleChangeCNFPassword = (e) => {
+        setCNFPassword(e.target.value);
+    };
+
+    const handleDateChange = (date) => {
+        setFormData((prevData) => ({ ...prevData, dob: date }));
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -176,6 +198,33 @@ export default function Signup() {
                                 }
                             }}
                         />
+                        <TextField 
+                            name="password"
+                            placeholder="Confirm password"
+                            label="Confirm Password" 
+                            type={showCNFPassword ? "text" : "password"} 
+                            variant="outlined" 
+                            required
+                            onChange={handleChangeCNFPassword}
+                            value={cnfPassword}
+                            sx={{ width: { sm: "100%", md: "90%" } }}
+                            slotProps={{ 
+                                input: {
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <PasswordIcon sx={{ color: "#6586f1" }}/>
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton onClick={handleCNFPasswordVisibility}>
+                                            {showCNFPassword ? <VisibilityIcon sx={{ color: "#6586f1" }}/> : <VisibilityOffIcon />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }
+                            }}
+                        />
                     </>}
                     {page === 2 && 
                     <>
@@ -263,8 +312,11 @@ export default function Signup() {
                     {page >= 3 && 
                     <>
                         <Box component="img" src={emailVerificationImage} sx={{ width: 150, height: 150 }}></Box>
-                        <Typography sx={{ width: "90%", textAlign: "" ,textWrap: "wrap" }}>We have sent a verification mail to the given email ID. Click on the provided link within 24 hours to activate your account.</Typography>
-                        <FormControlLabel control={<Checkbox/>} label="I accept the terms and conditions" sx={{ width: "90%" }} onChange={() => setTermsConsent(true)}/>
+                        <Typography sx={{ width: "90%", textAlign: "" ,textWrap: "wrap" }}>We have sent a verification mail to the given email ID. Click on the provided link within 24 hours to activate your account. <strong>Note:</strong> If you didn&apos;t receive any mail in your inbox, please check your spam.</Typography>
+                        <Box sx={{ width: "90%", display: "flex", alignItems: "center" }}>
+                            <FormControlLabel control={<Checkbox/>} onChange={() => setTermsConsent(true)}/>
+                            <Typography>I accept the <Link underline="none" href="#">terms and conditions</Link></Typography>
+                        </Box>
                     </>}
                     <Box sx={{ width: { sm: "100%", md: "90%" }, display: "flex", pb: 2, justifyContent: "space-between", pt: 2 }}>
                         {page === 1 ? 
