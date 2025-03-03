@@ -101,7 +101,10 @@ authRouter.get("/verify/:token", async (request, response)=>{
         });
         user.isVerified = true;
         await user.save();
-        return response.status(200).send({message:"Email Verified"});
+        return response.render("success",{
+            heading:"Email Verification",
+            message: "Your Email has been verified successfully."
+        });
     }catch(err){
         return response.status(500).send({error: "Invalid or expired token"});
     }
@@ -232,7 +235,8 @@ authRouter.post("/reset-password", async (request,response)=>{
         user.password = hashedPassword;
         user.resetToken = null;
         await user.save();
-        return response.status(200).send({
+        return response.render("success",{
+            heading:"Password Reset",
             message: "Your password has been successfully changed."
         });
     }catch(err){
