@@ -62,7 +62,7 @@ export default function TopBar({ toggle }) {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar elevation={0} position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor: theme.palette.mode === "dark" ? "#121212" : "white", borderBottom: 0.3, borderColor: "grey.500" }}>
                 <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: { sm: 3, lg: 0 }, color: "text.primary" }}>Connekt</Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: { sm: 3, lg: 0 }, color: "text.primary" }}>ConneKt</Typography>
                     <Tooltip title="Toggle mode">
                         <IconButton onClick={toggle} color="inherit" sx={{ mr: 2 }}>
                         {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon sx={{ color: "black" }}/>}
