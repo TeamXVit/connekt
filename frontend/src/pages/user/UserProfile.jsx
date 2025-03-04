@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import useDetails from "../../hooks/useDetails";
 import axios from "../../axios/axios";
-import { Avatar, Badge, Box, Button, Container, Divider, IconButton, Input, Modal, TextField, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Button, CircularProgress, Container, Divider, IconButton, Input, Modal, TextField, Typography } from "@mui/material";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function UserProfile() {
-    const [userDetails, setUserDetails] = useState(null);
+    const {details, setDetails} = useDetails();
     const [modal, setModal] = useState({
         open: false,
         field: "",
@@ -17,21 +18,6 @@ export default function UserProfile() {
     const [imagePreview, setImagePreview] = useState(null);
     const [profilePicture, setProfilePicture] = useState();
 
-    const dataFetchedRef = useRef(false);
-
-    useEffect(() => {
-        if (dataFetchedRef.current) return;
-        dataFetchedRef.current = true;
-
-        const fetchData = async () => {
-            await axios.get('/profile/view')
-            .then(res => setUserDetails(res.data))
-            .catch(e => console.log(e));
-        };
-
-        fetchData();
-    }, []);
-
     const handleProfileEdit = async () => {
         const fieldData = { [modal.field]: modal.value };
 
@@ -39,8 +25,8 @@ export default function UserProfile() {
         .then(res => toast.success(res.data.message))
         .catch(e => toast.error(e.data));
 
-        setUserDetails({
-            ...userDetails,
+        setDetails({
+            ...details,
             [modal.field]: modal.value
         });
 
@@ -57,7 +43,7 @@ export default function UserProfile() {
         setModal({
             open: true,
             field,
-            value: userDetails[field] || "",
+            value: details[field] || "",
             ...fieldConfig[field]
         });
     };
@@ -100,7 +86,7 @@ export default function UserProfile() {
 
     return (
         <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "75px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
-            {userDetails && 
+            {details ? 
             <>
                 <Box sx={{ width: { sm: "90%", lg: "70%" }, height: 100, px: 1, position: "relative", display: "flex", alignItems: "center", gap: 3, }}>
                     <Badge
@@ -114,12 +100,12 @@ export default function UserProfile() {
                         >
                         <Avatar
                             sx={{ width: 80, height: 80 }}
-                            src={userDetails.optprofilepicture}
+                            src={details.optprofilepicture}
                         />
                     </Badge>
                     <Box>
-                        <Typography variant="h5">{userDetails.name}</Typography>
-                        <Typography variant="body2">{userDetails.regno}</Typography>
+                        <Typography variant="h5">{details.name}</Typography>
+                        <Typography variant="body2">{details.regno}</Typography>
                     </Box>
                 </Box>
                 <Modal open={openImageModal} onClose={handleCloseImageModal}>
@@ -147,7 +133,7 @@ export default function UserProfile() {
                     <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                             <Typography sx={{ fontWeight: "bold" }}>Name</Typography>
-                            <Typography sx={{ color: "grey.700" }}>{userDetails.name}</Typography>
+                            <Typography sx={{ color: "grey.700" }}>{details.name}</Typography>
                         </Box>
                         <IconButton size="medium" onClick={() => handleOpenModal("name")}>
                             <EditIcon />
@@ -156,18 +142,18 @@ export default function UserProfile() {
                     <Divider sx={{ my: 2, width: "100%" }}/>
                     <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                         <Typography sx={{ fontWeight: "bold" }}>Gender</Typography>
-                        <Typography sx={{ color: "grey.700" }}>{userDetails.gender}</Typography>
+                        <Typography sx={{ color: "grey.700" }}>{details.gender}</Typography>
                     </Box>
                     <Divider sx={{ my: 2, width: "100%" }}/>
                     <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                         <Typography sx={{ fontWeight: "bold" }}>Email ID</Typography>
-                        <Typography sx={{ color: "grey.700" }}>{userDetails.email}</Typography>
+                        <Typography sx={{ color: "grey.700" }}>{details.email}</Typography>
                     </Box>
                     <Divider sx={{ my: 2, width: "100%" }}/>
                     <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                             <Typography sx={{ fontWeight: "bold" }}>Contact Number</Typography>
-                            <Typography sx={{ color: "grey.700" }}>{userDetails.phoneno}</Typography>
+                            <Typography sx={{ color: "grey.700" }}>{details.phoneno}</Typography>
                         </Box>
                         <IconButton size="medium" onClick={() => handleOpenModal("phoneno")}>
                             <EditIcon/>
@@ -177,14 +163,14 @@ export default function UserProfile() {
                     <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                             <Typography sx={{ fontWeight: "bold" }}>Instagram</Typography>
-                            <Typography sx={{ color: "grey.700" }}>{userDetails.instagram}</Typography>
+                            <Typography sx={{ color: "grey.700" }}>{details.instagram}</Typography>
                         </Box>
                         <IconButton size="medium" onClick={() => handleOpenModal("instagram")}>
                             <EditIcon/>
                         </IconButton>
                     </Box>
                 </Box>
-            </>}         
+            </> : <CircularProgress sx={{ m: "auto" }} />}         
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     );

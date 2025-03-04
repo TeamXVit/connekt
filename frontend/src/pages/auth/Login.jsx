@@ -28,7 +28,7 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${Backend}/auth/login`, formData)
+        axios.post(`${Backend}auth/login`, formData)
         .then((res) => {
             login(res.data.token);
             navigate("/travel-partner");

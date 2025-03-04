@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useDetails from "../../hooks/useDetails";
 import axios from "../../axios/axios";
 import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,6 +15,8 @@ export default function MakePost() {
         ttl: "",
         time: new Date()
     });
+
+    const { details } = useDetails();
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -69,8 +72,8 @@ export default function MakePost() {
                         onChange={handleChange}
                     >
                         <MenuItem value="All">All</MenuItem>
-                        <MenuItem value="Male">Male</MenuItem>
-                        <MenuItem value="Female">Female</MenuItem>
+                        {details.gender === "Male" && <MenuItem value="Male">Male</MenuItem>}
+                        {details.gender === "Female" && <MenuItem value="Female">Female</MenuItem>}
                     </Select>
                 </FormControl>}
             </Box>

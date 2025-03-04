@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router";
 import TopBar from "../components/TopBar";
@@ -10,12 +11,13 @@ import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
 import MakePost from "../pages/user/MakePost";
 import Activities from "../pages/user/Activities";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const UserProfile = lazy(() => import("../pages/user/UserProfile"));
 const TravelPartner = lazy(() => import("../pages/features/TravelPartner"));
 
-export default function RouteProvider() {
+export default function RouteProvider({ toggleTheme }) {
     const location = useLocation();
     
     const token = localStorage.getItem("Connekt-token");
@@ -59,13 +61,13 @@ export default function RouteProvider() {
                 </Routes>
             ) : (
                 <Box sx={{ display: "flex" }}>
-                    <TopBar />
+                    <TopBar toggle={toggleTheme}/>
                     <Sidebar />
                     <Routes>
                         <Route 
                             path="/travel-partner" 
                             element={token ? 
-                            <Suspense fallback={<Typography variant="h3">🌀 Loading...</Typography>}>
+                            <Suspense fallback={<CircularProgress />}>
                                 <TravelPartner />
                             </Suspense> : 
                             <Navigate to="/login" />} 
@@ -76,7 +78,7 @@ export default function RouteProvider() {
                         <Route 
                             path="/user" 
                             element={
-                            <Suspense fallback={<Typography variant="h3">🌀 Loading...</Typography>}>
+                            <Suspense fallback={<CircularProgress />}>
                                 <UserProfile />
                             </Suspense>} 
                         />

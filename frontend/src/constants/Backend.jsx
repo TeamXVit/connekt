@@ -1,2 +1,2 @@
-const Backend = "http://localhost:8000";
+const Backend = "https://connekt-z6wf.onrender.com/";
 export default Backend;

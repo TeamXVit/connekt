@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../../axios/axios"
-import { Avatar, Box, Container, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, CircularProgress, Container, IconButton, Typography, useTheme } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast, ToastContainer } from "react-toastify";
 
@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default function Activities() {
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const dataFetchedRef = useRef(false);
     const theme = useTheme();
 
@@ -17,7 +18,10 @@ export default function Activities() {
 
         const fetchTravelPosts = () => {
             axios.get("/profile/mytravels")
-            .then(res => setPosts(res.data))
+            .then(res => {
+                setPosts(res.data);
+                setLoading(false);
+            })
             .catch(() => toast.error("Failed to fetch data"))
         };
         
@@ -36,7 +40,7 @@ export default function Activities() {
     return (
         <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "15px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4 }}>
             <Typography variant="h4">Activities</Typography>
-            {posts.length > 0 ?
+            {loading ? <CircularProgress sx={{ my: "auto" }}/> : posts.length > 0 ?
             <Box sx={{ width: "95%", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
                 {posts.map((post, index) => (
                 <Box key={index} sx={{ width: { sm: "95%" ,lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
@@ -55,7 +59,8 @@ export default function Activities() {
                 </Box>
                 ))}
             </Box> :
-            <Typography sx={{ my: "auto" }}>You haven&apos;t posted anything Yet</Typography>}
+            <Typography sx={{ my: "auto" }}>You haven&apos;t posted anything Yet</Typography>
+            }
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     )
