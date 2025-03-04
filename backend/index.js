@@ -24,7 +24,7 @@ app.get("/",(request, response)=>{
 });
 
 connectDB().then(()=>{
-    app.listen(process.env.PORT,()=>{
+    app.listen(process.env.PORT,"0.0.0.0",()=>{
         console.log(`server listening at port ${process.env.PORT}`);
     });
 }).catch((err)=>{
