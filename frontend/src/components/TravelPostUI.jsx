@@ -3,7 +3,6 @@ import { useState } from "react";
 import axios from "../axios/axios";
 import { Avatar, Box, IconButton, Link, Popover, Typography, useTheme } from "@mui/material";
 
-
 export default function TravelPostUI({ data }) { 
     const theme = useTheme();
 
@@ -11,19 +10,19 @@ export default function TravelPostUI({ data }) {
     const [anchorEl, setAnchorEl] = useState(null);
     
     const handleClick = async (e, regNo) => {
-        setAnchorEl(anchorEl ? null : e.currentTarget);
-        if (!otherUserDetails) {
-            await axios.get(`/profile/view/${regNo}`)
-            .then(res => setOtherUserDetails(res.data))
-            .catch(e => console.log(e));
-        };
+        setAnchorEl(e.currentTarget);
+        try {
+            const res = await axios.get(`/profile/view/${regNo}`);
+            setOtherUserDetails(res.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
-
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const open = Boolean(anchorEl);
+    const open = Boolean(anchorEl) && Boolean(otherUserDetails);
     const id = open ? 'details-popper' : undefined;
 
     const formattedDate = new Date(data.createdAt).toLocaleString("en-US", {
@@ -40,8 +39,8 @@ export default function TravelPostUI({ data }) {
         <Box sx={{ width: "100%", bgcolor: theme.palette.mode === "light" ? "grey.200" : "grey.900", borderRadius: 7, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
             <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author.regno)}>
-                        <Avatar src={data.author.optprofilepicture || ""}/>
+                    <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)}>
+                        <Avatar src={data.author?.optprofilepicture || ""}/>
                     </IconButton>
                     {otherUserDetails &&            
                     <Popover 
@@ -67,11 +66,11 @@ export default function TravelPostUI({ data }) {
                             >{otherUserDetails.instagram}</Link>
                         </Box>
                     </Popover>}
-                    <Typography variant="body1">{data.author.name}</Typography>    
+                    <Typography variant="body1">{data.author?.name}</Typography>    
                 </Box>
             </Box>
             <Typography variant="body1" sx={{ width: "100%" }}>{data.content}</Typography>
-            {data.author.phoneno && <Typography variant="body2">Phone no: {data.author.phoneno}</Typography>}
+            {data.author?.phoneno && <Typography variant="body2">Phone no: {data.author.phoneno}</Typography>}
             <Typography variant="body2">{formattedDate}</Typography>
         </Box>
     );
