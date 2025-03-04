@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router";
+import Landing from "../pages/user/Landing";
 import TopBar from "../components/TopBar";
 import Sidebar from "../components/Sidebar";
 import Login from "../pages/auth/Login";
@@ -11,6 +12,7 @@ import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
 import MakePost from "../pages/user/MakePost";
 import Activities from "../pages/user/Activities";
+import FAQ from "../pages/user/FAQ";
 import { Box } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -27,7 +29,7 @@ export default function RouteProvider({ toggleTheme }) {
 
     useEffect(() => {
         const titles = {
-            "/": "Home",
+            "/": "Connekt",
             "/login": "Login",
             "/signup": "Signup",
             "/forgot-password": "Reset Password",
@@ -42,13 +44,13 @@ export default function RouteProvider({ toggleTheme }) {
         document.title = titles[location.pathname] || "Connekt";
     }, [location]);
 
-    if (!token && location.pathname === "/") {
-        return <Navigate to="/login" replace />;
-    }
+    // if (!token && location.pathname === "/") {
+    //     return <Navigate to="/login" replace />;
+    // }
 
-    if (token && location.pathname === "/") {
-        return <Navigate to="/travel-partner" replace/>
-    }
+    // if (token && location.pathname === "/") {
+    //     return <Navigate to="/travel-partner" replace/>
+    // }
     
 
     return (  
@@ -64,6 +66,7 @@ export default function RouteProvider({ toggleTheme }) {
                     <TopBar toggle={toggleTheme}/>
                     <Sidebar />
                     <Routes>
+                        <Route path="/" element={<Landing />}/>
                         <Route 
                             path="/travel-partner" 
                             element={token ? 
@@ -84,6 +87,7 @@ export default function RouteProvider({ toggleTheme }) {
                         />
                         <Route path="/make-post" element={<MakePost />} />
                         <Route path="/activities" element={<Activities />} />
+                        <Route path="/faq" element={<FAQ />}/>
                     </Routes>
                 </Box>
             )}

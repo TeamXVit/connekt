@@ -13,7 +13,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 export default function TopBar({ toggle }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const hiddenRoutes = ["/login", "/signup", "/forgot-password"];
+    const hiddenRoutes = ["/", "/login", "/signup", "/forgot-password"];
 
     const { logout } = useAuth();
 
@@ -86,10 +86,10 @@ export default function TopBar({ toggle }) {
                             <Typography>View Profile</Typography>
                         </MenuItem>
                         <MenuItem onClick={() => {navigate("/make-post"); handleCloseUserMenu}} sx={{ width: "100%" }}>
-                            <Typography>Create Post</Typography>
+                            <Typography>Create a Post</Typography>
                         </MenuItem>
                         <MenuItem onClick={() => {navigate("/activities"); handleCloseUserMenu}} sx={{ width: "100%" }}>
-                            <Typography>Activities</Typography>
+                            <Typography>My Activities</Typography>
                         </MenuItem>
                         <MenuItem onClick={() => {logout_(); handleCloseUserMenu()}} sx={{ width: "100%" }}>
                             <Typography>Logout</Typography>

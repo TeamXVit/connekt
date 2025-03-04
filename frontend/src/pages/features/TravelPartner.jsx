@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
-import { Box, CircularProgress, Container, Typography, useTheme } from "@mui/material";
+import { Box, CircularProgress, Container, Link, Typography, useTheme } from "@mui/material";
 import TravelPostUI from "../../components/TravelPostUI";
 
 export default function TravelPartner() {
@@ -64,9 +65,21 @@ export default function TravelPartner() {
                     <CircularProgress sx={{ m: "auto" }} />
                 }
             </Box>
-            <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "flex" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
-                <Typography variant="h5">How it works</Typography>
+            <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
+                <Typography variant="h5" sx={{ mb: 2 }}>Travel Partner 🚗✨</Typography>
+                <Typography variant="body1">
+                Looking for a ride companion? Travel Partner connects you with others traveling to the same destination while respecting your preferences.
+                Travel with comfort – Choose to ride with someone of the same gender.
+                Post your travel details – Heading to the bus stop, railway station, or airport? Let others know.
+                Find a matching travel buddy – Make your journey safer, smarter, and more enjoyable.
+                Travel your way—find your Travel Partner today!
+                </Typography>
+                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
+                <Typography sx={{ my: 1 }}>Check out our other projects: </Typography>
+                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
             </Box>
         </Container>
     );
 };
+
+

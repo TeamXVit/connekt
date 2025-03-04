@@ -15,7 +15,7 @@ const drawerWidth = 240;
 export default function Sidebar() {
     const location = useLocation();
     const navigate = useNavigate();
-    const hiddenRoutes = ["/login", "/signup", "/forgot-password"];
+    const hiddenRoutes = ["/", "/login", "/signup", "/forgot-password"];
 
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
@@ -34,7 +34,7 @@ export default function Sidebar() {
         { page: "Lost & Found", icon: <SearchIcon />, link: "/lost-found" },
         { page: "Find A Teammate", icon: <PeopleOutlineIcon />, link: "/find-teammate" },
         { page: "Queries", icon: <LiveHelpIcon />, link: "/queries" },
-        { page: "Help", icon: <InfoIcon />, link: "#" }
+        { page: "FAQ", icon: <InfoIcon />, link: "/faq" }
     ]
 
     return (
