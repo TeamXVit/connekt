@@ -41,9 +41,7 @@ export default function TravelPartner() {
                         const chunk = decoder.decode(value);
                         try {
                             const processed = JSON.parse(chunk);
-                            setTravelPosts((prevPosts) =>
-                                [...processed, ...prevPosts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                            );
+                            setTravelPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
                         } catch (error) {
                             console.error("Error parsing SSE data:", error);
