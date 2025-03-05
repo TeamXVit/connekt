@@ -41,6 +41,7 @@ export default function Activities() {
         await axios.delete(`/travel/delete/${postID}`)
         .then(res => {
             toast.success(res.data.message);
+            handleModalClose();
             setPosts((prev) => prev.filter((post) => post._id !== postID))
         })
         .catch(() => toast.error("Failed to delete post"))
