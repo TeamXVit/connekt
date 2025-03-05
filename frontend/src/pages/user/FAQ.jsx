@@ -1,4 +1,4 @@
-import { Box, Container, Link, Typography } from "@mui/material";
+import { Box, Button, Container, Link, Typography } from "@mui/material";
 import FeedbackIcon from '@mui/icons-material/Feedback';
 
 
@@ -12,7 +12,7 @@ export default function FAQ() {
             </Box>
             <Box sx={{ width: "90%" }}>
                <Typography variant="h6">2. How do I delete my account?</Typography>
-               <Typography>To delete your account, please send an email to <Link underline="none">connekt4vitap@gmail.com</Link> with your request.</Typography>
+               <Typography>To delete your account, please send an email to <Button variant="text" rel="noopener noreferrer" href={`mailto: connekt4vitap@gmail.com`}>connekt4vitap@gmail.com</Button> with your request.</Typography>
             </Box>
             <Box sx={{ width: "90%" }}>
                <Typography variant="h6">3. How do I edit or delete a post?</Typography>
@@ -36,7 +36,7 @@ export default function FAQ() {
             </Box>
             <Box sx={{ width: "90%" }}>
                <Typography variant="h6">8. How do I report or take down a post?</Typography>
-               <Typography>If you come across any inappropriate or harmful posts, please email <Link underline="none">connekt4vitap@gmail.com</Link> with a screenshot of the post you wish to report or have taken down. Our team will review it promptly.</Typography>
+               <Typography>If you come across any inappropriate or harmful posts, please email <Button variant="text" rel="noopener noreferrer" href={`mailto: connekt4vitap@gmail.com`}>connekt4vitap@gmail.com</Button> with a screenshot of the post you wish to report or have taken down. Our team will review it promptly.</Typography>
             </Box>         
             <Box sx={{ width: "90%", display: "flex", gap: 1 }}>
                <FeedbackIcon />

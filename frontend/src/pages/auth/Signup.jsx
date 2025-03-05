@@ -17,6 +17,7 @@ import axios from "axios";
 import Backend from "../../constants/Backend";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
+import TermsAndConditionsModal from "../../components/TermsandConditionsModal";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +35,15 @@ export default function Signup() {
         instagram: ""
     });
     const [cnfPassword, setCNFPassword] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     let navigate = useNavigate();
 
@@ -56,7 +66,6 @@ export default function Signup() {
             };
             if (formData.password.length < 8 || cnfPassword.length < 8) {
                 isValid = false;
-                toast.error("Password's length must be 8 or more characters long!")
             }
             if (formData.password !== cnfPassword) {
                 isValid = false;
@@ -173,7 +182,7 @@ export default function Signup() {
                         />
                         <TextField 
                             name="password"
-                            placeholder="Enter your password"
+                            placeholder="Password must be 8 characters long"
                             label="Password" 
                             type={showPassword ? "text" : "password"} 
                             variant="outlined" 
@@ -315,7 +324,7 @@ export default function Signup() {
                         <Typography sx={{ width: "90%", textAlign: "" ,textWrap: "wrap" }}>We have sent a verification mail to the given email ID. Click on the provided link within 24 hours to activate your account. <strong>Note:</strong> If you didn&apos;t receive any mail in your inbox, please check your spam.</Typography>
                         <Box sx={{ width: "90%", display: "flex", alignItems: "center" }}>
                             <FormControlLabel control={<Checkbox/>} onChange={() => setTermsConsent(true)}/>
-                            <Typography>I accept the <Link underline="none" href="#">terms and conditions</Link></Typography>
+                            <Typography>I accept the <Typography component="button" onClick={handleOpen} sx={{ color: "#6586f1", cursor: "pointer" }}>terms and conditions</Typography></Typography>
                         </Box>
                     </>}
                     <Box sx={{ width: { sm: "100%", md: "90%" }, display: "flex", pb: 2, justifyContent: "space-between", pt: 2 }}>
@@ -328,6 +337,7 @@ export default function Signup() {
                     </Box>
                 </Box>
             </Grid2>
+            <TermsAndConditionsModal open={open} handleClose={handleClose}/>
             <ToastContainer autoClose={1000} hideProgressBar position={window.innerWidth < 660 ? "top-left" : "bottom-right"} pauseOnHover={false}/>
         </Container>
     )

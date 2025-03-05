@@ -48,9 +48,9 @@ export default function RouteProvider({ toggleTheme }) {
     //     return <Navigate to="/login" replace />;
     // }
 
-    // if (token && location.pathname === "/") {
-    //     return <Navigate to="/travel-partner" replace/>
-    // }
+    if (token && location.pathname === "/") {
+        return <Navigate to="/travel-partner" replace/>
+    }
     
 
     return (  

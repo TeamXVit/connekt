@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 
 export default function FindTeammate() {
     return (
-        <Container maxWidth={false} sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "30px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4 }}>
+        <Container maxWidth="lg" sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "30px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "flex-start" }, gap: 4, overflow: "hidden", width: "100vw" }}>
             <Typography variant="h4">Find a Teammate</Typography>
             <Box sx={{ width: "90%" }}>
                 <Typography>Looking for a partner to collaborate on your college activities? <strong>Find a Teammate</strong> helps you connect with like-minded individuals for all kinds of projects and events.</Typography>

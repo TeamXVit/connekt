@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useDetails from "../../hooks/useDetails";
 import axios from "../../axios/axios";
-import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 
 
@@ -97,6 +97,7 @@ export default function MakePost() {
                         <MenuItem value={6 * 86400}>6 Days</MenuItem>
                         <MenuItem value={7 * 86400}>7 Days</MenuItem>
                     </Select>
+                    <FormHelperText>How long do you want the post to exist?</FormHelperText>
                 </FormControl>
                 <FormControl sx={{ minWidth: 150 }}>
                     <InputLabel id="select-showphoneno">Show Phone no.</InputLabel>
@@ -111,6 +112,7 @@ export default function MakePost() {
                         <MenuItem value={true}>Yes</MenuItem>
                         <MenuItem value={false}>No</MenuItem>
                     </Select>
+                    <FormHelperText>Select &apos;Yes&apos; if you want others to see your phone number</FormHelperText>
                 </FormControl>
                 <TextField
                     label="Time"
@@ -123,7 +125,7 @@ export default function MakePost() {
                 <TextField 
                     variant="outlined" 
                     sx={{ width: { sm: "100%", lg: "75%" } }}
-                    placeholder="ex: If anyone is travelling from Vijayawada Railway Station at 5:30 PM today, please contact me."
+                    placeholder="ex: If anyone is travelling from Vijayawada Railway Station at 5:30 PM today, please contact me. Note: If you don't want to show your contact number, please mention how others can contact you"
                     multiline
                     rows={3}
                     value={formData.content}

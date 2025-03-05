@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
-import { useSwipeable } from "react-swipeable"; // Import swipe gesture hook
+import { useSwipeable } from "react-swipeable";
 import TrainIcon from '@mui/icons-material/Train';
 import SearchIcon from '@mui/icons-material/Search';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
@@ -26,8 +26,6 @@ export default function Sidebar() {
         setOpen(state);
     };
 
-    if (hiddenRoutes.includes(location.pathname)) return null;
-
     const navLinks = [
         { page: "Travel Partner", icon: <TrainIcon />, link: "/travel-partner" },
         { page: "Lost & Found", icon: <SearchIcon />, link: "/lost-found" },
@@ -36,12 +34,13 @@ export default function Sidebar() {
         { page: "FAQ", icon: <InfoIcon />, link: "/faq" }
     ];
 
-    // Swipe gesture handlers
     const swipeHandlers = useSwipeable({
-        onSwipedLeft: () => toggleDrawer(false), // Close on left swipe
-        onSwipedRight: () => toggleDrawer(true), // Open on right swipe
-        trackMouse: true, // Enables swipe gestures with the mouse
+        onSwipedLeft: () => toggleDrawer(false), 
+        onSwipedRight: () => toggleDrawer(true), 
+        trackMouse: true, 
     });
+
+    if (hiddenRoutes.includes(location.pathname)) return null;
 
     return (
         <>
@@ -57,13 +56,12 @@ export default function Sidebar() {
                     <MenuIcon />
                 </IconButton>
             )}
-            {/* Swipeable area for mobile */}
             <div {...swipeHandlers} style={{ width: "100vw", height: "100vh", position: "absolute", top: 0, left: 0 }} />
 
             <Drawer
                 open={isLargeScreen ? true : open}
                 variant={isLargeScreen ? "permanent" : "temporary"}
-                onClose={() => toggleDrawer(false)} // Close when clicking outside
+                onClose={() => toggleDrawer(false)} 
                 sx={{
                     bgcolor: "transparent",
                     justifyContent: "space-between",
@@ -73,6 +71,8 @@ export default function Sidebar() {
                         width: drawerWidth,
                         boxSizing: "border-box",
                         p: 2,
+                        bgcolor: theme.palette.mode === "dark" ? "#121212" : "white",
+                        color: "text.primary"
                     },
                 }}
             >
@@ -92,7 +92,7 @@ export default function Sidebar() {
                             }}
                             onClick={() => {
                                 navigate(navLink.link);
-                                toggleDrawer(false); // Close drawer after navigation
+                                toggleDrawer(false); 
                             }}
                         >
                             <ListItemIcon>{navLink.icon}</ListItemIcon>

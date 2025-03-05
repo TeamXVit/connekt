@@ -3,6 +3,7 @@ import { Box, Button, CircularProgress, Container, Typography } from "@mui/mater
 import Logo from "../../assets/logo.png";
 import { useEffect, useState } from "react";
 import axios from "../../axios/axios";
+import { ToastContainer, toast } from "react-toastify";
 
 
 export default function Landing() {
@@ -15,10 +16,11 @@ export default function Landing() {
             try {
                 await axios.get("/").then(res=>{
                     console.log(res.data);
+                    toast("If login or signup fails, try another browser!");
                 });
                 setServerReady(true);
             } catch (error) {
-                console.error("Server is not ready yet");
+                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -45,7 +47,7 @@ export default function Landing() {
             >
                 <CircularProgress sx={{ color: "white" }} />
                 <Typography variant="h5" sx={{ mt: 2 }}>
-                    Waiting for server to start...
+                    Waiting for response from the server...
                 </Typography>
             </Container>
         );
@@ -90,7 +92,6 @@ export default function Landing() {
                 px: { xs: 2, md: 4 }
             }}
         >
-            {/* Navbar */}
             <Box
                 sx={{
                     height: 72,
@@ -102,13 +103,14 @@ export default function Landing() {
                     alignItems: "center",
                     justifyContent: "space-between",
                     bgcolor: "rgba(0, 0, 0, 0.7)",
+                    color: "white",
                     backdropFilter: "blur(5px)",
                     zIndex: 1000
                 }}
             >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Box component="img" src={Logo} sx={{ width: 40, height: 40 }} />
-                    <Typography variant="h6" sx={{ color: "text.primary", fontSize: { xs: "1rem", md: "1.5rem" } }}>
+                    <Typography variant="h6" sx={{ fontSize: { xs: "1rem", md: "1.5rem" } }}>
                         ConneKt
                     </Typography>
                 </Box>
@@ -116,9 +118,7 @@ export default function Landing() {
                     Login
                 </Button>
             </Box>
-
-            {/* Main Content */}
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, mt: { xs: 10, md: 0 } }}>
+            <Box sx={{ color: "white", display: "flex", flexDirection: "column", alignItems: "center", gap: 2, mt: { sm: 10, lg: 0 } }}>
                 <Typography variant="h4" fontWeight="bold" sx={{ fontSize: { xs: "2rem", md: "3rem" } }}>
                     Welcome to ConneKt
                 </Typography>
@@ -139,6 +139,7 @@ export default function Landing() {
                     Sign Up
                 </Button>
             </Box>
+            <ToastContainer autoClose={false} hideProgressBar position="top-center" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     );
 }

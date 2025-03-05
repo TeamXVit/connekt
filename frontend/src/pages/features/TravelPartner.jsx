@@ -78,7 +78,6 @@ export default function TravelPartner() {
                 }
             </Box>
 
-            {/* Mobile View - Popup */}
             {isMobile ? (
                 <>
                     <IconButton
