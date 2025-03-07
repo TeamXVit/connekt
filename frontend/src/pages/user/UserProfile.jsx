@@ -133,7 +133,7 @@ export default function UserProfile() {
                     <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                             <Typography sx={{ fontWeight: "bold" }}>Name</Typography>
-                            <Typography sx={{ color: "grey.700" }}>{details.name}</Typography>
+                            <Typography sx={{ color: "grey.700" }}>{details?.name}</Typography>
                         </Box>
                         <IconButton size="medium" onClick={() => handleOpenModal("name")}>
                             <EditIcon />
@@ -142,18 +142,18 @@ export default function UserProfile() {
                     <Divider sx={{ my: 2, width: "100%" }}/>
                     <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                         <Typography sx={{ fontWeight: "bold" }}>Gender</Typography>
-                        <Typography sx={{ color: "grey.700" }}>{details.gender}</Typography>
+                        <Typography sx={{ color: "grey.700" }}>{details?.gender}</Typography>
                     </Box>
                     <Divider sx={{ my: 2, width: "100%" }}/>
                     <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                         <Typography sx={{ fontWeight: "bold" }}>Email ID</Typography>
-                        <Typography sx={{ color: "grey.700" }}>{details.email}</Typography>
+                        <Typography sx={{ color: "grey.700" }}>{details?.email}</Typography>
                     </Box>
                     <Divider sx={{ my: 2, width: "100%" }}/>
                     <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                             <Typography sx={{ fontWeight: "bold" }}>Contact Number</Typography>
-                            <Typography sx={{ color: "grey.700" }}>{details.phoneno}</Typography>
+                            <Typography sx={{ color: "grey.700" }}>{details?.phoneno}</Typography>
                         </Box>
                         <IconButton size="medium" onClick={() => handleOpenModal("phoneno")}>
                             <EditIcon/>
@@ -163,7 +163,7 @@ export default function UserProfile() {
                     <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                         <Box sx={{ width: "100%", display: "flex", flexDirection: { sm: "column", md: "row" }, justifyContent: "space-between", gap: 2 }}>
                             <Typography sx={{ fontWeight: "bold" }}>Instagram</Typography>
-                            <Typography sx={{ color: "grey.700" }}>{details.instagram}</Typography>
+                            <Typography sx={{ color: "grey.700" }}>{details?.instagram}</Typography>
                         </Box>
                         <IconButton size="medium" onClick={() => handleOpenModal("instagram")}>
                             <EditIcon/>

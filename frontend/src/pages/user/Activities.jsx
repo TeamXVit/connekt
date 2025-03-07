@@ -5,10 +5,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { toast, ToastContainer } from "react-toastify";
 
 
-
 export default function Activities() {
     const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [contentLoading, setContentLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const dataFetchedRef = useRef(false);
     const theme = useTheme();
@@ -20,10 +20,10 @@ export default function Activities() {
         const fetchTravelPosts = () => {
             axios.get("/profile/mytravels")
             .then(res => {
+                setContentLoading(false);
                 setPosts(res.data);
-                setLoading(false);
             })
-            .catch(() => toast.error("Failed to fetch data"))
+            .catch((e) => toast.error(e.response.data.error))
         };
         
         fetchTravelPosts();
@@ -40,24 +40,28 @@ export default function Activities() {
     const deletePost = async (postID) => {
         await axios.delete(`/travel/delete/${postID}`)
         .then(res => {
+            setLoading(false);
             toast.success(res.data.message);
             handleModalClose();
             setPosts((prev) => prev.filter((post) => post._id !== postID))
         })
-        .catch(() => toast.error("Failed to delete post"))
+        .catch(() => {
+            setLoading(false);
+            toast.error("Failed to delete post");
+        })
     };
 
     return (
         <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "15px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4 }}>
             <Typography variant="h4">Activities</Typography>
-            {loading ? <CircularProgress sx={{ my: "auto" }}/> : posts.length > 0 ?
+            {contentLoading ? <CircularProgress sx={{ my: "auto" }}/> : posts.length > 0 ?
             <Box sx={{ width: "95%", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-                {posts.map((post, index) => (
+                {posts?.map((post, index) => (
                 <Box key={index} sx={{ width: { sm: "95%" ,lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                            <Avatar src={post.author.optprofilepicture || ""}/>
-                            <Typography>{post.author.name}</Typography>
+                            <Avatar src={post?.author.optprofilepicture || ""}/>
+                            <Typography>{post?.author.name}</Typography>
                         </Box>
                         <IconButton onClick={handleModalOpen}>
                             <DeleteIcon />
@@ -66,8 +70,6 @@ export default function Activities() {
                             keepMounted
                             open={modalOpen}
                             onClose={handleModalClose}
-                            aria-labelledby="keep-mounted-modal-title"
-                            aria-describedby="keep-mounted-modal-description"
                         >
                             <Box sx={{
                                 position: 'absolute',
@@ -84,20 +86,19 @@ export default function Activities() {
                                 <Typography sx={{ mt: 1 }} variant="body1">Are you sure you want to delete this post?</Typography>
                                 <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
                                     <Button variant="text" onClick={handleModalClose}>Cancel</Button>
-                                    <Button variant="contained" onClick={() => deletePost(post._id)}>Delete</Button>
+                                    <Button variant="contained" onClick={() => {setLoading(true); deletePost(post?._id)}} disabled={loading}>Delete</Button>
                                 </Box>
                             </Box>
                         </Modal>
                     </Box>
-                    <Typography variant="body1" sx={{ width: "100%" }}>{post.content}</Typography>
-                    <Typography variant="body2">Phone no: {post.author.phoneno}</Typography>
-                    <Typography variant="body2">Created at: {post.createdAt}</Typography>
+                    <Typography variant="body1" sx={{ width: "100%" }}>{post?.content}</Typography>
+                    <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>
+                    <Typography variant="body2">Created at: {post?.createdAt}</Typography>
                 </Box>
                 ))}
             </Box> :
             <Typography sx={{ my: "auto" }}>You haven&apos;t posted anything Yet</Typography>
             }
-            
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     )

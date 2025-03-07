@@ -5,7 +5,6 @@ import { Box, Button, Container, FormControl, FormHelperText, InputLabel, MenuIt
 import { ToastContainer, toast } from "react-toastify";
 
 
-
 export default function MakePost() {
     const [feature, setFeature] = useState("");
     const [formData, setFormData] = useState({
@@ -15,6 +14,7 @@ export default function MakePost() {
         ttl: "",
         time: new Date()
     });
+    const [loading, setLoading] = useState(false);
 
     const { details } = useDetails();
     
@@ -24,9 +24,16 @@ export default function MakePost() {
     };
 
     const handlePost = () => {
+        setLoading(true);
         axios.post(`${feature}/post`, formData)
-        .then(res => toast.success(res.data.message))
-        .catch(e => console.log(e));
+        .then(res => {
+            setLoading(false);
+            toast.success(res.data.message);
+        })
+        .catch(e => {
+            setLoading(false);
+            toast.error(e.response.data.error);
+        });
         handleClear();
     };
 
@@ -134,7 +141,7 @@ export default function MakePost() {
                 />
             </Box>
             <Box sx={{ width: "90%" }}>
-                <Button variant="contained" onClick={handlePost} disabled={!formData.content || !formData.ttl || !feature}>Post</Button>
+                <Button variant="contained" onClick={handlePost} disabled={!formData.content || !formData.ttl || !feature || loading}>Post</Button>
             </Box>
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>

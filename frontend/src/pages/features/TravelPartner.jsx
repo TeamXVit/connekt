@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
 import { Box, Container, Dialog, DialogContent, IconButton, Link, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import TravelPostUI from "../../components/TravelPostUI";
-import InfoIcon from '@mui/icons-material/Info';
-import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from "@mui/icons-material/Info";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function TravelPartner() {
     const [travelPosts, setTravelPosts] = useState([]);
@@ -13,6 +15,7 @@ export default function TravelPartner() {
     const [openPopup, setOpenPopup] = useState(false);
     
     const theme = useTheme();
+    const navigate = useNavigate();
     const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
     const eventSourceRef = useRef(null);
 
@@ -79,12 +82,17 @@ export default function TravelPartner() {
             {isMobile ? (
                 <>
                     <IconButton
+                        onClick={() => navigate("/make-post")}
+                        sx={{ position: "fixed", right: 15, bottom: 65, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark } }}
+                    >
+                        <AddCircleIcon />
+                    </IconButton>
+                    <IconButton
                         onClick={() => setOpenPopup(true)}
                         sx={{ position: "fixed", right: 15, bottom: 15, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark } }}
                     >
                         <InfoIcon />
                     </IconButton>
-
                     <Dialog open={openPopup} onClose={() => setOpenPopup(false)} fullWidth>
                         <DialogContent sx={{ p: 3 }}>
                             <Box>

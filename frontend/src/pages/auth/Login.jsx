@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify"
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         regno: "",
         password: ""
@@ -28,12 +29,17 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setLoading(true);
         axios.post(`${Backend}auth/login`, formData)
         .then((res) => {
+            setLoading(false);
             login(res.data.token);
             navigate("/travel-partner");
         })
-        .catch((e) => toast.error(e.response.data.error));
+        .catch((e) => {
+            setLoading(false);
+            toast.error(e.response.data.error);
+        });
     };
 
     return (
@@ -89,7 +95,12 @@ export default function Login() {
                                 }
                             }}
                         />
-                        <Button variant="contained" sx={{ bgcolor: "#6586f1" }} type="submit">Login</Button>
+                        <Button 
+                            variant="contained" 
+                            sx={{ bgcolor: "#6586f1" }} 
+                            type="submit"
+                            disabled={loading}
+                        >{!loading ? "Login" : "Please Wait..."}</Button>
                     </Box>
                     <Stack direction="row" sx={{ justifyContent: "space-between" }}>
                         <Link href="/forgot-password" underline="none">Forgot Password</Link>
