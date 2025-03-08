@@ -157,4 +157,28 @@ profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
     }
 });
 
+profileRouter.get("/mytravels/mycomments",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await Travel.find({"comments.userID":user._id})
+        .populate("author","regno name optprofilepicture")
+        .populate("comments.userID","regno name")
+        .lean();
+        const filteredPosts = posts.map(post=>(
+            {...post,
+                comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
+            }
+        ));
+        return response.status(200).send(filteredPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
 export default profileRouter;

@@ -53,6 +53,7 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
                     $or: [{ preferences: "All" }, { preferences: gender }]
                 })
                 .populate("author", "regno name optprofilepicture phoneno")
+                .populate("comments.userID", "regno name")
                 .lean();
                 posts.forEach(post => {
                     if (post.author && !post.showphoneno) {
@@ -78,7 +79,74 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
     }
 });
 
-travelRouter.delete("/delete/:id",authenticateToken, async (request,response)=>{
+travelRouter.post("/comment/:id",authenticateToken, async (request, response)=>{
+    try{
+        const {regno} = request.user;
+        const {id} = request.params;
+        const {comment, time} = request.body;
+        if(!comment || !time){
+            return response.status(400).send({
+                error: "All required fields must be filled."
+            });
+        }
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error: "User not found."
+        });
+        if(!mongoose.Types.ObjectId.isValid(id)) {
+            return response.status(400).json({ error: "Invalid ID format." });
+        }
+        const post = await Travel.findById(id);
+        if(!post) return response.status(404).send({
+            error: "Post not found."
+        });
+        post.comments.push({userID:user._id,comment:comment,createdAt:time});
+        await post.save();
+        return response.status(201).send({
+            message:"Comment added successfully"
+        });
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+travelRouter.delete("/comment/:id", authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const { id } = request.params;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error: "User not found."
+        });
+        if(!mongoose.Types.ObjectId.isValid(id)) {
+            return response.status(400).json({ error: "Invalid ID format." });
+        }
+        const post = await Travel.findOne({"comments._id":id});
+        if(!post) return response.status(404).send({
+            error: "Post not found."
+        });
+        const comment = post.comments.id(id);
+        if(!comment) return response.status(404).send({
+            error: "Comment not found."
+        });
+        if(!comment.userID.equals(user._id)) return response.status(403).send({
+            error: "Unauthorized: You can only delete your own comments."
+        }); 
+        comment.deleteOne();
+        await post.save();
+        return response.status(200).send({
+            message : "Comment deleted successfully."
+        });
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+travelRouter.delete("/delete/:id", authenticateToken, async (request, response)=>{
     try{
         const {regno} = request.user;
         const {id} = request.params;
