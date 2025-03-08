@@ -17,7 +17,7 @@ export default function TravelPartner() {
     const theme = useTheme();
     const navigate = useNavigate();
     const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-    const eventSourceRef = useRef(null);
+    // const eventSourceRef = useRef(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -46,6 +46,7 @@ export default function TravelPartner() {
                             const processed = JSON.parse(chunk);
                             setTravelPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
+                            console.log(processed)
                         } catch (error) {
                             console.error("Error parsing SSE data:", error);
                         }
@@ -78,7 +79,6 @@ export default function TravelPartner() {
                         <Typography>No travel posts available</Typography>
                 }
             </Box>
-
             {isMobile ? (
                 <>
                     <IconButton

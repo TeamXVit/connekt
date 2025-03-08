@@ -49,7 +49,7 @@ export default function MakePost() {
     };
 
     return (
-        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "75px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4 }}>
+        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "75px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4, overflow: "auto" }}>
             <Typography variant="h4" sx={{ width: "90%", textAlign: "left" }}>Make A Post</Typography>
             <Box sx={{ width: "90%", display: "flex", flexWrap: "wrap", gap: 2 }}>
                 <FormControl sx={{ minWidth: 230 }}>
@@ -143,7 +143,7 @@ export default function MakePost() {
             <Box sx={{ width: "90%" }}>
                 <Button variant="contained" onClick={handlePost} disabled={!formData.content || !formData.ttl || !feature || loading}>Post</Button>
             </Box>
-            <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
+            <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" pauseOnHover={false}/>
         </Container>
     );
 };
