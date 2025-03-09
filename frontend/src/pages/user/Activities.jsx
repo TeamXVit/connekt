@@ -7,7 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default function Activities() {
     const [posts, setPosts] = useState([]);
-    const [comments, setComments] = useState([]);
+    const [replies, setReplies] = useState([]);
     const [contentLoading, setContentLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -33,8 +33,8 @@ export default function Activities() {
             axios.get("/profile/mytravels/mycomments")
             .then(res => {
                 setContentLoading(false);
+                setReplies(res.data);
                 console.log(res.data)
-                setComments(res.data);
             })
             .catch((e) => toast.error(e.response.data.error));
         };
@@ -54,7 +54,6 @@ export default function Activities() {
 
     const handleChange = (event, newValue) => {
         setActivity(newValue);
-        console.log(newValue)
     };
 
     const deletePost = async (postID) => {
@@ -79,7 +78,7 @@ export default function Activities() {
             setLoading(false);
             toast.success(res.data.message);
             handleModalClose();
-            setComments((prev) => 
+            setReplies((prev) => 
                 prev.map((com) => ({
                     ...com,
                     comments: com.comments.filter((c) => c._id !== commentID) 
@@ -99,12 +98,32 @@ export default function Activities() {
         activity === 0 ? deletePost(id) : deleteComment(id);
     };
 
+    const getRelativeTimeString = (date) => {
+        const now = new Date();
+        const diffInMs = now - date;
+        
+        const diffInSeconds = Math.floor(diffInMs / 1000);
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        const diffInDays = Math.floor(diffInHours / 24);
+        
+        if (diffInDays > 0) {
+          return diffInDays === 1 ? '1 day ago' : `${diffInDays} days ago`;
+        } else if (diffInHours > 0) {
+          return diffInHours === 1 ? '1 hour ago' : `${diffInHours} hours ago`;
+        } else if (diffInMinutes > 0) {
+          return diffInMinutes === 1 ? '1 minute ago' : `${diffInMinutes} minutes ago`;
+        } else {
+          return diffInSeconds <= 5 ? 'just now' : `${diffInSeconds} seconds ago`;
+        }
+    };
+
     return (
         <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "15px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
             <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <Tabs value={activity} onChange={handleChange} centered sx={{ mb: 2 }}>
                     <Tab label="Posts"/>
-                    <Tab label="Comments"/>
+                    <Tab label="Replies"/>
                 </Tabs>
             </Box>
             {contentLoading ? <CircularProgress sx={{ my: "auto" }}/> : 
@@ -116,6 +135,7 @@ export default function Activities() {
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                             <Avatar src={post?.author.optprofilepicture || ""}/>
                             <Typography>{post?.author.name}</Typography>
+                            <Typography variant="caption">{getRelativeTimeString(new Date(post?.createdAt))}</Typography>
                         </Box>
                         <IconButton 
                         onClick={() => {
@@ -125,11 +145,9 @@ export default function Activities() {
                         >
                             <DeleteIcon />
                         </IconButton>
-                        
                     </Box>
-                    <Typography variant="body1" sx={{ width: "100%" }}>{post?.content}</Typography>
+                    <Typography variant="body1" sx={{ width: "100%" }}>{post.content}</Typography>
                     <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>
-                    <Typography variant="body2">Created at: {post?.createdAt}</Typography>
                 </Box>
                 ))}
             </Box> :
@@ -159,14 +177,18 @@ export default function Activities() {
                     </Box>
                 </Box>
             </Modal>
-            {comments.length > 0 && activity === 1 ? comments?.map((com) => (
-                com.comments.map((c, index) => (
+            {replies.length > 0 && activity === 1 ? replies.map((com) => (
+                com?.comments.map((c, index) => (
                     <Box key={index} sx={{ width: { sm: "95%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, my: 1, display: "flex", flexDirection: "column" }}>
-                        <Typography>Commented under {com?.author.name}&apos;s post</Typography>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <Avatar src={com.author.optprofilepicture} sx={{ width: 30, height: 30 }}/>
+                            <Typography>{com.author.name}</Typography>
+                            <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
+                        </Box>
+                        <Typography my={2}>{com.content}</Typography>
                         <Divider sx={{ my: 1 }}/>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <Typography>{c.comment}</Typography>
-                            
+                            <Typography>Your reply: {c.comment}</Typography>
                             <IconButton
                             onClick={() => {
                                 handleModalOpen();
@@ -178,7 +200,7 @@ export default function Activities() {
                         </Box>
                     </Box>
                 ))
-            )) : (activity === 1 && <Typography sx={{ my: "auto" }}>You haven&apos;t commented anything Yet</Typography>)}
+            )) : (activity === 1 && <Typography sx={{ my: "auto" }}>You haven&apos;t replied to anything Yet</Typography>)}
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     )

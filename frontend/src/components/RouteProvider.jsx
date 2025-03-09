@@ -33,7 +33,7 @@ export default function RouteProvider({ toggleTheme }) {
             "/login": "Login",
             "/signup": "Signup",
             "/forgot-password": "Reset Password",
-            "/travel-partner": "Travel Partner",
+            "/travel": "Travel Partner",
             "/lost-found": "Lost & Found",
             "/find-teammate": "Find A Teammate",
             "/queries": "Queries",
@@ -49,16 +49,16 @@ export default function RouteProvider({ toggleTheme }) {
     // }
 
     if (token && location.pathname === "/") {
-        return <Navigate to="/travel-partner" replace/>
-    }
+        return <Navigate to="/travel" replace/>
+    };
     
 
     return (  
         <>
             {isAuthPage ? (
                 <Routes>
-                    <Route path="/login" element={!token ? <Login /> : <Navigate to="/travel-partner" />} />
-                    <Route path="/signup" element={!token ? <Signup /> : <Navigate to="/travel-partner" />} />
+                    <Route path="/login" element={!token ? <Login /> : <Navigate to="/travel" />} />
+                    <Route path="/signup" element={!token ? <Signup /> : <Navigate to="/travel" />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Routes>
             ) : (
@@ -68,7 +68,7 @@ export default function RouteProvider({ toggleTheme }) {
                     <Routes>
                         <Route path="/" element={<Landing />}/>
                         <Route 
-                            path="/travel-partner" 
+                            path="/travel" 
                             element={token ? 
                             <Suspense fallback={<CircularProgress />}>
                                 <TravelPartner />

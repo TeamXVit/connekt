@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import useDetails from "../../hooks/useDetails";
 import axios from "../../axios/axios";
 import { Box, Button, Container, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
@@ -15,7 +16,7 @@ export default function MakePost() {
         time: new Date()
     });
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
     const { details } = useDetails();
     
     const handleChange = (e) => {
@@ -29,6 +30,7 @@ export default function MakePost() {
         .then(res => {
             setLoading(false);
             toast.success(res.data.message);
+            navigate(`${feature}`);
         })
         .catch(e => {
             setLoading(false);

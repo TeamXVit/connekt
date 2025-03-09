@@ -27,9 +27,9 @@ export default function Sidebar() {
     };
 
     const navLinks = [
-        { page: "Travel Partner", icon: <TrainIcon />, link: "/travel-partner" },
-        { page: "Lost & Found", icon: <SearchIcon />, link: "/lost-found" },
+        { page: "Travel Partner", icon: <TrainIcon />, link: "/travel" },
         { page: "Find A Teammate", icon: <PeopleOutlineIcon />, link: "/find-teammate" },
+        { page: "Lost & Found", icon: <SearchIcon />, link: "/lost-found" },
         { page: "Queries", icon: <LiveHelpIcon />, link: "/queries" },
         { page: "FAQ", icon: <InfoIcon />, link: "/faq" }
     ];

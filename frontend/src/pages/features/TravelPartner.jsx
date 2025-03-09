@@ -17,8 +17,7 @@ export default function TravelPartner() {
     const theme = useTheme();
     const navigate = useNavigate();
     const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-    // const eventSourceRef = useRef(null);
-
+    
     useEffect(() => {
         let isMounted = true;
 
@@ -46,7 +45,6 @@ export default function TravelPartner() {
                             const processed = JSON.parse(chunk);
                             setTravelPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
-                            console.log(processed)
                         } catch (error) {
                             console.error("Error parsing SSE data:", error);
                         }
@@ -69,7 +67,7 @@ export default function TravelPartner() {
 
     return (
         <Container maxWidth={false} sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", display: "flex", gap: 1, pt: "75px" }}>
-            <Box sx={{ width: { sm: "100%", lg: "67%" }, display: "flex", flexDirection: "column", gap: 2, pb: 2 }}>
+            <Box sx={{ width: { sm: "100%", lg: "67%" }, display: "flex", flexDirection: "column", gap: 2, pb: 2, position: "relative" }}>
                 {loading ? 
                     Array.from(new Array(5)).map((_, index) => (
                         <Skeleton key={index} variant="rectangular" height={100} sx={{ borderRadius: 2 }} />
@@ -129,6 +127,13 @@ export default function TravelPartner() {
                     <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
                 </Box>
             )}
+            <IconButton
+                size="large"
+                onClick={() => navigate("/make-post")}
+                sx={{ display: { sm: "none", lg: "flex" }, position: "fixed", right: 345, bottom: 25, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark } }}
+            >
+                <AddCircleIcon sx={{ height: 30, width: 30 }}/>
+            </IconButton>
         </Container>
     );
 };
