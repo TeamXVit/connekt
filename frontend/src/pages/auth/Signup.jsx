@@ -17,7 +17,7 @@ import axios from "axios";
 import Backend from "../../constants/Backend";
 import { useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
-import TermsAndConditionsModal from "../../components/TermsandConditionsModal";
+import TermsAndConditionsModal from "../../components/TermsAndConditionsModal";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
