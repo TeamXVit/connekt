@@ -34,7 +34,7 @@ export default function Login() {
         .then((res) => {
             setLoading(false);
             login(res.data.token);
-            navigate("/travel-partner");
+            navigate("/travel");
         })
         .catch((e) => {
             setLoading(false);
