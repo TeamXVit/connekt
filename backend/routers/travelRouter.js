@@ -53,7 +53,7 @@ travelRouter.get("/view", authenticateToken, async (request, response) => {
                     $or: [{ preferences: "All" }, { preferences: gender }]
                 })
                 .populate("author", "regno name optprofilepicture phoneno")
-                .populate("comments.userID", "regno name")
+                .populate("comments.userID", "regno name optprofilepicture")
                 .lean();
                 posts.forEach(post => {
                     if (post.author && !post.showphoneno) {
