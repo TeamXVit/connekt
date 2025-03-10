@@ -81,7 +81,7 @@ export default function TravelPostUI({ data }) {
             <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 2 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)}>
-                        <Avatar src={data.author?.optprofilepicture || ""}/>
+                        <Avatar src={data.author?.optprofilepicture+`?t=${new Date().getTime()}`}/>
                     </IconButton>
                     {otherUserDetails &&            
                     <Popover 
@@ -139,7 +139,7 @@ export default function TravelPostUI({ data }) {
                 data.comments?.map((com, index) => (
                 <Box key={index}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture}/>
+                        <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture+`?t=${new Date().getTime()}`}/>
                         <Typography fontWeight={600}>{com.userID.name}</Typography>
                         <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
                     </Box>

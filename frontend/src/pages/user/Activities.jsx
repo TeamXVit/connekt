@@ -133,7 +133,7 @@ export default function Activities() {
                 <Box key={index} sx={{ width: { sm: "95%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                            <Avatar src={post?.author.optprofilepicture || ""}/>
+                            <Avatar src={post?.author.optprofilepicture+`?t=${new Date().getTime()}`}/>
                             <Typography>{post?.author.name}</Typography>
                             <Typography variant="caption">{getRelativeTimeString(new Date(post?.createdAt))}</Typography>
                         </Box>
@@ -181,7 +181,7 @@ export default function Activities() {
                 com?.comments.map((c, index) => (
                     <Box key={index} sx={{ width: { sm: "95%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, my: 1, display: "flex", flexDirection: "column" }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <Avatar src={com.author.optprofilepicture} sx={{ width: 30, height: 30 }}/>
+                            <Avatar src={com.author?.optprofilepicture+`?t=${new Date().getTime()}`} sx={{ width: 30, height: 30 }}/>
                             <Typography>{com.author.name}</Typography>
                             <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
                         </Box>

@@ -8,7 +8,10 @@ import multer from "multer";
 
 cloudinary.config({secure:true});
 const storage = multer.memoryStorage();
-const upload = multer({storage});
+const upload = multer({
+    storage,
+    limits: { fileSize: 50 * 1024 * 1024 } 
+});
 const profileRouter = express.Router();
 
 profileRouter.post(
@@ -33,7 +36,9 @@ profileRouter.post(
             folder : "profile-pictures",
             unique_filename : false, 
             use_filename : true,
-            resource_type: "image"
+            resource_type: "image",
+            invalidate: true,
+            overwrite: true
         };
         const b64 = Buffer.from(request.file.buffer).toString("base64");
         const dataURI = `data:${request.file.mimetype};base64,${b64}`;

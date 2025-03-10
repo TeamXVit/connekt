@@ -70,7 +70,7 @@ export default function TopBar({ toggle }) {
                     </Tooltip>
                     <Tooltip title="Open settings">
                         <IconButton  sx={{ p: 0 }} onClick={handleOpenUserMenu}>
-                            <Avatar alt="Profile Picture" src={pic} />
+                            <Avatar alt="Profile Picture" src={`${pic}?t=${new Date().getTime()}`} />
                         </IconButton>
                     </Tooltip>
                     <Menu

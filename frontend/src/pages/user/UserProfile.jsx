@@ -100,7 +100,7 @@ export default function UserProfile() {
                         >
                         <Avatar
                             sx={{ width: 80, height: 80 }}
-                            src={details.optprofilepicture}
+                            src={details?.optprofilepicture+`?t=${new Date().getTime()}`}
                         />
                     </Badge>
                     <Box>
