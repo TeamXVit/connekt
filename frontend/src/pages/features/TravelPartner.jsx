@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
@@ -68,7 +67,7 @@ export default function TravelPartner() {
 
     return (
         <Container maxWidth={false} sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", display: "flex", gap: 1, pt: "75px" }}>
-            <Box sx={{ width: { sm: "100%", lg: "67%" }, display: "flex", flexDirection: "column", gap: 2, pb: 2, position: "relative" }}>
+            <Box sx={{ width: { sm: "100%", lg: "67%" }, display: "flex", flexDirection: "column", gap: 2, pb: 2 }}>
                 {loading ? 
                     Array.from(new Array(5)).map((_, index) => (
                         <Skeleton key={index} variant="rectangular" height={100} sx={{ borderRadius: 2 }} />
