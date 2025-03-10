@@ -26,6 +26,7 @@ export default function TravelPostUI({ data }) {
 
     const handleClose = () => {
         setAnchorEl(null);
+        setOtherUserDetails(null);
     };
 
     const handleToggleComment = () => {
@@ -83,34 +84,34 @@ export default function TravelPostUI({ data }) {
                     <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)}>
                         <Avatar src={data.author?.optprofilepicture+`?t=${new Date().getTime()}`}/>
                     </IconButton>
-                    {otherUserDetails &&            
-                    <Popover 
-                        id={id} 
-                        open={open} 
-                        onClose={handleClose}
-                        anchorEl={anchorEl} 
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }}
-                    >
-                        <Box sx={{ borderRadius: 1, p: 1, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", color: "text.primary", display: "flex", flexDirection: "column", gap: 1 }}>
-                            <Typography>{otherUserDetails?.name}</Typography>
-                            <Typography>{otherUserDetails?.email}</Typography>
-                            <Typography>{otherUserDetails?.regno}</Typography>
-                            <Typography>{otherUserDetails?.gender}</Typography>
-                            <Link 
-                                href={`https://www.instagram.com/${otherUserDetails?.instagram}`} 
-                                target="blank" 
-                                variant="inherit"
-                                underline="none"
-                            >{otherUserDetails.instagram}</Link>
-                        </Box>
-                    </Popover>}
                     <Typography variant="body1" fontWeight="medium">{data.author?.name}</Typography>    
                 </Box>
                 <Typography variant="caption">{formattedDate}</Typography>
             </Box>
+            {otherUserDetails &&            
+            <Popover 
+                id={id} 
+                open={open} 
+                onClose={handleClose}
+                anchorEl={anchorEl} 
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+            >
+                <Box sx={{ borderRadius: 1, p: 1, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", color: "text.primary", display: "flex", flexDirection: "column", gap: 1 }}>
+                    <Typography>{otherUserDetails?.name}</Typography>
+                    <Typography>{otherUserDetails?.email}</Typography>
+                    <Typography>{otherUserDetails?.regno}</Typography>
+                    <Typography>{otherUserDetails?.gender}</Typography>
+                    <Link 
+                        href={`https://www.instagram.com/${otherUserDetails?.instagram}`} 
+                        target="blank" 
+                        variant="inherit"
+                        underline="none"
+                    >{otherUserDetails.instagram}</Link>
+                </Box>
+            </Popover>}
             <Typography variant="body1" sx={{ width: "100%" }}>{data?.content}</Typography>
             {data.author?.phoneno && <Typography variant="body2">Phone no: {data.author?.phoneno}</Typography>}      
             <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>
@@ -138,12 +139,14 @@ export default function TravelPostUI({ data }) {
                 {data.comments?.length > 0 ? 
                 data.comments?.map((com, index) => (
                 <Box key={index}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture+`?t=${new Date().getTime()}`}/>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <IconButton onClick={(e) => handleClick(e, com.userID?.regno)}>
+                            <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture+`?t=${new Date().getTime()}`}/>
+                        </IconButton>
                         <Typography fontWeight={600}>{com.userID.name}</Typography>
                         <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
                     </Box>
-                    <Typography sx={{ my: 1, ml: 5.5 }}>{com.comment}</Typography>
+                    <Typography sx={{ my: 1, ml: 6.7 }}>{com.comment}</Typography>
                 </Box>
                 )) :
                 <Typography variant="body2">No replies yet</Typography>

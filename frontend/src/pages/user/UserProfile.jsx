@@ -17,6 +17,7 @@ export default function UserProfile() {
     const [openImageModal, setOpenImageModal] = useState(false);
     const [imagePreview, setImagePreview] = useState(null);
     const [profilePicture, setProfilePicture] = useState();
+    const [imageLoading, setImageLoading] = useState(false);
 
     const handleProfileEdit = async () => {
         const fieldData = { [modal.field]: modal.value };
@@ -67,13 +68,17 @@ export default function UserProfile() {
     const handleImageUpload = () => {   
         const formData = new FormData();
         formData.append("image", profilePicture);
-        
+        setImageLoading(true);
         axios.post("/profile/upload-profilepicture", formData)
         .then((res) => {
+            setImageLoading(false);
             toast.success(res.data.message);
             handleCloseImageModal();
         })
-        .catch((e) => toast.error(e.response.data.error));
+        .catch((e) => {
+            setImageLoading(false);
+            toast.error(e.response.data.error);
+        });
     };
 
     const handleCloseModal = () => {
@@ -115,7 +120,7 @@ export default function UserProfile() {
                         <Input type="file" accept="image/png, image/jpeg" onChange={handleImagePreview}/>
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Button variant="text" onClick={handleCloseImageModal}>Cancel</Button>
-                            <Button variant="contained" onClick={handleImageUpload} disabled={!imagePreview}>Upload</Button>
+                            <Button variant="contained" onClick={handleImageUpload} disabled={!imagePreview || imageLoading}>Upload</Button>
                         </Box>
                     </Box>
                 </Modal>

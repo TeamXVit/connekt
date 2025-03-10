@@ -45,6 +45,7 @@ export default function TravelPartner() {
                             const processed = JSON.parse(chunk);
                             setTravelPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
+                            console.log(processed)
                         } catch (error) {
                             console.error("Error parsing SSE data:", error);
                         }
@@ -81,13 +82,13 @@ export default function TravelPartner() {
                 <>
                     <IconButton
                         onClick={() => navigate("/make-post")}
-                        sx={{ position: "fixed", right: 15, bottom: 65, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark } }}
+                        sx={{ position: "fixed", right: 15, bottom: 65, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark }, zIndex: 1000 }}
                     >
                         <AddCircleIcon />
                     </IconButton>
                     <IconButton
                         onClick={() => setOpenPopup(true)}
-                        sx={{ position: "fixed", right: 15, bottom: 15, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark } }}
+                        sx={{ position: "fixed", right: 15, bottom: 15, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark }, zIndex: 1100 }}
                     >
                         <InfoIcon />
                     </IconButton>
