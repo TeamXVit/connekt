@@ -139,7 +139,7 @@ export default function TravelPostUI({ data }) {
                 data.comments?.map((com, index) => (
                 <Box key={index}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Avatar sx={{ width: 30, height: 30 }}/>
+                        <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture}/>
                         <Typography fontWeight={600}>{com.userID.name}</Typography>
                         <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
                     </Box>
