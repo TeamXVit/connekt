@@ -2,6 +2,7 @@ import express from "express";
 import authenticateToken from "../middleware/authMiddleware.js";
 import { Users } from "../models/User.js";
 import { Travel } from "../models/Travel.js";
+import { TeamMate } from "../models/TeamMate.js";
 import { v2 as cloudinary} from "cloudinary";
 import "dotenv/config";
 import multer from "multer";
@@ -170,6 +171,49 @@ profileRouter.get("/mytravels/mycomments",authenticateToken, async (request, res
             error:"User not found."
         });
         const posts = await Travel.find({"comments.userID":user._id})
+        .populate("author","regno name optprofilepicture")
+        .populate("comments.userID","regno name")
+        .lean();
+        const filteredPosts = posts.map(post=>(
+            {...post,
+                comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
+            }
+        ));
+        return response.status(200).send(filteredPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/myteammates",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await TeamMate.find({author:user._id}).populate({
+            path:"author",
+            select:"regno name optprofilepicture phoneno"
+        }).lean();
+        return response.status(200).send(posts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/myteammates/mycomments",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await TeamMate.find({"comments.userID":user._id})
         .populate("author","regno name optprofilepicture")
         .populate("comments.userID","regno name")
         .lean();
