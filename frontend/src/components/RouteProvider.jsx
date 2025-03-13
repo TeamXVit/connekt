@@ -35,7 +35,7 @@ export default function RouteProvider({ toggleTheme }) {
             "/forgot-password": "Reset Password",
             "/travel": "Travel Partner",
             "/lost-found": "Lost & Found",
-            "/find-teammate": "Find A Teammate",
+            "/teammate": "Find A Teammate",
             "/queries": "Queries",
             "/user": "User Profile",
             "/make-post": "Make A Post",
@@ -43,10 +43,6 @@ export default function RouteProvider({ toggleTheme }) {
         };
         document.title = titles[location.pathname] || "Connekt";
     }, [location]);
-
-    // if (!token && location.pathname === "/") {
-    //     return <Navigate to="/login" replace />;
-    // }
 
     if (token && location.pathname === "/") {
         return <Navigate to="/travel" replace/>
@@ -75,8 +71,8 @@ export default function RouteProvider({ toggleTheme }) {
                             </Suspense> : 
                             <Navigate to="/login" />} 
                         />
+                        <Route path="/teammate" element={<FindTeammate />} />
                         <Route path="/lost-found" element={<LostFound />} />
-                        <Route path="/find-teammate" element={<FindTeammate />} />
                         <Route path="/queries" element={<Queries />} />
                         <Route 
                             path="/user" 

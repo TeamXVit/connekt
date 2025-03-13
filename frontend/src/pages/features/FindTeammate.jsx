@@ -1,28 +1,136 @@
-import { Box, Container, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router"
+import Backend from "../../constants/Backend";
+import BearerHeader from "../../constants/BearerHeader";
+import { Box, Container, Dialog, DialogContent, IconButton, Link, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import PostUI from "../../components/PostUI";
+import InfoIcon from "@mui/icons-material/Info";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import CloseIcon from "@mui/icons-material/Close";
 
-export default function FindTeammate() {
+export default function TravelPartner() {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [openPopup, setOpenPopup] = useState(false);
+    
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+    
+    useEffect(() => {
+        let isMounted = true;
+
+        const getSSEStream = async () => {
+            try {
+                const response = await fetch(`${Backend}/teammate/view`, {
+                    headers: {
+                        Authorization: BearerHeader,
+                        Accept: "text/event-stream",
+                    },
+                });
+
+                if (!response.body) throw new Error("Stream response body is empty");
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                const readStream = async () => {
+                    while (isMounted) {
+                        const { value, done } = await reader.read();
+                        if (done || !isMounted) break;
+
+                        const chunk = decoder.decode(value);
+                        try {
+                            const processed = JSON.parse(chunk);
+                            setPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+                            setLoading(false);
+                        } catch (error) {
+                            console.error("Error parsing SSE data:", error);
+                        }
+                    }
+                };
+
+                readStream();
+            } catch (err) {
+                console.error("Error fetching SSE:", err);
+                setLoading(false);
+            }
+        };
+
+        getSSEStream();
+
+        return () => {
+            isMounted = false; 
+        };
+    }, []);
+
     return (
-        <Container maxWidth="lg" sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "30px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "flex-start" }, gap: 4, overflow: "hidden", width: "100vw" }}>
-            <Typography variant="h4">Find a Teammate</Typography>
-            <Box sx={{ width: "90%" }}>
-                <Typography>Looking for a partner to collaborate on your college activities? <strong>Find a Teammate</strong> helps you connect with like-minded individuals for all kinds of projects and events.</Typography>
+        <Container maxWidth={false} sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", display: "flex", gap: 1, pt: "75px" }}>
+            <Box sx={{ width: { sm: "100%", lg: "67%" }, display: "flex", flexDirection: "column", gap: 2, pb: 2 }}>
+                {loading ? 
+                    Array.from(new Array(5)).map((_, index) => (
+                        <Skeleton key={index} variant="rectangular" height={100} sx={{ borderRadius: 2 }} />
+                    )) :
+                    posts.length > 0 ? 
+                        posts.map((post, index) => <PostUI key={index} data={post} />) :
+                        <Typography sx={{ m: "auto" }}>No posts available</Typography>
+                }
             </Box>
-            <Box sx={{ width: "90%" }}>
-                <Typography variant="h6">🔹 Collaborate on ECS or Capstone Projects</Typography>
-                <Typography>Find someone with the right skills and ideas to work with you.</Typography>
-            </Box>
-            <Box sx={{ width: "90%" }}>
-                <Typography variant="h6">🔹 Join Hackathons & Competitions</Typography>
-                <Typography>Need a team for an upcoming challenge? Look for teammates here!</Typography>
-            </Box>
-            <Box sx={{ width: "90%" }}>
-                <Typography variant="h6">🔹 Connect for College Events</Typography>
-                <Typography>Whether it’s a seminar, workshop, or community activity, find others who are passionate about the same things.</Typography>
-            </Box>
-            <Box sx={{ width: "90%" }}>
-                <Typography variant="h6">Get the best team together—find your perfect teammate today!</Typography>
-            </Box>
-            <Typography variant="h4">Coming soon...</Typography>
+            {isMobile ? (
+                <>
+                    <IconButton
+                        onClick={() => navigate("/make-post")}
+                        sx={{ position: "fixed", right: 15, bottom: 65, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark }, zIndex: 1000 }}
+                    >
+                        <AddCircleIcon />
+                    </IconButton>
+                    <IconButton
+                        onClick={() => setOpenPopup(true)}
+                        sx={{ position: "fixed", right: 15, bottom: 15, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark }, zIndex: 1100 }}
+                    >
+                        <InfoIcon />
+                    </IconButton>
+                    <Dialog open={openPopup} onClose={() => setOpenPopup(false)} fullWidth>
+                        <DialogContent sx={{ p: 3 }}>
+                            <Box>
+                                <IconButton onClick={() => setOpenPopup(false)} sx={{ position: "absolute", top: 8, right: 8 }}>
+                                    <CloseIcon />
+                                </IconButton>
+                                <Typography variant="h5" sx={{ mb: 2 }}>Find a Teammate</Typography>
+                                <Typography variant="body1">
+                                    Looking for a partner to collaborate on your college activities? Find a Teammate helps you connect with like-minded individuals for all kinds of projects and events.
+                                    🔹 Collaborate on ECS or Capstone Projects - Find someone with the right skills and ideas to work with you.
+                                    🔹 Join Hackathons & Competitions - Need a team for an upcoming challenge? Look for teammates here!
+                                    🔹 Connect for College Events - Whether it’s a seminar, workshop, or community activity, find others who are passionate about the same things.
+                                    Get the best team together—find your perfect teammate today!
+                                </Typography>
+                                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
+                                <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
+                                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                            </Box>
+                        </DialogContent>
+                    </Dialog>
+                </>
+            ) : (
+                <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
+                    <Typography variant="h5" sx={{ mb: 2 }}>Find a Teammate</Typography>
+                    <Typography variant="body1">
+                    Looking for a partner to collaborate on your college activities? Find a Teammate helps you connect with like-minded individuals for all kinds of projects and events.
+                    Collaborate on ECS or Capstone Projects, Join Hackathons & Competitions, Connect for College Events and find others who are passionate about the same things.
+                    Get the best team together—find your perfect teammate today!
+                    </Typography>
+                    <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
+                    <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
+                    <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                </Box>
+            )}
+            <IconButton
+                size="large"
+                onClick={() => navigate("/make-post")}
+                sx={{ display: { sm: "none", lg: "flex" }, position: "fixed", right: 345, bottom: 25, bgcolor: theme.palette.primary.main, color: "white", "&:hover": { bgcolor: theme.palette.primary.dark } }}
+            >
+                <AddCircleIcon sx={{ height: 30, width: 30 }}/>
+            </IconButton>
         </Container>
     );
-}
+};

@@ -51,7 +51,7 @@ export default function MakePost() {
     };
 
     return (
-        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "75px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4, overflow: "auto" }}>
+        <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh",  pt: "75px", pb: "15px", display: "flex", flexDirection: "column", alignItems: { sm: "center", lg: "none" }, gap: 4 }}>
             <Typography variant="h4" sx={{ width: "90%", textAlign: "left" }}>Make A Post</Typography>
             <Box sx={{ width: "90%", display: "flex", flexWrap: "wrap", gap: 2 }}>
                 <FormControl sx={{ minWidth: 230 }}>
@@ -64,7 +64,7 @@ export default function MakePost() {
                         onChange={(e) => setFeature(e.target.value)}
                     >
                         <MenuItem value="/travel">Travel Partner</MenuItem>
-                        <MenuItem disabled>Find A Teammate</MenuItem>
+                        <MenuItem value="/teammate">Find A Teammate</MenuItem>
                         <MenuItem disabled>Lost & Found</MenuItem>
                         <MenuItem disabled>Queries</MenuItem>
                     </Select>
@@ -134,7 +134,7 @@ export default function MakePost() {
                 <TextField 
                     variant="outlined" 
                     sx={{ width: { sm: "100%", lg: "75%" } }}
-                    placeholder="ex: If anyone is travelling from Vijayawada Railway Station at 5:30 PM today, please contact me. Note: If you don't want to show your contact number, please mention how others can contact you"
+                    placeholder="Note: If you don't want to show your contact number, please mention how others can contact you"
                     multiline
                     rows={3}
                     value={formData.content}

@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import axios from "../axios/axios";
+import { useLocation } from "react-router";
 import { Avatar, Box, Button, IconButton, Link, Popover, TextField, Typography, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SendIcon from "@mui/icons-material/Send";
 import { ToastContainer, toast } from "react-toastify";
 
-export default function TravelPostUI({ data }) { 
+export default function PostUI({ data }) { 
     const theme = useTheme();
-
+    const location = useLocation();
     const [otherUserDetails, setOtherUserDetails] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [toggleComments, setToggleComments] = useState(false);
@@ -44,7 +45,7 @@ export default function TravelPostUI({ data }) {
 
     const handlePostComment = async (postID) => {
         setCommenting(false)
-        await axios.post(`travel/comment/${postID}`, { "comment": comment, "time": new Date() })
+        await axios.post(`${location.pathname}/comment/${postID}`, { "comment": comment, "time": new Date() })
         .then(res => {
             toast.success(res.data.message);
             setComment("");

@@ -3,13 +3,13 @@ import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
 import { Box, Container, Dialog, DialogContent, IconButton, Link, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
-import TravelPostUI from "../../components/TravelPostUI";
+import PostUI from "../../components/PostUI";
 import InfoIcon from "@mui/icons-material/Info";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function TravelPartner() {
-    const [travelPosts, setTravelPosts] = useState([]);
+    const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openPopup, setOpenPopup] = useState(false);
     
@@ -20,9 +20,9 @@ export default function TravelPartner() {
     useEffect(() => {
         let isMounted = true;
 
-        const getTravelStream = async () => {
+        const getSSEStream = async () => {
             try {
-                const response = await fetch(`${Backend}travel/view`, {
+                const response = await fetch(`${Backend}/travel/view`, {
                     headers: {
                         Authorization: BearerHeader,
                         Accept: "text/event-stream",
@@ -42,9 +42,8 @@ export default function TravelPartner() {
                         const chunk = decoder.decode(value);
                         try {
                             const processed = JSON.parse(chunk);
-                            setTravelPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+                            setPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
-                            console.log(processed)
                         } catch (error) {
                             console.error("Error parsing SSE data:", error);
                         }
@@ -58,7 +57,7 @@ export default function TravelPartner() {
             }
         };
 
-        getTravelStream();
+        getSSEStream();
 
         return () => {
             isMounted = false; 
@@ -72,9 +71,9 @@ export default function TravelPartner() {
                     Array.from(new Array(5)).map((_, index) => (
                         <Skeleton key={index} variant="rectangular" height={100} sx={{ borderRadius: 2 }} />
                     )) :
-                    travelPosts.length > 0 ? 
-                        travelPosts.map((travel, index) => <TravelPostUI key={index} data={travel} />) :
-                        <Typography>No travel posts available</Typography>
+                    posts.length > 0 ? 
+                        posts.map((post, index) => <PostUI key={index} data={post} />) :
+                        <Typography sx={{ m: "auto" }}>No posts available</Typography>
                 }
             </Box>
             {isMobile ? (
