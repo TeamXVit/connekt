@@ -30,7 +30,7 @@ export default function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
-        axios.post(`${Backend}auth/login`, formData)
+        axios.post(`${Backend}/auth/login`, formData)
         .then((res) => {
             setLoading(false);
             login(res.data.token);

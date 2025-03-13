@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import axios from "../../axios/axios"
+import axios from "../../axios/axios";
 import { Avatar, Box, Button, CircularProgress, Container, Divider, IconButton, Modal, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast, ToastContainer } from "react-toastify";
@@ -19,30 +19,49 @@ export default function Activities() {
     useEffect(() => {
         if (dataFetchedRef.current) return;
         dataFetchedRef.current = true;
-
-        const fetchTravelPosts = () => {
-            axios.get("/profile/mytravels")
-            .then(res => {
-                setContentLoading(false);
-                setPosts(res.data);
-            })
-            .catch((e) => toast.error(e.response.data.error))
-        };
-
-        const fetchTravelComments = () => {
-            axios.get("/profile/mytravels/mycomments")
-            .then(res => {
-                setContentLoading(false);
-                setReplies(res.data);
-                console.log(res.data)
-            })
-            .catch((e) => toast.error(e.response.data.error));
-        };
   
         fetchTravelPosts(); 
-        fetchTravelComments();       
+        fetchTravelComments();  
+        fetchTeammatePosts();    
+        fetchTeammateComments(); 
     }, []);
 
+    const fetchTravelPosts = () => {
+        axios.get("/profile/mytravels")
+        .then(res => {
+            setContentLoading(false);
+            setPosts((prevPosts) => [...prevPosts, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error))
+    };
+
+    const fetchTravelComments = () => {
+        axios.get("/profile/mytravels/mycomments")
+        .then(res => {
+            setContentLoading(false);
+            setReplies((prevReplies) => [...prevReplies, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error));
+    };
+
+
+    const fetchTeammatePosts = () => {
+        axios.get("/profile/myteammates")
+        .then((res) => {
+            setContentLoading(false);
+            setPosts((prevPosts) => [...prevPosts, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error))
+    };
+
+    const fetchTeammateComments = () => {
+        axios.get("/profile/myteammates/mycomments")
+        .then(res => {
+            setContentLoading(false);
+            setReplies((prevReplies) => [...prevReplies, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error));
+    };
     
     const handleModalOpen = () => {
         setModalOpen(true);
@@ -120,7 +139,7 @@ export default function Activities() {
 
     return (
         <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "15px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
-            <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
                 <Tabs value={activity} onChange={handleChange} centered sx={{ mb: 2 }}>
                     <Tab label="Posts"/>
                     <Tab label="Replies"/>

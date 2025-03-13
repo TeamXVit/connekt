@@ -13,7 +13,7 @@ export default function ForgotPassword() {
     const navigate = useNavigate();
     
     const handleSendEmail = () => {
-        axios.post(`${Backend}auth/forget-password`, { "email": email })
+        axios.post(`${Backend}/auth/forget-password`, { "email": email })
         .then(res => {
             toast.success(res.data);
             navigate("/login");

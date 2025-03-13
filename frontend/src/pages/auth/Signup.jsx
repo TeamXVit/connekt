@@ -110,7 +110,7 @@ export default function Signup() {
         e.preventDefault();
         setLoading(true);
         if (termsConsent === true && page === 3) { 
-            axios.post(`${Backend}auth/signup`, formData)
+            axios.post(`${Backend}/auth/signup`, formData)
             .then((res) => {
                 setLoading(false);
                 toast.success(res.data.message);

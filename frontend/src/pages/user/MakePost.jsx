@@ -30,7 +30,7 @@ export default function MakePost() {
         .then(res => {
             setLoading(false);
             toast.success(res.data.message);
-            navigate(`${feature}`);
+            navigate(feature);
         })
         .catch(e => {
             setLoading(false);
