@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "../axios/axios";
 import { useLocation } from "react-router";
+import useDetails from "../hooks/useDetails";
 import { Avatar, Box, Button, IconButton, Link, Popover, TextField, Typography, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -17,6 +18,7 @@ export default function PostUI({ data }) {
     const [toggleReply, setToggleReply] = useState(false);
     const [comment, setComment] = useState("");
     const [commenting, setCommenting] = useState(true);
+    const { details } = useDetails();
     
     const handleClick = async (e, regNo) => {
         setAnchorEl(e.currentTarget);
@@ -118,7 +120,7 @@ export default function PostUI({ data }) {
             <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>
             {toggleReply && 
             <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
-                <Avatar sx={{ width: 35, height: 35 }}/>
+                <Avatar src={details.optprofilepicture} sx={{ width: 35, height: 35 }}/>
                 <TextField 
                     variant="standard"
                     sx={{ width: "95%" }} 

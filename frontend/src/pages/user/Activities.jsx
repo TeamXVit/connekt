@@ -13,6 +13,7 @@ export default function Activities() {
     const [modalOpen, setModalOpen] = useState(false);
     const [activity, setActivity] = useState(0);
     const [id, setId] = useState("");
+    const [tag, setTag] = useState("");
     const dataFetchedRef = useRef(false);
     const theme = useTheme();
 
@@ -44,7 +45,6 @@ export default function Activities() {
         .catch((e) => toast.error(e.response.data.error));
     };
 
-
     const fetchTeammatePosts = () => {
         axios.get("/profile/myteammates")
         .then((res) => {
@@ -75,8 +75,19 @@ export default function Activities() {
         setActivity(newValue);
     };
 
-    const deletePost = async (postID) => {
-        await axios.delete(`travel/delete/${postID}`)
+    const deletePost = (postID, postTag) => {
+        let path;
+
+        switch (postTag) {
+            case "Travel Partner":
+                path = `/travel/delete/${postID}`
+                break
+            case "Find A Teammate":
+                path = `/teammate/delete/${postID}`
+                break
+        };
+        
+        axios.delete(path)
         .then((res) => {
             setLoading(false);
             toast.success(res.data.message);
@@ -91,8 +102,19 @@ export default function Activities() {
         })
     };
 
-    const deleteComment = async (commentID) => {
-        await axios.delete(`travel/comment/${commentID}`)
+    const deleteComment = async (commentID, commentTag) => {
+        let path;
+
+        switch (commentTag) {
+            case "Travel Partner":
+                path = `/travel/comment/${commentID}`
+                break
+            case "Find A Teammate":
+                path = `/teammate/comment/${commentID}`
+                break
+        };
+
+        await axios.delete(path)
         .then((res) => {
             setLoading(false);
             toast.success(res.data.message);
@@ -114,7 +136,7 @@ export default function Activities() {
 
     const handleDelete = () => {
         setLoading(true);
-        activity === 0 ? deletePost(id) : deleteComment(id);
+        activity === 0 ? deletePost(id, tag) : deleteComment(id, tag);
     };
 
     const getRelativeTimeString = (date) => {
@@ -147,9 +169,9 @@ export default function Activities() {
             </Box>
             {contentLoading ? <CircularProgress sx={{ my: "auto" }}/> : 
             (posts.length > 0 && activity === 0) ?
-            <Box sx={{ width: "95%", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+            <Box sx={{ width: "97%", display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
                 {activity === 0 && posts?.map((post, index) => (
-                <Box key={index} sx={{ width: { sm: "95%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+                <Box key={index} sx={{ width: { sm: "100%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                             <Avatar src={post?.author.optprofilepicture+`?t=${new Date().getTime()}`}/>
@@ -159,14 +181,18 @@ export default function Activities() {
                         <IconButton 
                         onClick={() => {
                             handleModalOpen();
-                            setId(post?._id)
+                            setId(post?._id);
+                            setTag(post?.tag);
                         }}
                         >
                             <DeleteIcon />
                         </IconButton>
                     </Box>
                     <Typography variant="body1" sx={{ width: "100%" }}>{post.content}</Typography>
-                    <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>
+                    <Box sx={{ display: "flex" }}>
+                        {post.author.phoneno && <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>}
+                        <Typography variant="body2" fontWeight={500} sx={{ ml: "auto" }}>#{post?.tag}</Typography>
+                    </Box>
                 </Box>
                 ))}
             </Box> :
@@ -205,13 +231,18 @@ export default function Activities() {
                             <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
                         </Box>
                         <Typography my={2}>{com.content}</Typography>
+                        <Box sx={{ display: "flex" }}>
+                        {com?.author.phoneno && <Typography variant="body2">Phone no: {com?.author.phoneno}</Typography>}
+                        <Typography variant="body2" fontWeight={500} sx={{ ml: "auto" }}>#{com?.tag}</Typography>
+                    </Box>
                         <Divider sx={{ my: 1 }}/>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <Typography>Your reply: {c.comment}</Typography>
                             <IconButton
                             onClick={() => {
                                 handleModalOpen();
-                                setId(c?._id)
+                                setId(c?._id);
+                                setTag(com?.tag);
                             }}
                             >
                                 <DeleteIcon />
