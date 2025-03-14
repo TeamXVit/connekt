@@ -155,7 +155,8 @@ profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
             path:"author",
             select:"regno name optprofilepicture phoneno"
         }).lean();
-        return response.status(200).send({...posts, tag: "Travel Partner"});
+        const tagedPosts = posts.map(post=>({...post,tag:"Travel Partner"}));
+        return response.status(200).send(tagedPosts);
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
@@ -174,9 +175,9 @@ profileRouter.get("/mytravels/mycomments",authenticateToken, async (request, res
         .populate("author","regno name optprofilepicture")
         .populate("comments.userID","regno name")
         .lean();
-        const filteredPosts = posts.map(post=>(
+        const tagedPosts = posts.map(post=>({...post,tag:"Travel Partner"}));
+        const filteredPosts = tagedPosts.map(post=>(
             {...post,
-                tag: "Travel Partner",
                 comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
             }
         ));
@@ -199,7 +200,8 @@ profileRouter.get("/myteammates",authenticateToken, async (request, response)=>{
             path:"author",
             select:"regno name optprofilepicture phoneno"
         }).lean();
-        return response.status(200).send({...posts,  tag: "Find A Teammate"});
+        const tagedPosts = posts.map(post=>({...post,tag:"Find A Teammate"}));
+        return response.status(200).send(tagedPosts);
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
@@ -218,9 +220,9 @@ profileRouter.get("/myteammates/mycomments",authenticateToken, async (request, r
         .populate("author","regno name optprofilepicture")
         .populate("comments.userID","regno name")
         .lean();
-        const filteredPosts = posts.map(post=>(
+        const tagedPosts = posts.map(post=>({...post,tag:"Find A Teammate"}));
+        const filteredPosts = tagedPosts.map(post=>(
             {...post,
-                tag: "Find A Teammate",
                 comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
             }
         ));
