@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/helpers": "^7.26.10",
+    "@babel/runtime": "^7.26.10",
     "@coreui/coreui": "^5.2.0",
     "@coreui/react": "^5.5.0",
     "@emotion/react": "^11.14.0",
