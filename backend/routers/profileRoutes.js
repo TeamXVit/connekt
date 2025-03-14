@@ -155,7 +155,7 @@ profileRouter.get("/mytravels",authenticateToken, async (request, response)=>{
             path:"author",
             select:"regno name optprofilepicture phoneno"
         }).lean();
-        return response.status(200).send(posts);
+        return response.status(200).send({...posts, tag: "Travel Partner"});
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
@@ -176,6 +176,7 @@ profileRouter.get("/mytravels/mycomments",authenticateToken, async (request, res
         .lean();
         const filteredPosts = posts.map(post=>(
             {...post,
+                tag: "Travel Partner",
                 comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
             }
         ));
@@ -198,7 +199,7 @@ profileRouter.get("/myteammates",authenticateToken, async (request, response)=>{
             path:"author",
             select:"regno name optprofilepicture phoneno"
         }).lean();
-        return response.status(200).send(posts);
+        return response.status(200).send({...posts,  tag: "Find A Teammate"});
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
@@ -219,6 +220,7 @@ profileRouter.get("/myteammates/mycomments",authenticateToken, async (request, r
         .lean();
         const filteredPosts = posts.map(post=>(
             {...post,
+                tag: "Find A Teammate",
                 comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
             }
         ));
