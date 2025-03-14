@@ -19,7 +19,7 @@
     "@mui/material": "^6.4.5",
     "@mui/x-date-pickers": "^7.27.0",
     "@tailwindcss/vite": "^4.0.6",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.475.0",
     "react": "^19.0.0",
