@@ -1,3 +1,5 @@
 .env
+.gitignore
 email.js
+email.txt
 node_modules

@@ -3,6 +3,7 @@ import authenticateToken from "../middleware/authMiddleware.js";
 import { Users } from "../models/User.js";
 import { Travel } from "../models/Travel.js";
 import { TeamMate } from "../models/TeamMate.js";
+import { Queries } from "../models/Queries.js";
 import { v2 as cloudinary} from "cloudinary";
 import "dotenv/config";
 import multer from "multer";
@@ -227,6 +228,71 @@ profileRouter.get("/myteammates/mycomments",authenticateToken, async (request, r
             }
         ));
         return response.status(200).send(filteredPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/myqueries",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await Queries.find({author:user._id}).populate({
+            path:"author",
+            select:"regno name optprofilepicture phoneno"
+        }).lean();
+        const tagedPosts = posts.map(post=>({...post,tag:"Queries"}));
+        return response.status(200).send(tagedPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/myqueries/mycomments",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await Queries.find({"comments.userID":user._id})
+        .populate("author","regno name optprofilepicture")
+        .populate("comments.userID","regno name")
+        .lean();
+        const tagedPosts = posts.map(post=>({...post,tag:"Queries"}));
+        const filteredPosts = tagedPosts.map(post=>(
+            {...post,
+                comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
+            }
+        ));
+        return response.status(200).send(filteredPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/myqueries/mylikes",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await Queries.find({likes:user._id}).populate({
+            path:"author",
+            select:"regno name optprofilepicture phoneno"
+        }).lean();
+        const tagedPosts = posts.map(post=>({...post,tag:"Queries"}));
+        return response.status(200).send(tagedPosts);
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`

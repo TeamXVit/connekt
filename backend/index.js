@@ -4,6 +4,7 @@ import authRouter from "./routers/authRoutes.js";
 import profileRouter from "./routers/profileRoutes.js";
 import travelRouter from "./routers/travelRouter.js";
 import teammateRouter from "./routers/teammateRoutes.js";
+import queriesRouter from "./routers/queriesRouter.js";
 import path from "path";
 import "dotenv/config";
 import { connectDB } from "./db.js";
@@ -18,6 +19,7 @@ app.use("/auth",authRouter);
 app.use("/profile", profileRouter);
 app.use("/travel", travelRouter);
 app.use("/teammate", teammateRouter);
+app.use("/queries", queriesRouter);
 
 app.get("/",(request, response)=>{
     response.status(200).send({
