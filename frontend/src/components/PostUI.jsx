@@ -135,7 +135,7 @@ export default function PostUI({ data }) {
                 <IconButton onClick={() => handleLikeQuery(data?._id)} disabled={likeLoading}>
                     {data.likes.includes(details?.regno) ? <FavoriteIcon sx={{ color: "#f52c51" }}/> : <FavoriteBorderIcon />}
                 </IconButton>}
-                <Typography fontSize={15}>{data.likes.length}</Typography>
+                <Typography fontSize={15}>{data.likes?.length}</Typography>
                 <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>
             </Box>  
             {toggleReply && 
