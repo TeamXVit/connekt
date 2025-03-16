@@ -25,6 +25,8 @@ export default function Activities() {
         fetchTravelComments();  
         fetchTeammatePosts();    
         fetchTeammateComments(); 
+        fetchQueryPosts();
+        fetchQueryComments();
     }, []);
 
     const fetchTravelPosts = () => {
@@ -62,6 +64,24 @@ export default function Activities() {
         })
         .catch((e) => toast.error(e.response.data.error));
     };
+
+    const fetchQueryPosts = () => {
+        axios.get("/profile/myqueries")
+        .then((res) => {
+            setContentLoading(false);
+            setPosts((prevPosts) => [...prevPosts, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error))
+    };
+
+    const fetchQueryComments = () => {
+        axios.get("/profile/myqueries/mycomments")
+        .then(res => {
+            setContentLoading(false);
+            setReplies((prevReplies) => [...prevReplies, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error));
+    };
     
     const handleModalOpen = () => {
         setModalOpen(true);
@@ -84,6 +104,9 @@ export default function Activities() {
                 break
             case "Find A Teammate":
                 path = `/teammate/delete/${postID}`
+                break
+            case "Queries":
+                path = `/queries/delete/${postID}`
                 break
         };
         
@@ -111,6 +134,9 @@ export default function Activities() {
                 break
             case "Find A Teammate":
                 path = `/teammate/comment/${commentID}`
+                break
+            case "Queries":
+                path = `/queries/comment/${commentID}`
                 break
         };
 

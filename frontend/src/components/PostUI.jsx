@@ -7,18 +7,24 @@ import { Avatar, Box, Button, IconButton, Link, Popover, TextField, Typography, 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SendIcon from "@mui/icons-material/Send";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { ToastContainer, toast } from "react-toastify";
 
 export default function PostUI({ data }) { 
     const theme = useTheme();
+
     const location = useLocation();
+
+    const { details } = useDetails();
+
     const [otherUserDetails, setOtherUserDetails] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [toggleComments, setToggleComments] = useState(false);
     const [toggleReply, setToggleReply] = useState(false);
     const [comment, setComment] = useState("");
     const [commenting, setCommenting] = useState(true);
-    const { details } = useDetails();
+    const [likeLoading, setLikeLoading] = useState(false);
     
     const handleClick = async (e, regNo) => {
         setAnchorEl(e.currentTarget);
@@ -74,6 +80,13 @@ export default function PostUI({ data }) {
           return diffInSeconds <= 5 ? 'just now' : `${diffInSeconds} seconds ago`;
         }
     };
+
+    const handleLikeQuery = async (postID) => {
+        setLikeLoading(true);
+        await axios.patch(`${location.pathname}/like/${postID}`)
+        .then(() => setLikeLoading(false))
+        .catch(() => setLikeLoading(false))
+    };
     
     const open = Boolean(anchorEl) && Boolean(otherUserDetails);
     const id = open ? 'details-popper' : undefined;
@@ -116,8 +129,15 @@ export default function PostUI({ data }) {
                 </Box>
             </Popover>}
             <Typography variant="body1" sx={{ width: "100%" }}>{data?.content}</Typography>
-            {data.author?.phoneno && <Typography variant="body2">Phone no: {data.author?.phoneno}</Typography>}      
-            <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>
+            {data.author?.phoneno && <Typography variant="body2">Phone no: {data.author?.phoneno}</Typography>}    
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+                {data?.tag === "Queries" &&
+                <IconButton onClick={() => handleLikeQuery(data?._id)} disabled={likeLoading}>
+                    {data.likes.includes(details?.regno) ? <FavoriteIcon sx={{ color: "#f52c51" }}/> : <FavoriteBorderIcon />}
+                </IconButton>}
+                <Typography fontSize={15}>{data.likes.length}</Typography>
+                <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>
+            </Box>  
             {toggleReply && 
             <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
                 <Avatar src={details.optprofilepicture} sx={{ width: 35, height: 35 }}/>
@@ -128,7 +148,7 @@ export default function PostUI({ data }) {
                     value={comment} 
                     onChange={handleComment}
                 />
-                <IconButton disabled={!comment || !commenting} onClick={() => handlePostComment(data._id)}>
+                <IconButton disabled={!comment || !commenting} onClick={() => handlePostComment(data?._id)}>
                     <SendIcon />
                 </IconButton>  
             </Box>}

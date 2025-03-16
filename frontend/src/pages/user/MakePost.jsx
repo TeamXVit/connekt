@@ -65,8 +65,8 @@ export default function MakePost() {
                     >
                         <MenuItem value="/travel">Travel Partner</MenuItem>
                         <MenuItem value="/teammate">Find A Teammate</MenuItem>
+                        <MenuItem value="/queries">Queries</MenuItem>
                         <MenuItem disabled>Lost & Found</MenuItem>
-                        <MenuItem disabled>Queries</MenuItem>
                     </Select>
                 </FormControl>
                 {feature === "/travel" && 
@@ -108,6 +108,7 @@ export default function MakePost() {
                     </Select>
                     <FormHelperText>How long do you want the post to exist?</FormHelperText>
                 </FormControl>
+                {feature !== "/queries" && 
                 <FormControl sx={{ minWidth: 150 }}>
                     <InputLabel id="select-showphoneno">Show Phone no.</InputLabel>
                     <Select
@@ -122,7 +123,7 @@ export default function MakePost() {
                         <MenuItem value={false}>No</MenuItem>
                     </Select>
                     <FormHelperText>Select &apos;Yes&apos; if you want others to see your phone number</FormHelperText>
-                </FormControl>
+                </FormControl>}
                 <TextField
                     label="Time"
                     name="time"
