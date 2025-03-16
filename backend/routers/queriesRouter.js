@@ -53,7 +53,11 @@ queriesRouter.get("/view", authenticateToken, async (request, response) => {
                 .populate("comments.userID", "regno name optprofilepicture")
                 .populate("likes","regno")
                 .lean();
-                response.write(`${JSON.stringify(posts)}\n\n`);
+                const formattedPosts = posts.map(post => ({
+                    ...post,
+                    likes: post.likes.map(user => user.regno)
+                }));
+                response.write(`${JSON.stringify(formattedPosts)}\n\n`);
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
