@@ -4,6 +4,7 @@ import { Users } from "../models/User.js";
 import { Travel } from "../models/Travel.js";
 import { TeamMate } from "../models/TeamMate.js";
 import { Queries } from "../models/Queries.js";
+import { LostAndFound } from "../models/LostAndFound.js";
 import { v2 as cloudinary} from "cloudinary";
 import "dotenv/config";
 import multer from "multer";
@@ -293,6 +294,51 @@ profileRouter.get("/myqueries/mylikes",authenticateToken, async (request, respon
         }).lean();
         const tagedPosts = posts.map(post=>({...post,tag:"Queries"}));
         return response.status(200).send(tagedPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/mylostandfound",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await LostAndFound.find({author:user._id}).populate({
+            path:"author",
+            select:"regno name optprofilepicture phoneno"
+        }).lean();
+        const tagedPosts = posts.map(post=>({...post,tag:"Lost And Found"}));
+        return response.status(200).send(tagedPosts);
+    }catch(err){
+        return response.status(500).send({
+            error : `Internal Server Error : ${err.message}`
+        });
+    }
+});
+
+profileRouter.get("/mylostandfound/mycomments",authenticateToken, async (request, response)=>{
+    try{
+        const { regno } = request.user;
+        const user = await Users.findOne({regno});
+        if(!user) return response.status(404).send({
+            error:"User not found."
+        });
+        const posts = await LostAndFound.find({"comments.userID":user._id})
+        .populate("author","regno name optprofilepicture")
+        .populate("comments.userID","regno name")
+        .lean();
+        const tagedPosts = posts.map(post=>({...post,tag:"Lost And Found"}));
+        const filteredPosts = tagedPosts.map(post=>(
+            {...post,
+                comments: post.comments.filter(comment=>comment.userID._id.toString()===user._id.toString())
+            }
+        ));
+        return response.status(200).send(filteredPosts);
     }catch(err){
         return response.status(500).send({
             error : `Internal Server Error : ${err.message}`
