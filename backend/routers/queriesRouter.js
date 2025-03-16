@@ -51,7 +51,7 @@ queriesRouter.get("/view", authenticateToken, async (request, response) => {
                 const posts = await Queries.find()
                 .populate("author", "regno name optprofilepicture phoneno")
                 .populate("comments.userID", "regno name optprofilepicture")
-                .populate("likes.userID","regno")
+                .populate("likes","regno")
                 .lean();
                 response.write(`${JSON.stringify(posts)}\n\n`);
             } catch (err) {
