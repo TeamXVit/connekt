@@ -49,7 +49,7 @@ queriesRouter.get("/view", authenticateToken, async (request, response) => {
         async function sendPosts(){
             try {
                 const posts = await Queries.find()
-                .populate("author", "regno name optprofilepicture phoneno")
+                .populate("author", "regno name optprofilepicture")
                 .populate("comments.userID", "regno name optprofilepicture")
                 .populate("likes","regno")
                 .lean();
