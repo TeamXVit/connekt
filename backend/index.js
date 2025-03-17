@@ -6,6 +6,7 @@ import travelRouter from "./routers/travelRouter.js";
 import teammateRouter from "./routers/teammateRoutes.js";
 import queriesRouter from "./routers/queriesRouter.js";
 import lostAndFoundRouter from "./routers/lostandfoundRouter.js";
+import anonymousRouter from "./routers/anonymousRouter.js";
 import path from "path";
 import "dotenv/config";
 import { connectDB } from "./db.js";
@@ -22,6 +23,7 @@ app.use("/travel", travelRouter);
 app.use("/teammate", teammateRouter);
 app.use("/queries", queriesRouter);
 app.use("/lostandfound", lostAndFoundRouter);
+app.use("/anonymous", anonymousRouter);
 
 app.get("/",(request, response)=>{
     response.status(200).send({
