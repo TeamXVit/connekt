@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
-import { Box, Container, Dialog, DialogContent, IconButton, Link, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, Dialog, DialogContent, IconButton, Link, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PostUI from "../../components/PostUI";
 import InfoIcon from "@mui/icons-material/Info";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function LostFound() {
+export default function Anonymous() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openPopup, setOpenPopup] = useState(false);
@@ -22,7 +22,7 @@ export default function LostFound() {
 
         const getSSEStream = async () => {
             try {
-                const response = await fetch(`${Backend}/lostandfound/view`, {
+                const response = await fetch(`${Backend}/anonymous/view`, {
                     headers: {
                         Authorization: BearerHeader,
                         Accept: "text/event-stream",
@@ -42,7 +42,6 @@ export default function LostFound() {
                         const chunk = decoder.decode(value);
                         try {
                             const processed = JSON.parse(chunk);
-                            console.log(processed)
                             setPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
                         } catch (error) {
@@ -73,7 +72,7 @@ export default function LostFound() {
                         <Skeleton key={index} variant="rectangular" height={100} sx={{ borderRadius: 2 }} />
                     )) :
                     posts.length > 0 ? 
-                        posts.map((post, index) => <PostUI key={index} data={post} />) :
+                        posts.map((post, index) => <PostUI key={index} data={{...post, tag: "Anonymous"}} />) :
                         <Typography sx={{ m: "auto" }}>No posts available</Typography>
                 }
             </Box>
@@ -97,18 +96,7 @@ export default function LostFound() {
                                 <IconButton onClick={() => setOpenPopup(false)} sx={{ position: "absolute", top: 8, right: 8 }}>
                                     <CloseIcon />
                                 </IconButton>
-                                <Typography variant="h4">Lost & Found</Typography>
-                                <Box sx={{ width: "90%" }}>
-                                    <Typography>Looking for something you lost? Found an item and want to return it? Lost & Found helps you reconnect with misplaced belongings.</Typography>
-                                </Box>
-                                <Box sx={{ width: "90%" }}>
-                                    <Typography>Report a lost item – Describe your lost item so others can help.</Typography>
-                                    <Typography>Post a found item – Let the owner claim their belongings.</Typography>
-                                    <Typography>Help your community – Keep the campus connected by returning lost items.</Typography>
-                                </Box>
-                                <Box sx={{ width: "90%" }}>
-                                    <Typography>Reclaim what’s lost—connect through Lost & Found today!</Typography>
-                                </Box>
+                                <Typography variant="h5" sx={{ mb: 2 }}>Anonymous confessions</Typography>
                                 <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
                                 <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
                                 <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
@@ -117,19 +105,8 @@ export default function LostFound() {
                     </Dialog>
                 </>
             ) : (
-                <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
-                    <Typography variant="h4">Lost & Found</Typography>
-                    <Box sx={{ width: "90%" }}>
-                        <Typography>Looking for something you lost? Found an item and want to return it? Lost & Found helps you reconnect with misplaced belongings.</Typography>
-                    </Box>
-                    <Box sx={{ width: "90%" }}>
-                        <Typography>Report a lost item – Describe your lost item so others can help.</Typography>
-                        <Typography>Post a found item – Let the owner claim their belongings.</Typography>
-                        <Typography>Help your community – Keep the campus connected by returning lost items.</Typography>
-                    </Box>
-                    <Box sx={{ width: "90%" }}>
-                        <Typography>Reclaim what’s lost—connect through Lost & Found today!</Typography>
-                    </Box>
+                <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3, overflowY: "auto" }}>
+                    <Typography variant="h5" sx={{ mb: 2 }}>Anonymous Confessions</Typography>
                     <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
                     <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
                     <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>

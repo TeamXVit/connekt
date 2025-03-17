@@ -7,8 +7,10 @@ import { Avatar, Box, Button, IconButton, Link, Popover, TextField, Typography, 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SendIcon from "@mui/icons-material/Send";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+// import FavoriteIcon from '@mui/icons-material/Favorite';
 import { ToastContainer, toast } from "react-toastify";
 
 export default function PostUI({ data }) { 
@@ -97,12 +99,21 @@ export default function PostUI({ data }) {
         <Box sx={{ width: "100%", bgcolor: theme.palette.mode === "light" ? "grey.200" : "grey.900", borderRadius: 4, px: 2, py: 1, display: "flex", flexDirection: "column", gap: 2 }}>
             <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 2 }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)}>
-                        <Avatar src={data.author?.optprofilepicture+`?t=${new Date().getTime()}`}/>
-                    </IconButton>
-                    <Typography variant="body1" fontWeight="medium">{data.author?.name}</Typography>    
+                    {data?.tag === "Anonymous" ?
+                    <Box sx={{ mt: 1, display: "flex", alignItems: "center", gap: 1 }}>
+                        <Avatar />
+                        <Typography>Anonymous</Typography>
+                        <Typography variant="caption">{formattedDate}</Typography>
+                    </Box>
+                    : 
+                    <>
+                        <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)}>
+                            <Avatar src={data.author?.optprofilepicture+`?t=${new Date().getTime()}`}/>
+                        </IconButton>
+                        <Typography variant="body1" fontWeight="medium">{data.author?.name}</Typography>  
+                        <Typography variant="caption">{formattedDate}</Typography>
+                    </>}  
                 </Box>
-                <Typography variant="caption">{formattedDate}</Typography>
             </Box>
             {otherUserDetails &&            
             <Popover 
@@ -133,14 +144,14 @@ export default function PostUI({ data }) {
             <Box sx={{ display: "flex", alignItems: "center" }}>
                 {data?.tag === "Queries" &&
                 <IconButton onClick={() => handleLikeQuery(data?._id)} disabled={likeLoading}>
-                    {data.likes.includes(details?.regno) ? <FavoriteIcon sx={{ color: "#f52c51" }}/> : <FavoriteBorderIcon />}
+                    {data.likes.includes(details?.regno) ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
                 </IconButton>}
                 <Typography fontSize={15}>{data.likes?.length}</Typography>
                 <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>
             </Box>  
             {toggleReply && 
             <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
-                <Avatar src={details.optprofilepicture} sx={{ width: 35, height: 35 }}/>
+                <Avatar src={data?.tag !== "Anonymous" && details.optprofilepicture} sx={{ width: 35, height: 35 }}/>
                 <TextField 
                     variant="standard"
                     sx={{ width: "95%" }} 
@@ -163,19 +174,24 @@ export default function PostUI({ data }) {
                 data.comments?.map((com, index) => (
                 <Box key={index}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <IconButton onClick={(e) => handleClick(e, com.userID?.regno)}>
-                            <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture+`?t=${new Date().getTime()}`}/>
-                        </IconButton>
-                        <Typography fontWeight={600}>{com.userID.name}</Typography>
+                        {data?.tag === "Anonymous" ? 
+                        <>  
+                            <Avatar sx={{ width: 30, height: 30 }} />
+                            <Typography>Anonymous</Typography>
+                        </> :
+                        <>
+                            <IconButton onClick={(e) => handleClick(e, com.userID?.regno)}>
+                                <Avatar sx={{ width: 30, height: 30 }} src={com.userID?.optprofilepicture+`?t=${new Date().getTime()}`}/>
+                            </IconButton>
+                            <Typography fontWeight={600}>{com.userID?.name}</Typography>
+                        </>}
                         <Typography variant="caption">{getRelativeTimeString(new Date(com.createdAt))}</Typography>
                     </Box>
                     <Typography sx={{ my: 1, ml: 6.7 }}>{com.comment}</Typography>
                 </Box>
                 )) :
-                <Typography variant="body2">No replies yet</Typography>
-                }
-            </Box>
-            }
+                <Typography variant="body2">No replies yet</Typography>}
+            </Box>}
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Box>
     );

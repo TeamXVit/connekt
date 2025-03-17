@@ -9,6 +9,7 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import MenuIcon from '@mui/icons-material/Menu';
 import InfoIcon from '@mui/icons-material/Info';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 const drawerWidth = 240;
 
@@ -29,8 +30,9 @@ export default function Sidebar() {
     const navLinks = [
         { page: "Travel Partner", icon: <TrainIcon />, link: "/travel" },
         { page: "Find A Teammate", icon: <PeopleOutlineIcon />, link: "/teammate" },
-        { page: "Lost & Found", icon: <SearchIcon />, link: "/lost-found" },
+        { page: "Lost & Found", icon: <SearchIcon />, link: "/lostandfound" },
         { page: "Queries", icon: <LiveHelpIcon />, link: "/queries" },
+        { page: "Anonymous Confessions", icon: <NoAccountsIcon />, link: "/anonymous" },
         { page: "FAQ", icon: <InfoIcon />, link: "/faq" }
     ];
 

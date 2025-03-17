@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../../axios/axios";
 import { Avatar, Box, Button, CircularProgress, Container, Divider, IconButton, Modal, Tab, Tabs, Typography, useTheme } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { toast, ToastContainer } from "react-toastify";
 
 
 export default function Activities() {
     const [posts, setPosts] = useState([]);
     const [replies, setReplies] = useState([]);
+    const [likes, setLikes] = useState([]);
     const [contentLoading, setContentLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -27,6 +29,9 @@ export default function Activities() {
         fetchTeammateComments(); 
         fetchQueryPosts();
         fetchQueryComments();
+        fetchLikedQueryPosts();
+        fetchLostFoundPosts();
+        fetchLostFoundComments();
     }, []);
 
     const fetchTravelPosts = () => {
@@ -82,6 +87,33 @@ export default function Activities() {
         })
         .catch((e) => toast.error(e.response.data.error));
     };
+
+    const fetchLikedQueryPosts = () => {
+        axios.get("/profile/myqueries/mylikes")
+        .then((res) => {
+            setContentLoading(false);
+            setLikes((prevLikes) => [...prevLikes, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error))
+    };
+
+    const fetchLostFoundPosts = () => {
+        axios.get("/profile/mylostandfound")
+        .then((res) => {
+            setContentLoading(false);
+            setPosts((prevPosts) => [...prevPosts, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error))
+    };
+
+    const fetchLostFoundComments = () => {
+        axios.get("/profile/mylostandfound/mycomments")
+        .then((res) => {
+            setContentLoading(false);
+            setReplies((prevReplies) => [...prevReplies, ...res.data]);
+        })
+        .catch((e) => toast.error(e.response.data.error));
+    };
     
     const handleModalOpen = () => {
         setModalOpen(true);
@@ -108,6 +140,9 @@ export default function Activities() {
             case "Queries":
                 path = `/queries/delete/${postID}`
                 break
+            case "Lost And Found":
+                path = `/lostandfound/delete/${postID}`
+                break
         };
         
         axios.delete(path)
@@ -117,11 +152,13 @@ export default function Activities() {
             handleModalClose();
             setPosts((prev) => prev.filter((post) => post._id !== postID));
             setId("");
+            setTag("");
         })
         .catch(() => {
             setLoading(false);
             toast.error("Failed to delete post");
             setId("");
+            setTag("");
         })
     };
 
@@ -138,6 +175,9 @@ export default function Activities() {
             case "Queries":
                 path = `/queries/comment/${commentID}`
                 break
+            case "Lost And Found":
+                path = `/lostandfound/comment/${commentID}`
+                break
         };
 
         await axios.delete(path)
@@ -152,17 +192,37 @@ export default function Activities() {
                 })).filter((com) => com.comments.length > 0) 
             );
             setId("");
+            setTag("");
+        })
+        .catch(() => {
+            setLoading(false);
+            toast.error("Failed to delete post");
+            setId("");
+            setTag("");
+        })
+    };
+
+    const handleDelete = () => {
+        setLoading(true);
+        if (activity === 0) deletePost(id, tag)
+        else if (activity === 1) deleteComment(id, tag)
+        else if (activity === 2) handleUnlikePost(id)
+    };
+
+    const handleUnlikePost = (postID) => {
+        axios.patch(`/queries/like/${postID}`)
+        .then((res) => {
+            setLoading(false);
+            toast.success(res.data.message);
+            handleModalClose();
+            setLikes((prevLikes) => prevLikes.filter((prev => prev._id !== postID)));
+            setId("");
         })
         .catch(() => {
             setLoading(false);
             toast.error("Failed to delete post");
             setId("");
         })
-    };
-
-    const handleDelete = () => {
-        setLoading(true);
-        activity === 0 ? deletePost(id, tag) : deleteComment(id, tag);
     };
 
     const getRelativeTimeString = (date) => {
@@ -191,6 +251,7 @@ export default function Activities() {
                 <Tabs value={activity} onChange={handleChange} centered sx={{ mb: 2 }}>
                     <Tab label="Posts"/>
                     <Tab label="Replies"/>
+                    <Tab label="Likes"/>
                 </Tabs>
             </Box>
             {contentLoading ? <CircularProgress sx={{ my: "auto" }}/> : 
@@ -241,10 +302,10 @@ export default function Activities() {
                     borderRadius: 2,
                     color: 'text.primary'
                 }}>
-                    <Typography sx={{ mt: 1 }} variant="body1">Are you sure you want to delete this {activity == 0 ? "post" : "comment"}?</Typography>
+                    {activity === 2 ? <Typography sx={{ mt: 1 }}>Are you sure you want to unlike this post?</Typography> : <Typography sx={{ mt: 1 }} variant="body1">Are you sure you want to delete this {activity == 0 ? "post" : "comment"}?</Typography>}
                     <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
                         <Button variant="text" onClick={handleModalClose}>Cancel</Button>
-                        <Button variant="contained" onClick={handleDelete}  disabled={loading}>Delete</Button>
+                        <Button variant="contained" onClick={handleDelete} disabled={loading}>{activity === 2 ? "Unlike" : "Delete"}</Button>
                     </Box>
                 </Box>
             </Modal>
@@ -277,6 +338,30 @@ export default function Activities() {
                     </Box>
                 ))
             )) : (activity === 1 && <Typography sx={{ my: "auto" }}>You haven&apos;t replied to anything Yet</Typography>)}
+            {likes.length > 0 && activity === 2 ? likes.map((like, index) => (
+                <Box key={index} sx={{ width: { sm: "95%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, my: 1, display: "flex", flexDirection: "column" }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <Avatar src={like.author?.optprofilepicture+`?t=${new Date().getTime()}`} sx={{ width: 30, height: 30 }}/>
+                            <Typography>{like.author.name}</Typography>
+                            <Typography variant="caption">{getRelativeTimeString(new Date(like.createdAt))}</Typography>
+                        </Box>
+                        <Typography my={2}>{like.content}</Typography>
+                        <Box sx={{ display: "flex" }}>
+                        {like?.author.phoneno && <Typography variant="body2">Phone no: {like?.author.phoneno}</Typography>}
+                        <Typography variant="body2" fontWeight={500} sx={{ ml: "auto" }}>#{like?.tag}</Typography>
+                    </Box>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <IconButton
+                            onClick={() => {
+                                handleModalOpen();
+                                setId(like?._id);
+                            }}
+                            >
+                                <ThumbUpAltIcon />
+                            </IconButton>
+                        </Box>
+                    </Box>
+                )) : (activity === 2 && <Typography sx={{ my: "auto" }}>You haven&apos;t replied to anything Yet</Typography>)}
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     )

@@ -7,7 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
 
 export default function UserProfile() {
-    const {details, setDetails} = useDetails();
+    const { details, setDetails } = useDetails();
     const [modal, setModal] = useState({
         open: false,
         field: "",

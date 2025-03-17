@@ -12,6 +12,7 @@ import FindTeammate from "../pages/features/FindTeammate";
 import Queries from "../pages/features/Queries";
 import MakePost from "../pages/user/MakePost";
 import Activities from "../pages/user/Activities";
+import Anonymous from "../pages/features/Anonymous";
 import FAQ from "../pages/user/FAQ";
 import { Box } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -34,9 +35,10 @@ export default function RouteProvider({ toggleTheme }) {
             "/signup": "Signup",
             "/forgot-password": "Reset Password",
             "/travel": "Travel Partner",
-            "/lost-found": "Lost & Found",
+            "/lostandfound": "Lost & Found",
             "/teammate": "Find A Teammate",
             "/queries": "Queries",
+            "/anonymous": "Anonymous confessions",
             "/user": "User Profile",
             "/make-post": "Make A Post",
             "/activities": "My Activities",
@@ -72,8 +74,9 @@ export default function RouteProvider({ toggleTheme }) {
                             <Navigate to="/login" />} 
                         />
                         <Route path="/teammate" element={<FindTeammate />} />
-                        <Route path="/lost-found" element={<LostFound />} />
+                        <Route path="/lostandfound" element={<LostFound />} />
                         <Route path="/queries" element={<Queries />} />
+                        <Route path="/anonymous" element={<Anonymous />}/>
                         <Route 
                             path="/user" 
                             element={
