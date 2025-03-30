@@ -50,7 +50,6 @@ export default function RouteProvider({ toggleTheme }) {
         return <Navigate to="/travel" replace/>
     };
     
-    // Fixed token expiration issue
     if (!token && ["/travel", "/lostandfound", "/teammate", "/queries", "/anonymous", "/user", "/make-post", "/activities"].includes(location.pathname)) {
         return <Navigate to="/login" replace/>
     }
@@ -97,4 +96,3 @@ export default function RouteProvider({ toggleTheme }) {
         </>
     );
 };
-    

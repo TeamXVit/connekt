@@ -14,7 +14,7 @@ export default function Landing() {
     useEffect(() => {
         const checkServerStatus = async () => {
             try {
-                await axios.get("/").then(res=>{
+                await axios.get("/").then((res) => {
                     console.log(res.data);
                     toast("If login or signup fails, try another browser!");
                 });
