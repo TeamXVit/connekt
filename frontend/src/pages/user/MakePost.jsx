@@ -26,12 +26,14 @@ export default function MakePost() {
     };
 
     const handlePost = () => {
+        let tempForm = formData;
         if (feature === "/lostandfound") {
-            setFormData((prev) => ({...prev, "image": pic}))
+            tempForm.image = pic;
+            setFormData(tempForm)
         };
         setLoading(true);
-        console.log(pic)
-        axios.post(`${feature}/post`, formData)
+        console.log(tempForm);
+        axios.post(`${feature}/post`, tempForm)
         .then(res => {
             setLoading(false);
             toast.success(res.data.message);

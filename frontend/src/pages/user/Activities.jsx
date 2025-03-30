@@ -283,7 +283,7 @@ export default function Activities() {
                 </Box>
                 ))}
             </Box> :
-            (activity === 0 && <Typography sx={{ my: "auto" }}>You haven&apos;t posted anything Yet</Typography>)
+            (activity === 0 && <Typography sx={{ my: "auto" }}>You haven&apos;t posted anything yet</Typography>)
             }
             <Modal
             keepMounted
@@ -337,7 +337,7 @@ export default function Activities() {
                         </Box>
                     </Box>
                 ))
-            )) : (activity === 1 && <Typography sx={{ my: "auto" }}>You haven&apos;t replied to anything Yet</Typography>)}
+            )) : (activity === 1 && <Typography sx={{ my: "auto" }}>You haven&apos;t replied to anything yet</Typography>)}
             {likes.length > 0 && activity === 2 ? likes.map((like, index) => (
                 <Box key={index} sx={{ width: { sm: "95%", lg: "75%" }, bgcolor: theme.palette.mode === "light" ? "grey.100" : "grey.900", borderRadius: 3, p: 2, my: 1, display: "flex", flexDirection: "column" }}>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -361,7 +361,7 @@ export default function Activities() {
                             </IconButton>
                         </Box>
                     </Box>
-                )) : (activity === 2 && <Typography sx={{ my: "auto" }}>You haven&apos;t replied to anything Yet</Typography>)}
+            )) : (activity === 2 && <Typography sx={{ my: "auto" }}>You haven&apos;t liked anything yet</Typography>)}
             <ToastContainer autoClose={1000} hideProgressBar position="bottom-right" className="sm:w-[75%]" pauseOnHover={false}/>
         </Container>
     )

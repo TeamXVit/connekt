@@ -42,7 +42,6 @@ export default function LostFound() {
                         const chunk = decoder.decode(value);
                         try {
                             const processed = JSON.parse(chunk);
-                            console.log(processed)
                             setPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
                             setLoading(false);
                         } catch (error) {
