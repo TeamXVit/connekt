@@ -18,7 +18,9 @@ const lostAndFoundRouter = express.Router();
 lostAndFoundRouter.post("/post", authenticateToken, upload.single("image"), async (request, response) => {
     try {
         const { regno } = request.user; 
-        const { content, showphoneno, ttl, time } = request.body;
+        let { content, showphoneno, ttl, time } = request.body;
+        showphoneno = showphoneno === "true"; 
+        ttl = Number(ttl);
         if (!content || showphoneno === undefined || !ttl || !time) {
             return response.status(400).json({ error: "All required fields must be filled." });
         }
