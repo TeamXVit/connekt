@@ -3,14 +3,14 @@ import { useState } from "react";
 import axios from "../axios/axios";
 import { useLocation } from "react-router";
 import useDetails from "../hooks/useDetails";
-import { Avatar, Box, Button, IconButton, Link, Popover, TextField, Typography, useTheme } from "@mui/material";
+import { Avatar, Badge, Box, Button, IconButton, Link, Modal, Popover, TextField, Typography, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from "react-toastify";
 
 export default function PostUI({ data }) { 
@@ -27,6 +27,7 @@ export default function PostUI({ data }) {
     const [comment, setComment] = useState("");
     const [commenting, setCommenting] = useState(true);
     const [likeLoading, setLikeLoading] = useState(false);
+    const [openImageModal, setOpenImageModal] = useState(false);
     
     const handleClick = async (e, regNo) => {
         setAnchorEl(e.currentTarget);
@@ -89,6 +90,14 @@ export default function PostUI({ data }) {
         .then(() => setLikeLoading(false))
         .catch(() => setLikeLoading(false))
     };
+
+    const handleOpenImageModal = () => {
+        setOpenImageModal(true);
+    };
+
+    const handleCloseImageModal = () => {
+        setOpenImageModal(false);
+    };
     
     const open = Boolean(anchorEl) && Boolean(otherUserDetails);
     const id = open ? 'details-popper' : undefined;
@@ -107,7 +116,7 @@ export default function PostUI({ data }) {
                     </Box>
                     : 
                     <>
-                        <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)}>
+                        <IconButton aria-describedby={id} onClick={(e) => handleClick(e, data.author?.regno)} >
                             <Avatar src={data.author?.optprofilepicture+`?t=${new Date().getTime()}`}/>
                         </IconButton>
                         <Typography variant="body1" fontWeight="medium">{data.author?.name}</Typography>  
@@ -138,8 +147,33 @@ export default function PostUI({ data }) {
                         underline="none"
                     >{otherUserDetails.instagram}</Link>
                 </Box>
-            </Popover>}
-            <Typography variant="body1" sx={{ width: "100%" }}>{data?.content}</Typography>
+            </Popover>}            
+            {data?.image && 
+            <Box>
+                <Badge
+                    overlap="circular"    
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    badgeContent={
+                        <IconButton sx={{ backgroundColor: "black", color: "white", borderRadius: "50%", padding: "5px", width: 32, height: 32 }} onClick={handleOpenImageModal}>
+                            <OpenInFullIcon sx={{ width: 20, height: 20 }} />
+                        </IconButton>}
+                >
+                    <Box
+                        component="img"
+                        src={data?.image}
+                        sx={{ width: 100 }}
+                    />
+                </Badge>
+            </Box>}
+            <Modal open={openImageModal} onClose={handleCloseImageModal}>
+                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                    <IconButton sx={{ position: 'absolute', top: 1, right: 1 }} onClick={handleCloseImageModal}>
+                        <CloseIcon />
+                    </IconButton>
+                    <Box component="img" src={data?.image} sx={{ width: '100%', mt: 1 }}/>
+                </Box>
+            </Modal>
+            <Typography variant="body1" sx={{ width: "100%", mx: "auto" }}>{data?.content}</Typography>
             {data.author?.phoneno && <Typography variant="body2">Phone no: {data.author?.phoneno}</Typography>}    
             <Box sx={{ display: "flex", alignItems: "center" }}>
                 {data?.tag === "Queries" &&

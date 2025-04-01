@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "../../axios/axios";
-import { Avatar, Box, Button, CircularProgress, Container, Divider, IconButton, Modal, Tab, Tabs, Typography, useTheme } from "@mui/material";
+import { Avatar, Badge, Box, Button, CircularProgress, Container, Divider, IconButton, Modal, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import OpenInFullIcon from "@mui/icons-material/OpenInFull";
+import CloseIcon from "@mui/icons-material/Close";
 import { toast, ToastContainer } from "react-toastify";
 
 
@@ -16,6 +18,7 @@ export default function Activities() {
     const [activity, setActivity] = useState(0);
     const [id, setId] = useState("");
     const [tag, setTag] = useState("");
+    const [openImageModal, setOpenImageModal] = useState(false);
     const dataFetchedRef = useRef(false);
     const theme = useTheme();
 
@@ -100,6 +103,7 @@ export default function Activities() {
     const fetchLostFoundPosts = () => {
         axios.get("/profile/mylostandfound")
         .then((res) => {
+            console.log(res.data)
             setContentLoading(false);
             setPosts((prevPosts) => [...prevPosts, ...res.data]);
         })
@@ -245,6 +249,14 @@ export default function Activities() {
         }
     };
 
+    const handleOpenImageModal = () => {
+        setOpenImageModal(true);
+    };
+
+    const handleCloseImageModal = () => {
+        setOpenImageModal(false);
+    };
+
     return (
         <Container maxWidth={false} sx={{  bgcolor: "background.default", color: "text.primary", minHeight: "100vh", pt: "75px", pb: "15px", display: "flex", flexWrap: "wrap", flexDirection: "column", alignItems: { sm: "center", lg: "none" } }}>
             <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
@@ -275,7 +287,32 @@ export default function Activities() {
                             <DeleteIcon />
                         </IconButton>
                     </Box>
-                    <Typography variant="body1" sx={{ width: "100%" }}>{post.content}</Typography>
+                    {post?.image && 
+                    <Box>
+                        <Badge
+                            overlap="circular"    
+                            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                            badgeContent={
+                                <IconButton sx={{ backgroundColor: "black", color: "white", borderRadius: "50%", padding: "5px", width: 32, height: 32 }} onClick={handleOpenImageModal}>
+                                    <OpenInFullIcon sx={{ width: 20, height: 20 }} />
+                                </IconButton>}
+                        >
+                            <Box
+                                component="img"
+                                src={post?.image}
+                                sx={{ width: 100 }}
+                            />
+                        </Badge>
+                    </Box>}
+                    <Modal open={openImageModal} onClose={handleCloseImageModal}>
+                        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                            <IconButton sx={{ position: 'absolute', top: 1, right: 1 }} onClick={handleCloseImageModal}>
+                                <CloseIcon />
+                            </IconButton>
+                            <Box component="img" src={post?.image} sx={{ width: '100%', mt: 1 }}/>
+                        </Box>
+                    </Modal>
+                    <Typography variant="body1" sx={{ width: "100%" }}>{post?.content}</Typography>
                     <Box sx={{ display: "flex" }}>
                         {post.author.phoneno && <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>}
                         <Typography variant="body2" fontWeight={500} sx={{ ml: "auto" }}>#{post?.tag}</Typography>

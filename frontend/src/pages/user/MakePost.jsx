@@ -15,7 +15,6 @@ export default function MakePost() {
         ttl: "",
         time: new Date()
     });
-    const [pic, setPic] = useState();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { details } = useDetails();
@@ -26,14 +25,21 @@ export default function MakePost() {
     };
 
     const handlePost = () => {
-        let tempForm = formData;
+        let tempForm = new FormData();
+
+        Object.keys(formData).forEach(key => {
+            tempForm.append(key, formData[key]);
+        });
+
         if (feature === "/lostandfound") {
-            tempForm.image = pic;
-            setFormData(tempForm)
+            const fileInput = document.querySelector("#fileInput");
+            if (fileInput.files.length > 0) {
+                tempForm.append("image", fileInput.files[0]);
+            };
         };
         setLoading(true);
         console.log(tempForm);
-        axios.post(`${feature}/post`, tempForm)
+        axios.post(`${feature}/post`, feature === "/lostandfound" ? tempForm : formData)
         .then(res => {
             setLoading(false);
             toast.success(res.data.message);
@@ -107,13 +113,6 @@ export default function MakePost() {
                         required
                     >
                         {[1, 2, 3, 4, 5, 6, 7].map((num, index) => <MenuItem key={index} value={num * 86400}>{num} {num > 1 ? "Days" : "Day"}</MenuItem>)}
-                        {/* <MenuItem value={1 * 86400}>1 Day</MenuItem>
-                        <MenuItem value={2 * 86400}>2 Days</MenuItem>
-                        <MenuItem value={3 * 86400}>3 Days</MenuItem>
-                        <MenuItem value={4 * 86400}>4 Days</MenuItem>
-                        <MenuItem value={5 * 86400}>5 Days</MenuItem>
-                        <MenuItem value={6 * 86400}>6 Days</MenuItem>
-                        <MenuItem value={7 * 86400}>7 Days</MenuItem> */}
                     </Select>
                     <FormHelperText>How long do you want the post to exist?</FormHelperText>
                 </FormControl>
@@ -139,7 +138,7 @@ export default function MakePost() {
                     defaultValue={formData.time}
                     slotProps={{ input: { readOnly: true } }}
                 />
-                {feature === "/lostandfound" && <Input type="file" accept="image/png, image/jpeg"  onChange={(e) => setPic(e.target.files[0])}/>}
+                {feature === "/lostandfound" && <Input id="fileInput" type="file" accept="image/png, image/jpeg" />}
             </Box>
             <Box sx={{ width: "90%" }}>
                 <TextField 
