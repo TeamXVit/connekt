@@ -166,11 +166,11 @@ export default function PostUI({ data }) {
                 </Badge>
             </Box>}
             <Modal open={openImageModal} onClose={handleCloseImageModal}>
-                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, maxHeight: "90%", bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3, overflow: "auto" }}>
                     <IconButton sx={{ position: 'absolute', top: 1, right: 1 }} onClick={handleCloseImageModal}>
                         <CloseIcon />
                     </IconButton>
-                    <Box component="img" src={data?.image} sx={{ width: '100%', mt: 1 }}/>
+                    <Box component="img" src={data?.image} sx={{ width: '100%', mt: 1, objectFit: "fill" }}/>
                 </Box>
             </Modal>
             <Typography variant="body1" sx={{ width: "100%", mx: "auto" }}>{data?.content}</Typography>
