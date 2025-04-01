@@ -288,6 +288,7 @@ export default function Activities() {
                         </IconButton>
                     </Box>
                     {post?.image && 
+                    <>
                     <Box>
                         <Badge
                             overlap="circular"    
@@ -303,15 +304,17 @@ export default function Activities() {
                                 sx={{ width: 100 }}
                             />
                         </Badge>
-                    </Box>}
+                    </Box>
                     <Modal open={openImageModal} onClose={handleCloseImageModal}>
-                        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
+                        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, maxHeight: "90%", bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3, overflow: "auto" }}>
                             <IconButton sx={{ position: 'absolute', top: 1, right: 1 }} onClick={handleCloseImageModal}>
                                 <CloseIcon />
                             </IconButton>
                             <Box component="img" src={post?.image} sx={{ width: '100%', mt: 1 }}/>
                         </Box>
                     </Modal>
+                    </>
+                    }
                     <Typography variant="body1" sx={{ width: "100%" }}>{post?.content}</Typography>
                     <Box sx={{ display: "flex" }}>
                         {post.author.phoneno && <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>}
