@@ -3,34 +3,60 @@ import mongoose from "mongoose";
 import authenticateToken from "../middleware/authMiddleware.js";
 import { Queries } from "../models/Queries.js";
 import { Users } from "../models/User.js";
+import { v2 as cloudinary} from "cloudinary";
+import "dotenv/config";
+import multer from "multer";
 
+cloudinary.config({secure:true});
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage,
+    limits: { fileSize: 50 * 1024 * 1024 } 
+});
 const queriesRouter = express.Router();
 
-queriesRouter.post("/post",authenticateToken, async (request,response)=>{
+queriesRouter.post("/post",authenticateToken, upload.single("image"), async (request,response)=>{
     try{
         const { regno } = request.user; 
-        const { content, ttl, time } = request.body;
+        let { content, ttl, time } = request.body;
         if(!content || !ttl || !time){
             return response.status(400).send({
                 error: "All required fields must be filled."
             });
         }
-        if (typeof ttl !== "number" || ttl <= 0) {
+        ttl = Number(ttl);
+        if (Number.isNaN(ttl) || ttl <= 0) {
             return response.status(400).json({ error: "TTL must be a positive number." });
         }
         const user = await Users.findOne({regno});
         if(!user) return response.status(404).send({
             error: "User not found."
         });
+        let imageUrl = null;
+        if (request.file) {
+            if (!["image/jpeg", "image/png"].includes(request.file.mimetype)) {
+                return response.status(400).json({ error: "Only JPG and PNG files are allowed." });
+            }
+            const config = {
+                folder: "queries",
+                resource_type: "image",
+            };
+            const b64 = Buffer.from(request.file.buffer).toString("base64");
+            const dataURI = `data:${request.file.mimetype};base64,${b64}`;
+            const result = await cloudinary.uploader.upload(dataURI, config);
+            imageUrl = result.secure_url;
+        }
         const TTL = new Date(Date.now()+ttl*1000);
         await Queries.create({
             content,
+            image: imageUrl,
             author: user._id,
             createdAt: time,
             expireAt: TTL
         });
         return response.status(200).send({
-            message:"Queries Post created successfully."
+            message: "Queries Post created successfully.",
+            image: imageUrl
         });
     }catch(err){
         return response.status(500).send({

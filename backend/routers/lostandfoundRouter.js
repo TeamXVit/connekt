@@ -19,12 +19,12 @@ lostAndFoundRouter.post("/post", authenticateToken, upload.single("image"), asyn
     try {
         const { regno } = request.user; 
         let { content, showphoneno, ttl, time } = request.body;
-        showphoneno = showphoneno === "true"; 
-        ttl = Number(ttl);
         if (!content || showphoneno === undefined || !ttl || !time) {
             return response.status(400).json({ error: "All required fields must be filled." });
         }
-        if (typeof ttl !== "number" || ttl <= 0) {
+        showphoneno = showphoneno === "true"; 
+        ttl = Number(ttl);
+        if (Number.isNaN(ttl) || ttl <= 0) {
             return response.status(400).json({ error: "TTL must be a positive number." });
         }
         const user = await Users.findOne({ regno });
@@ -37,8 +37,6 @@ lostAndFoundRouter.post("/post", authenticateToken, upload.single("image"), asyn
             const config = {
                 folder: "lost-and-found",
                 resource_type: "image",
-                use_filename: true,
-                unique_filename: true
             };
             const b64 = Buffer.from(request.file.buffer).toString("base64");
             const dataURI = `data:${request.file.mimetype};base64,${b64}`;
