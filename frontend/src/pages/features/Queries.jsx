@@ -33,7 +33,7 @@ export default function Queries() {
 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-
+                
                 const readStream = async () => {
                     while (isMounted) {
                         const { value, done } = await reader.read();

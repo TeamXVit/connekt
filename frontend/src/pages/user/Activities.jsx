@@ -18,6 +18,7 @@ export default function Activities() {
     const [activity, setActivity] = useState(0);
     const [id, setId] = useState("");
     const [tag, setTag] = useState("");
+    const [imageView, setImageView] = useState(null);
     const [openImageModal, setOpenImageModal] = useState(false);
     const dataFetchedRef = useRef(false);
     const theme = useTheme();
@@ -249,11 +250,13 @@ export default function Activities() {
         }
     };
 
-    const handleOpenImageModal = () => {
+    const handleOpenImageModal = (link) => {
+        setImageView(link)
         setOpenImageModal(true);
     };
 
     const handleCloseImageModal = () => {
+        setImageView(null);
         setOpenImageModal(false);
     };
 
@@ -288,13 +291,15 @@ export default function Activities() {
                         </IconButton>
                     </Box>
                     {post?.image && 
-                    <>
                     <Box>
                         <Badge
                             overlap="circular"    
                             anchorOrigin={{ vertical: "top", horizontal: "right" }}
                             badgeContent={
-                                <IconButton sx={{ backgroundColor: "black", color: "white", borderRadius: "50%", padding: "5px", width: 32, height: 32 }} onClick={handleOpenImageModal}>
+                                <IconButton 
+                                    sx={{ backgroundColor: "black", color: "white", borderRadius: "50%", padding: "5px", width: 32, height: 32 }} 
+                                    onClick={() => handleOpenImageModal(post?.image)}
+                                >
                                     <OpenInFullIcon sx={{ width: 20, height: 20 }} />
                                 </IconButton>}
                         >
@@ -304,17 +309,15 @@ export default function Activities() {
                                 sx={{ width: 100 }}
                             />
                         </Badge>
-                    </Box>
+                    </Box>}
                     <Modal open={openImageModal} onClose={handleCloseImageModal}>
                         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: { sm: "85%", lg: "60%" }, maxHeight: "90%", bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3, overflow: "auto" }}>
                             <IconButton sx={{ position: 'absolute', top: 1, right: 1 }} onClick={handleCloseImageModal}>
                                 <CloseIcon />
                             </IconButton>
-                            <Box component="img" src={post?.image} sx={{ width: '100%', mt: 1 }}/>
+                            <Box component="img" src={imageView} sx={{ width: '100%', mt: 1 }}/>
                         </Box>
                     </Modal>
-                    </>
-                    }
                     <Typography variant="body1" sx={{ width: "100%" }}>{post?.content}</Typography>
                     <Box sx={{ display: "flex" }}>
                         {post.author.phoneno && <Typography variant="body2">Phone no: {post?.author.phoneno}</Typography>}

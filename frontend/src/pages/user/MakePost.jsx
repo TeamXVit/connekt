@@ -138,7 +138,7 @@ export default function MakePost() {
                     defaultValue={formData.time}
                     slotProps={{ input: { readOnly: true } }}
                 />
-                {feature === "/lostandfound" && <Input id="fileInput" type="file" accept="image/png, image/jpeg" />}
+                {["/queries", "/lostandfound"].includes(feature) && <Input id="fileInput" type="file" accept="image/png, image/jpeg" />}
             </Box>
             <Box sx={{ width: "90%" }}>
                 <TextField 
