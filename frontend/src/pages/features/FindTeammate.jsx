@@ -51,33 +51,66 @@ export default function FindTeammate() {
                         Accept: "text/event-stream",
                     },
                 });
-    
+        
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
+        
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-    
+                let hasData = false;
+                let emptyStateTimer;
+        
                 const readStream = async () => {
+                    emptyStateTimer = setTimeout(() => {
+                        if (isMounted && !hasData) {
+                            setPosts([]);
+                            setLoading(false);
+                        }
+                    }, 1000);
+        
                     while (isMounted) {
                         const { value, done } = await reader.read();
                         if (done || !isMounted) break;
-    
+        
                         const chunk = decoder.decode(value, { stream: true });
                         buffer += chunk;
-    
+        
                         const messages = buffer.split('\n');
                         buffer = messages.pop() || '';
-    
+        
                         for (const message of messages) {
                             if (!message.trim()) continue;
-    
+        
                             try {
                                 const posts = processData(message);
                                 if (posts.length > 0) {
-                                    setPosts(prev => [
-                                        ...posts,
-                                        ...prev
-                                    ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+                                    hasData = true;
+                                    clearTimeout(emptyStateTimer);
+                                    
+                                    setPosts(prev => {
+                                        const existingIds = new Set(prev.map(post => post._id));
+                                        const newPosts = posts.filter(post => !existingIds.has(post._id));
+                                        
+                                        const mergedPosts = [
+                                            ...newPosts,
+                                            ...prev.map(prevPost => {
+                                                const updatedPost = posts.find(p => p._id === prevPost._id);
+                                                if (updatedPost) {
+                                                    return {
+                                                        ...prevPost,
+                                                        comments: updatedPost.comments || prevPost.comments,                                                    
+                                                    };
+                                                }
+                                                return prevPost;
+                                            })
+                                        ];
+                                        
+                                        return mergedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                                    });
+                                    setLoading(false);
+                                } else if (posts.length === 0) {
+                                    hasData = true;
+                                    clearTimeout(emptyStateTimer);
+                                    setPosts([]);
                                     setLoading(false);
                                 }
                             } catch (error) {
@@ -85,12 +118,20 @@ export default function FindTeammate() {
                             }
                         }
                     }
+        
+                    if (isMounted && !hasData) {
+                        setPosts([]);
+                        setLoading(false);
+                    }
                 };
-    
+        
                 await readStream();
             } catch (err) {
                 console.error("SSE Connection Error:", err);
-                setLoading(false);
+                if (isMounted) {
+                    setPosts([]);
+                    setLoading(false);
+                }
             }
         };
     
