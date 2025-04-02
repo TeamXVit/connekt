@@ -83,13 +83,17 @@ queriesRouter.get("/view", authenticateToken, async (request, response) => {
                     ...post,
                     likes: post.likes.map(user => user.regno)
                 }));
-                response.write(`${JSON.stringify(formattedPosts)}\n\n`);
+                response.write(`data: ${JSON.stringify(formattedPosts)}\n\n`);
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
         };
         await sendPosts();
         changeStream.on("change", sendPosts);
+        changeStream.on("error", err => {
+            console.error("Change Stream Error:", err);
+            changeStream.close();
+        });
         request.on("close", () => {
             changeStream.close();
             response.end();

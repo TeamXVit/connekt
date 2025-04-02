@@ -57,13 +57,17 @@ anonymousRouter.get("/view", authenticateToken, async (request, response)=>{
                         userID: undefined
                     }))
                 }));
-                response.write(`${JSON.stringify(anonymousPosts)}\n\n`);
+                response.write(`data: ${JSON.stringify(anonymousPosts)}\n\n`);
             }catch(err){
                 console.error("Error fetching posts:", err);
             }
         }
         await sendPosts();
         changeStream.on("change", sendPosts);
+        changeStream.on("error", err => {
+            console.error("Change Stream Error:", err);
+            changeStream.close();
+        });
         request.on("close", () => {
             changeStream.close();
             response.end();
