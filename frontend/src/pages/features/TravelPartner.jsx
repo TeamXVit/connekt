@@ -45,7 +45,7 @@ export default function TravelPartner() {
         
             const getSSEStream = async () => {
                 try {
-                    const response = await fetch(`${Backend}/teammate/view`, {
+                    const response = await fetch(`${Backend}/travel/view`, {
                         headers: {
                             Authorization: BearerHeader,
                             Accept: "text/event-stream",
