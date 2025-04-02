@@ -104,7 +104,6 @@ export default function Activities() {
     const fetchLostFoundPosts = () => {
         axios.get("/profile/mylostandfound")
         .then((res) => {
-            console.log(res.data)
             setContentLoading(false);
             setPosts((prevPosts) => [...prevPosts, ...res.data]);
         })

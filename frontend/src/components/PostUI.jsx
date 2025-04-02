@@ -178,7 +178,9 @@ export default function PostUI({ data }) {
             <Box sx={{ display: "flex", alignItems: "center" }}>
                 {data?.tag === "Queries" &&
                 <IconButton onClick={() => handleLikeQuery(data?._id)} disabled={likeLoading}>
-                    {data.likes.includes(details?.regno) ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+                    {(Array.isArray(data?.likes) && data.likes.includes(details?.regno)) ? 
+                    <ThumbUpAltIcon /> : 
+                    <ThumbUpOffAltIcon />}
                 </IconButton>}
                 <Typography fontSize={15}>{data.likes?.length}</Typography>
                 <Button sx={{ color: "text.primary", mr: "auto" }} onClick={handleToggleReply} variant="text">Reply</Button>

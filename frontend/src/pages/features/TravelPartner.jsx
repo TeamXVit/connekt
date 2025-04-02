@@ -18,51 +18,88 @@ export default function TravelPartner() {
     const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
     
     useEffect(() => {
-        let isMounted = true;
-
-        const getSSEStream = async () => {
-            try {
-                const response = await fetch(`${Backend}/travel/view`, {
-                    headers: {
-                        Authorization: BearerHeader,
-                        Accept: "text/event-stream",
-                    },
-                });
-
-                if (!response.body) throw new Error("Stream response body is empty");
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-
-                const readStream = async () => {
-                    while (isMounted) {
-                        const { value, done } = await reader.read();
-                        if (done || !isMounted) break;
-
-                        const chunk = decoder.decode(value);
-                        try {
-                            const processed = JSON.parse(chunk);
-                            setPosts(processed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
-                            setLoading(false);
-                        } catch (error) {
-                            console.error("Error parsing SSE data:", error);
-                        }
+            let isMounted = true;
+            let buffer = '';
+        
+            const processData = (rawData) => {
+                try {
+                    let dataStr = rawData.replace(/^data: /, '').trim();
+                    
+                    if (dataStr.startsWith('[') && dataStr.endsWith(']')) {
+                        const postsArray = JSON.parse(dataStr);
+                        return postsArray;
+                    } else {
+                        const repaired = dataStr
+                            .replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
+                            .replace(/'/g, '"')
+                            .replace(/,\s*([}\]])/g, '$1');
+                        
+                        const parsed = JSON.parse(`[${repaired}]`); 
+                        return Array.isArray(parsed) ? parsed : [parsed];
                     }
-                };
-
-                readStream();
-            } catch (err) {
-                console.error("Error fetching SSE:", err);
-                setLoading(false);
-            }
-        };
-
-        getSSEStream();
-
-        return () => {
-            isMounted = false; 
-        };
-    }, []);
+                } catch (error) {
+                    console.error("Error processing data:", error, "Raw data:", rawData);
+                    return [];
+                }
+            };
+        
+            const getSSEStream = async () => {
+                try {
+                    const response = await fetch(`${Backend}/travel/view`, {
+                        headers: {
+                            Authorization: BearerHeader,
+                            Accept: "text/event-stream",
+                        },
+                    });
+        
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+        
+                    const readStream = async () => {
+                        while (isMounted) {
+                            const { value, done } = await reader.read();
+                            if (done || !isMounted) break;
+        
+                            const chunk = decoder.decode(value, { stream: true });
+                            buffer += chunk;
+        
+                            const messages = buffer.split('\n');
+                            buffer = messages.pop() || '';
+        
+                            for (const message of messages) {
+                                if (!message.trim()) continue;
+        
+                                try {
+                                    const posts = processData(message);
+                                    if (posts.length > 0) {
+                                        setPosts(prev => [
+                                            ...posts,
+                                            ...prev
+                                        ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+                                        setLoading(false);
+                                    }
+                                } catch (error) {
+                                    console.error("Error in message processing:", error);
+                                }
+                            }
+                        }
+                    };
+        
+                    await readStream();
+                } catch (err) {
+                    console.error("SSE Connection Error:", err);
+                    setLoading(false);
+                }
+            };
+        
+            getSSEStream();
+        
+            return () => {
+                isMounted = false;
+            };
+        }, []);
 
     return (
         <Container maxWidth={false} sx={{ bgcolor: "background.default", color: "text.primary", minHeight: "100vh", display: "flex", gap: 1, pt: "75px" }}>

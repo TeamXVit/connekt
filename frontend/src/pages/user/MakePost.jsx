@@ -31,15 +31,14 @@ export default function MakePost() {
             tempForm.append(key, formData[key]);
         });
 
-        if (feature === "/lostandfound") {
+        if (["/lostandfound", "/queries"].includes(feature)) {
             const fileInput = document.querySelector("#fileInput");
             if (fileInput.files.length > 0) {
                 tempForm.append("image", fileInput.files[0]);
             };
         };
         setLoading(true);
-        console.log(tempForm);
-        axios.post(`${feature}/post`, feature === "/lostandfound" ? tempForm : formData)
+        axios.post(`${feature}/post`, ["/lostandfound", "/queries"].includes(feature) ? tempForm : formData)
         .then(res => {
             setLoading(false);
             toast.success(res.data.message);
