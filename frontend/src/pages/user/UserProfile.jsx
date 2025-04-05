@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import useDetails from "../../hooks/useDetails";
 import axios from "../../axios/axios";
@@ -5,6 +6,9 @@ import { Avatar, Badge, Box, Button, CircularProgress, Container, Divider, IconB
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import { ToastContainer, toast } from "react-toastify";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../utils/cropImage";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 
 export default function UserProfile() {
     const { details, setDetails } = useDetails();
@@ -18,6 +22,10 @@ export default function UserProfile() {
     const [imagePreview, setImagePreview] = useState(null);
     const [profilePicture, setProfilePicture] = useState();
     const [imageLoading, setImageLoading] = useState(false);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    
 
     const handleProfileEdit = async () => {
         const fieldData = { [modal.field]: modal.value };
@@ -65,20 +73,26 @@ export default function UserProfile() {
         };
     };
 
-    const handleImageUpload = () => {   
-        const formData = new FormData();
-        formData.append("image", profilePicture);
-        setImageLoading(true);
-        axios.post("/profile/upload-profilepicture", formData)
-        .then((res) => {
-            setImageLoading(false);
+    const onCropComplete = (croppedArea, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    };    
+
+    const handleImageUpload = async () => { 
+        try {
+            setImageLoading(true);
+            const croppedImageBlob = await getCroppedImg(imagePreview, croppedAreaPixels);
+    
+            const formData = new FormData();
+            formData.append("image", croppedImageBlob, "cropped.jpeg");
+    
+            const res = await axios.post("/profile/upload-profilepicture", formData);
             toast.success(res.data.message);
             handleCloseImageModal();
-        })
-        .catch((e) => {
+        } catch (e) {
+            toast.error("Image upload failed.");
+        } finally {
             setImageLoading(false);
-            toast.error(e.response.data.error);
-        });
+        }
     };
 
     const handleCloseModal = () => {
@@ -116,7 +130,22 @@ export default function UserProfile() {
                 <Modal open={openImageModal} onClose={handleCloseImageModal}>
                     <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: "fit", bgcolor: 'background.paper', boxShadow: 24, p: 4, display: "flex", flexDirection: "column", gap: 3 }}>
                         <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color: "text.primary" }}>Upload Profile Picture</Typography>
-                        <Avatar sx={{ width: 100, height: 100, mx: "auto" }} src={imagePreview}/>
+                        <Box sx={{ position: "relative", width: 250, height: 250, mx: "auto" }}>
+                            {imagePreview ?
+                            <Cropper
+                                image={imagePreview}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={1}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                onCropComplete={onCropComplete}
+                            /> :
+                            <Box sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                                <InsertPhotoIcon sx={{ width: 75, height: 75, color: "text.primary" }} /> 
+                                <Typography variant="body2" sx={{ width: 250, color: "text.primary", mt: 2, textAlign: "center" }}>Upload only .jpeg or .png files</Typography>   
+                            </Box>}
+                        </Box>
                         <Input type="file" accept="image/png, image/jpeg" onChange={handleImagePreview}/>
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Button variant="text" onClick={handleCloseImageModal}>Cancel</Button>

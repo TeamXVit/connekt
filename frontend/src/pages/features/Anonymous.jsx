@@ -66,7 +66,7 @@ export default function Anonymous() {
                             setPosts([]);
                             setLoading(false);
                         }
-                    }, 1000);
+                    }, 3000);
         
                     while (isMounted) {
                         const { value, done } = await reader.read();
