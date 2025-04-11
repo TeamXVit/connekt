@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
-import { Box, Container, Dialog, DialogContent, IconButton, Link, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, Dialog, DialogContent, IconButton, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PostUI from "../../components/PostUI";
 import InfoIcon from "@mui/icons-material/Info";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -175,41 +175,27 @@ export default function LostFound() {
                                     <CloseIcon />
                                 </IconButton>
                                 <Typography variant="h4">Lost & Found</Typography>
-                                <Box sx={{ width: "90%" }}>
-                                    <Typography>Looking for something you lost? Found an item and want to return it? Lost & Found helps you reconnect with misplaced belongings.</Typography>
-                                </Box>
-                                <Box sx={{ width: "90%" }}>
-                                    <Typography>Report a lost item – Describe your lost item so others can help.</Typography>
-                                    <Typography>Post a found item – Let the owner claim their belongings.</Typography>
-                                    <Typography>Help your community – Keep the campus connected by returning lost items.</Typography>
-                                </Box>
-                                <Box sx={{ width: "90%" }}>
-                                    <Typography>Reclaim what’s lost—connect through Lost & Found today!</Typography>
-                                </Box>
-                                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                                <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                                <Typography variant="body1">Lost something? Found an item? Lost & Found helps you reunite belongings with their rightful owners.</Typography>
+                                <List>
+                                    <ListItem>🔎 Report a Lost Item - Share details so others can keep an eye out.</ListItem>
+                                    <ListItem>🔎 Post a Found Item - Help someone reclaim what they&apos;ve lost. </ListItem>
+                                    <ListItem>🔎 Support Your Community - Keep the campus connected and caring.</ListItem>
+                                </List>
+                                <Typography>Reclaim what&apos;s lost—connect through Lost & Found today!</Typography>
                             </Box>
                         </DialogContent>
                     </Dialog>
                 </>
             ) : (
                 <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
-                    <Typography variant="h4">Lost & Found</Typography>
-                    <Box sx={{ width: "90%" }}>
-                        <Typography>Looking for something you lost? Found an item and want to return it? Lost & Found helps you reconnect with misplaced belongings.</Typography>
-                    </Box>
-                    <Box sx={{ width: "90%" }}>
-                        <Typography>Report a lost item – Describe your lost item so others can help.</Typography>
-                        <Typography>Post a found item – Let the owner claim their belongings.</Typography>
-                        <Typography>Help your community – Keep the campus connected by returning lost items.</Typography>
-                    </Box>
-                    <Box sx={{ width: "90%" }}>
-                        <Typography>Reclaim what’s lost—connect through Lost & Found today!</Typography>
-                    </Box>
-                    <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                    <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                    <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                    <Typography variant="h5" sx={{ mb: 2 }}>Lost & Found</Typography>
+                    <Typography variant="body1">Lost something? Found an item? Lost & Found helps you reunite belongings with their rightful owners.</Typography>
+                    <List>
+                        <ListItem>🔎 Report a Lost Item - Share details so others can keep an eye out.</ListItem>
+                        <ListItem>🔎 Post a Found Item - Help someone reclaim what they&apos;ve lost. </ListItem>
+                        <ListItem>🔎 Support Your Community - Keep the campus connected and caring.</ListItem>
+                    </List>
+                    <Typography>Reclaim what&apos;s lost—connect through Lost & Found today!</Typography>
                 </Box>
             )}
             <IconButton

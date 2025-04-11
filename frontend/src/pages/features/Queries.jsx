@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
-import { Box, Container, Dialog, DialogContent, IconButton, Link, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, Dialog, DialogContent, IconButton, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PostUI from "../../components/PostUI";
 import InfoIcon from "@mui/icons-material/Info";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -175,17 +175,14 @@ export default function Queries() {
                                     <CloseIcon />
                                 </IconButton>
                                 <Typography variant="h5" sx={{ mb: 2 }}>Queries</Typography>
-                                <Typography variant="body1">Looking for answers or want to share your knowledge? Queries is the go-to platform for asking questions, engaging in discussions, and upvoting the best posts.</Typography>
+                                <Typography variant="body1">Got questions or knowledge to share? Queries is your space to learn, engage, and grow with the community.</Typography>
                                 <List>
-                                    <ListItem>🔹 Ask Anything – Post questions on any topic, academic or personal.</ListItem>
-                                    <ListItem>🔹 Answer & Engage – Share insights and help others with your knowledge.</ListItem>
-                                    <ListItem>🔹 Upvote Questions – Highlight important or interesting questions.</ListItem>
-                                    <ListItem>🔹 Explore Discussions – Browse and contribute to ongoing conversations.</ListItem>
+                                    <ListItem>❔Ask Anything - Academic doubts or personal curiosities, all are welcome.</ListItem>
+                                    <ListItem>❔Answer & Engage - Help others by sharing what you know.</ListItem>
+                                    <ListItem>❔Upvote the Best - Boost valuable and interesting posts.</ListItem>
+                                    <ListItem>❔Explore Discussions - Join conversations and expand your perspective.</ListItem>
                                 </List>
-                                <Typography>Join Queries today—ask, answer, upvote, and be part of a knowledge-sharing community!</Typography>
-                                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                                <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                                <Typography>Be part of a knowledge-sharing community—join Queries today!</Typography>
                             </Box>
                         </DialogContent>
                     </Dialog>
@@ -193,17 +190,14 @@ export default function Queries() {
             ) : (
                 <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3, overflowY: "auto" }}>
                     <Typography variant="h5" sx={{ mb: 2 }}>Queries</Typography>
-                                <Typography variant="body1">Looking for answers or want to share your knowledge? Queries is the go-to platform for asking questions, engaging in discussions, and upvoting the best posts.</Typography>
-                                <List>
-                                    <ListItem>🔹 Ask Anything – Post questions on any topic, academic or personal.</ListItem>
-                                    <ListItem>🔹 Answer & Engage – Share insights and help others with your knowledge.</ListItem>
-                                    <ListItem>🔹 Upvote Questions – Highlight important or interesting questions.</ListItem>
-                                    <ListItem>🔹 Explore Discussions – Browse and contribute to ongoing conversations.</ListItem>
-                                </List>
-                                <Typography>Join Queries today—ask, answer, upvote, and be part of a knowledge-sharing community!</Typography>
-                    <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                    <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                    <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                    <Typography variant="body1">Got questions or knowledge to share? Queries is your space to learn, engage, and grow with the community.</Typography>
+                    <List>
+                        <ListItem>❔Ask Anything - Academic doubts or personal curiosities, all are welcome.</ListItem>
+                        <ListItem>❔Answer & Engage - Help others by sharing what you know.</ListItem>
+                        <ListItem>❔Upvote the Best - Boost valuable and interesting posts.</ListItem>
+                        <ListItem>❔Explore Discussions - Join conversations and expand your perspective.</ListItem>
+                    </List>
+                    <Typography>Be part of a knowledge-sharing community—join Queries today!</Typography>
                 </Box>
             )}
             <IconButton

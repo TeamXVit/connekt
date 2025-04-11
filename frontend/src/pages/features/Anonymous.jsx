@@ -176,9 +176,14 @@ export default function Anonymous() {
                                     <CloseIcon />
                                 </IconButton>
                                 <Typography variant="h5" sx={{ mb: 2 }}>Anonymous confessions</Typography>
-                                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                                <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                                <Typography variant="body1">Got secrets that are too juicy for your group chat? Spill the tea anonymously—we won’t judge (we’ll just read 👀).</Typography>
+                                <List>
+                                    <ListItem>🫢 Say It Without Saying It - Crushes, cringe moments, or chaotic thoughts? Let it out. </ListItem>
+                                    <ListItem>🤣 Laugh, Cry, Repeat - Read wild confessions and feel weirdly better about your own life.</ListItem>
+                                    <ListItem>🤫 No Names, No Shame - Confess like nobody&apos;s watching… because nobody knows it&apos;s you.</ListItem>
+                                </List>
+                                <Typography>Got something to confess?  
+                                Drop it. Read it. Regret it later. 💀</Typography>
                             </Box>
                         </DialogContent>
                     </Dialog>
@@ -186,9 +191,14 @@ export default function Anonymous() {
             ) : (
                 <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3, overflowY: "auto" }}>
                     <Typography variant="h5" sx={{ mb: 2 }}>Anonymous Confessions</Typography>
-                    <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                    <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                    <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                    <Typography variant="body1">Got secrets that are too juicy for your group chat? Spill the tea anonymously—we won’t judge (we’ll just read 👀).</Typography>
+                    <List>
+                        <ListItem>🫢 Say It Without Saying It - Crushes, cringe moments, or chaotic thoughts? Let it out. </ListItem>
+                        <ListItem>🤣 Laugh, Cry, Repeat - Read wild confessions and feel weirdly better about your own life.</ListItem>
+                        <ListItem>🤫 No Names, No Shame - Confess like nobody&apos;s watching… because nobody knows it&apos;s you.</ListItem>
+                    </List>
+                    <Typography>Got something to confess?  
+                    Drop it. Read it. Regret it later. 💀</Typography>
                 </Box>
             )}
             <IconButton

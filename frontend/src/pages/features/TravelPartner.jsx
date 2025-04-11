@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
-import { Box, Container, Dialog, DialogContent, IconButton, Link, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, Dialog, DialogContent, IconButton, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PostUI from "../../components/PostUI";
 import InfoIcon from "@mui/icons-material/Info";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -176,16 +176,13 @@ export default function TravelPartner() {
                                     <CloseIcon />
                                 </IconButton>
                                 <Typography variant="h5" sx={{ mb: 2 }}>Travel Partner</Typography>
-                                <Typography variant="body1">
-                                    Looking for a ride companion? Travel Partner connects you with others traveling to the same destination while respecting your preferences.
-                                    Travel with comfort – Choose to ride with someone of the same gender.
-                                    Post your travel details – Heading to the bus stop, railway station, or airport? Let others know.
-                                    Find a matching travel buddy – Make your journey safer, smarter, and more enjoyable.
-                                    Travel your way—find your Travel Partner today!
-                                </Typography>
-                                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                                <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                                <Typography variant="body1">Travel Partner helps you connect with others heading to the same destination—bus stop, railway station, or airport.</Typography>
+                                <List>
+                                    <ListItem>🌟Ride with Comfort: Choose companions based on your gender preference.</ListItem>
+                                    <ListItem>🌟Post Your Trip: Share your travel plans and let others find you.</ListItem>
+                                    <ListItem>🌟Match & Travel Smart: Find a travel buddy for a safer, more enjoyable journey.</ListItem>
+                                    <ListItem>🌟Travel your way. Find your Travel Partner today!</ListItem>
+                                </List>
                             </Box>
                         </DialogContent>
                     </Dialog>
@@ -193,16 +190,13 @@ export default function TravelPartner() {
             ) : (
                 <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
                     <Typography variant="h5" sx={{ mb: 2 }}>Travel Partner</Typography>
-                    <Typography variant="body1">
-                        Looking for a ride companion? Travel Partner connects you with others traveling to the same destination while respecting your preferences.
-                        Travel with comfort – Choose to ride with someone of the same gender.
-                        Post your travel details – Heading to the bus stop, railway station, or airport? Let others know.
-                        Find a matching travel buddy – Make your journey safer, smarter, and more enjoyable.
-                        Travel your way—find your Travel Partner today!
-                    </Typography>
-                    <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                    <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                    <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                    <Typography variant="body1">Travel Partner helps you connect with others heading to the same destination—bus stop, railway station, or airport.</Typography>
+                    <List>
+                        <ListItem>🌟Ride with Comfort: Choose companions based on your gender preference.</ListItem>
+                        <ListItem>🌟Post Your Trip: Share your travel plans and let others find you.</ListItem>
+                        <ListItem>🌟Match & Travel Smart: Find a travel buddy for a safer, more enjoyable journey.</ListItem>
+                        <ListItem>🌟Travel your way. Find your Travel Partner today!</ListItem>
+                    </List>
                 </Box>
             )}
             <IconButton

@@ -12,7 +12,7 @@ instance.defaults.headers.common["Authorization"] = BearerHeader;
 instance.interceptors.response.use(
     (response) => response, 
     (error) => {
-        if (error.response && error.response.data.message === "Invalid or expired token") {
+        if (error.response && error.response.data.message === "Invalid or Expired Token") {
             console.warn("Token expired. Logging out...");
             localStorage.removeItem("Connekt-token"); 
             window.location.href = "/login"; 

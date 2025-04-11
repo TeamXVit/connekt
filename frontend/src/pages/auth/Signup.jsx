@@ -110,6 +110,7 @@ export default function Signup() {
         e.preventDefault();
         setLoading(true);
         if (termsConsent === true && page === 3) { 
+            formData.email = formData.email.trim()
             axios.post(`${Backend}/auth/signup`, formData)
             .then((res) => {
                 setLoading(false);

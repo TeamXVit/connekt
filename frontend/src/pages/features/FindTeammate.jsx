@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router"
 import Backend from "../../constants/Backend";
 import BearerHeader from "../../constants/BearerHeader";
-import { Box, Container, Dialog, DialogContent, IconButton, Link, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, Dialog, DialogContent, IconButton, List, ListItem, Skeleton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PostUI from "../../components/PostUI";
 import InfoIcon from "@mui/icons-material/Info";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -175,16 +175,13 @@ export default function FindTeammate() {
                                     <CloseIcon />
                                 </IconButton>
                                 <Typography variant="h5" sx={{ mb: 2 }}>Find a Teammate</Typography>
-                                <Typography variant="body1">Looking for a partner to collaborate on your college activities? Find a Teammate helps you connect with like-minded individuals for all kinds of projects and events.</Typography>
+                                <Typography variant="body1">Looking for someone to collaborate on college projects or events? Connect with like-minded peers and build the best team for any activity!</Typography>
                                 <List>
-                                   <ListItem>🔹 Collaborate on ECS or Capstone Projects - Find someone with the right skills and ideas to work with you.</ListItem> 
-                                   <ListItem>🔹 Join Hackathons & Competitions - Need a team for an upcoming challenge? Look for teammates here!</ListItem> 
-                                   <ListItem>🔹 Connect for College Events - Whether it’s a seminar, workshop, or community activity, find others who are passionate about the same things.</ListItem> 
+                                    <ListItem>🔹Capstone & ECS Projects – Team up with individuals who share your vision and skills.</ListItem> 
+                                    <ListItem>🔹Hackathons & Competitions – Find partners ready to take on exciting challenges.</ListItem> 
+                                    <ListItem>🔹College Events – From seminars to workshops, connect with people who share your interests. </ListItem> 
                                 </List>                                                  
-                                <Typography>Get the best team together—find your perfect teammate today!</Typography>
-                                <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                                <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                                <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                                <Typography>Get the right people on board—find your perfect teammate today!</Typography>
                             </Box>
                         </DialogContent>
                     </Dialog>
@@ -192,16 +189,13 @@ export default function FindTeammate() {
             ) : (
                 <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3, overflowY: "auto" }}>
                     <Typography variant="h5" sx={{ mb: 2 }}>Find a Teammate</Typography>
-                    <Typography variant="body1">Looking for a partner to collaborate on your college activities? Find a Teammate helps you connect with like-minded individuals for all kinds of projects and events.</Typography>
+                    <Typography variant="body1">Looking for someone to collaborate on college projects or events? Connect with like-minded peers and build the best team for any activity!</Typography>
                     <List>
-                       <ListItem>🔹 Collaborate on ECS or Capstone Projects - Find someone with the right skills and ideas to work with you.</ListItem> 
-                       <ListItem>🔹 Join Hackathons & Competitions - Need a team for an upcoming challenge? Look for teammates here!</ListItem> 
-                       <ListItem>🔹 Connect for College Events - Whether it’s a seminar, workshop, or community activity, find others who are passionate about the same things.</ListItem> 
+                       <ListItem>🔹Capstone & ECS Projects – Team up with individuals who share your vision and skills.</ListItem> 
+                       <ListItem>🔹Hackathons & Competitions – Find partners ready to take on exciting challenges.</ListItem> 
+                       <ListItem>🔹College Events – From seminars to workshops, connect with people who share your interests. </ListItem> 
                     </List>                                                  
-                    <Typography>Get the best team together—find your perfect teammate today!</Typography>
-                    <Typography sx={{ my: 1 }}>Developed by TeamX</Typography>
-                    <Typography sx={{ my: 1 }}>Check out our other projects:</Typography>
-                    <Link variant="body1" href="https://git2know.netlify.app/" target="_blank">Git2know</Link>
+                    <Typography>Get the right people on board—find your perfect teammate today!</Typography>
                 </Box>
             )}
             <IconButton
