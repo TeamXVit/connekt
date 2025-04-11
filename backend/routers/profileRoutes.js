@@ -47,16 +47,13 @@ profileRouter.post(
         const dataURI = `data:${request.file.mimetype};base64,${b64}`;
         const result = await cloudinary.uploader.upload(dataURI, config);
         user.profilepicture = result.secure_url;
-        user.optprofilepicture = cloudinary.url(result.public_id,{
+        user.optprofilepicture = cloudinary.url(result.public_id, {
             secure: true,
-            transformation:[
+            transformation: [
                 {
-                    crop:"crop",
-                    gravity:"auto",
-                    height:400,
-                    width:400
-                },
-                {fetch_format:"auto"}
+                    fetch_format: "auto",
+                    quality: "auto:low"
+                }
             ]
         });
         await user.save();
