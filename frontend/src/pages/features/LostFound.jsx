@@ -187,7 +187,27 @@ export default function LostFound() {
                     </Dialog>
                 </>
             ) : (
-                <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3 }}>
+                <Box sx={{ width: "25%", height: "86%", position: "fixed", right: 15, display: { sm: "none", lg: "block" }, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.200", borderRadius: 5, py: 2, px: 3, overflowY: "auto",
+                    // Scrollbar styling
+                    "&::-webkit-scrollbar": {
+                        width: "8px",
+                    },
+                    "&::-webkit-scrollbar-track": {
+                        backgroundColor: "transparent",
+                    },
+                    "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: theme.palette.mode === "dark" ? "#555" : "#bbb",
+                        borderRadius: "4px",
+                    },
+                    "&::-webkit-scrollbar-thumb:hover": {
+                        backgroundColor: theme.palette.mode === "dark" ? "#777" : "#999",
+                    },
+                
+                    // Firefox support
+                    scrollbarWidth: "thin",
+                    scrollbarColor: `${theme.palette.mode === "dark" ? "#555 transparent" : "#bbb transparent"}`,
+                    
+                }}>
                     <Typography variant="h5" sx={{ mb: 2 }}>Lost & Found</Typography>
                     <Typography variant="body1">Lost something? Found an item? Lost & Found helps you reunite belongings with their rightful owners.</Typography>
                     <List>
