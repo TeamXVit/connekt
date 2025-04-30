@@ -33,7 +33,8 @@ export default function Sidebar() {
         { page: "Lost & Found", icon: <SearchIcon />, link: "/lostandfound" },
         { page: "Queries", icon: <LiveHelpIcon />, link: "/queries" },
         { page: "Anonymous Confessions", icon: <NoAccountsIcon />, link: "/anonymous" },
-        { page: "FAQ", icon: <InfoIcon />, link: "/faq" }
+        { page: "FAQ", icon: <InfoIcon />, link: "/faq" },
+        { page: "About", icon: <></>, link: "/about" },
     ];
 
     const swipeHandlers = useSwipeable({

@@ -14,6 +14,7 @@ import MakePost from "../pages/user/MakePost";
 import Activities from "../pages/user/Activities";
 import Anonymous from "../pages/features/Anonymous";
 import FAQ from "../pages/user/FAQ";
+import About from "../pages/user/About";
 import { Box } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -39,6 +40,7 @@ export default function RouteProvider({ toggleTheme }) {
             "/teammate": "Find A Teammate",
             "/queries": "Queries",
             "/anonymous": "Anonymous confessions",
+            "/about" : "About",
             "/user": "User Profile",
             "/make-post": "Make A Post",
             "/activities": "My Activities",
@@ -90,6 +92,7 @@ export default function RouteProvider({ toggleTheme }) {
                         <Route path="/make-post" element={<MakePost />} />
                         <Route path="/activities" element={<Activities />} />
                         <Route path="/faq" element={<FAQ />}/>
+                        <Route path="/about" element={<About />}/>
                     </Routes>
                 </Box>
             )}
