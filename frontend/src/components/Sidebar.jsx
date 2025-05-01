@@ -102,30 +102,15 @@ export default function Sidebar() {
             p: 2,
             bgcolor: theme.palette.mode === "dark" ? "#121212" : "white",
             color: "text.primary",
-            overflowY: "auto", // ensures scroll if content overflows
-
-            // Scrollbar styling
+            overflowY: "auto",
+        
+            // Hide scrollbar
             "&::-webkit-scrollbar": {
-              width: "8px",
+              display: "none",
             },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "transparent",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: theme.palette.mode === "dark" ? "#555" : "#bbb",
-              borderRadius: "4px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: theme.palette.mode === "dark" ? "#777" : "#999",
-            },
-            scrollbarWidth: "thin",
-            scrollbarColor: `${
-              theme.palette.mode === "dark"
-                ? "#555 transparent"
-                : "#bbb transparent"
-            }`,
+            scrollbarWidth: "none", // Firefox
           },
-        }}
+        }}        
       >
         <Typography variant="h5" sx={{ mb: 2, color: "transparent" }}>
           _

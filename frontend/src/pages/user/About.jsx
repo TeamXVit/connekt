@@ -13,27 +13,26 @@ import {
   
   const teamMembers = [
     {
-      name: "Your Name",
-      role: "Full-Stack Developer, Team Lead",
-      github: "https://github.com/prodev717",
-      instagram: "https://instagram.com/your_insta",
-      linkedin: "https://linkedin.com/in/your_profile",
-    },
-    {
-      name: "Contributor 2",
+      name: "Rohith VK",
       role: "UI/UX Designer",
-      github: "https://github.com/example",
-      instagram: "https://instagram.com/example",
-      linkedin: "https://linkedin.com/in/example",
+      github: "https://github.com/RohiVK",
+      instagram: "https://instagram.com/ro_hi.exe",
+      linkedin: "https://linkedin.com/in/v-k-rohith-5a8764326",
     },
     {
-      name: "Contributor 3",
-      role: "Backend Developer",
-      github: "https://github.com/example2",
-      instagram: "https://instagram.com/example2",
-      linkedin: "https://linkedin.com/in/example2",
+      name: "Muhammad Sajid Y",
+      role: "Frontend Developer",
+      github: "https://github.com/muhammadsajidy",
+      instagram: "https://instagram.com/_.sajid._04",
+      linkedin: "https://linkedin.com/in/muhammadsajidy",
     },
-    // Add more team members here
+    {
+      name: "Ganesh M",
+      role: "Backend Developer",
+      github: "https://github.com/prodev717",
+      instagram: "https://instagram.com/musicon717",
+      linkedin: "https://linkedin.com/in/ganesh717",
+    },
   ];
   
   export default function About() {
@@ -72,9 +71,8 @@ import {
           <Typography variant="h6">Our Projects</Typography>
           <ul>
             <li><strong>Connekt:</strong> A campus-exclusive social platform to ask queries, find teammates, travel partners, and more.</li>
-            <li><strong>Gesture-Controlled Robotic Arm:</strong> A remote robotic system controlled via real-time hand tracking for use in hazardous environments.</li>
-            <li><strong>MedLink:</strong> A mental health & therapy startup offering online therapy sessions for students and IT professionals.</li>
-            {/* Add more if needed */}
+            <li><strong>Git2Know:</strong> An AI-powered GitHub profile and repository analysis tool that provides insightful summaries.</li>
+            <li><strong>Vynkly:</strong> A search engine built for VIT-AP students to index, showcase, and connect all their innovations in one unified platform.</li>
           </ul>
         </Box>
   
@@ -84,13 +82,13 @@ import {
             We'd love to hear from you! Reach out to us on:
           </Typography>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2, mt: 1 }}>
-            <IconButton href="mailto:connekt4vitap@gmail.com" color="inherit">
+            <IconButton href="mailto:teamx.0403@gmail.com" color="inherit">
               <EmailIcon />
             </IconButton>
-            <IconButton href="https://instagram.com/teamx.vitap" target="_blank" color="inherit">
+            <IconButton href="https://instagram.com/teamx.vit" target="_blank" color="inherit">
               <InstagramIcon />
             </IconButton>
-            <IconButton href="https://github.com/teamx-vitap" target="_blank" color="inherit">
+            <IconButton href="https://github.com/TeamXVit" target="_blank" color="inherit">
               <GitHubIcon />
             </IconButton>
           </Box>

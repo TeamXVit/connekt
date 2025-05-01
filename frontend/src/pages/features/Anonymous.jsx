@@ -87,26 +87,10 @@ export default function Anonymous() {
                                     hasData = true;
                                     clearTimeout(emptyStateTimer);
                                     
-                                    setPosts(prev => {
-                                        const existingIds = new Set(prev.map(post => post._id));
-                                        const newPosts = posts.filter(post => !existingIds.has(post._id));
-                                        
-                                        const mergedPosts = [
-                                            ...newPosts,
-                                            ...prev.map(prevPost => {
-                                                const updatedPost = posts.find(p => p._id === prevPost._id);
-                                                if (updatedPost) {
-                                                    return {
-                                                        ...prevPost,
-                                                        comments: updatedPost.comments || prevPost.comments,                                                    
-                                                    };
-                                                }
-                                                return prevPost;
-                                            })
-                                        ];
-                                        
-                                        return mergedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                                    });
+                                    setPosts(
+                                        posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                                    );
+                                    
                                     setLoading(false);
                                 } else if (posts.length === 0) {
                                     hasData = true;
